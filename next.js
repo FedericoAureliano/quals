@@ -1,51 +1,21 @@
-import { annotate } from 'https://unpkg.com/rough-notation?module';
+const NUMBER_OF_SLIDES = 2;
 
-var count = 0;
+var slide = parseInt(document.URL.split('/').pop().split('.')[0], 10);
 
-const rc = rough.canvas(document.getElementById('canvas'));
-
-rc.circle(75, 75, 100, {
-  stroke: 'black', strokeWidth: 2,
-  fill: 'blue', fillStyle: 'zigzag',
-  roughness: 1,
-  fillWeight: 1
-});
-
-rc.circle(200, 200, 100, {
-  stroke: 'black', strokeWidth: 2,
-  fill: 'red', fillStyle: 'zigzag',
-  roughness: 1,
-  fillWeight: 1
-});
-
-rc.circle(400, 400, 100, {
-  stroke: 'black', strokeWidth: 2,
-  fill: 'green', fillStyle: 'zigzag',
-  roughness: 1,
-  fillWeight: 1
-});
-
+const footer = document.getElementById('foot');
+footer.innerText = "Slide " + slide;
 
 const body = document.querySelector('body');
-body.onkeypress = function(e){step(e)};
+body.onkeydown = function(e){step(e)};
 
 function step(e) {
-  console.log(e.code);
+
   if (e.code == "KeyD") {
-    count = count + 1;
+    slide = Math.min(NUMBER_OF_SLIDES - 1, slide + 1);
   } else if (e.code == "KeyA") {
-    count = count - 1;
+    slide = Math.max(0, slide - 1)
   }
-  if (count < 0) {
-    count = 0;
-  }
-  if (count == 1) {
-    const n1 = document.querySelector('h1');
-    n1.innerText = "Hey There";
-    const a1 = annotate(n1, { type: 'circle', color: 'blue' });
-    a1.show();
-  } else if (count == 0) {
-    const n1 = document.querySelector('h1');
-    n1.innerText = "Original Text";
-  }
+
+  const new_slide = document.URL.split('/').slice(0, -1).join('/') + '/' + slide + '.html';
+  window.location.href = new_slide;
 }

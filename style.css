@@ -1,4 +1,72 @@
+:root {
+    --screen-width: 1920px;
+    --screen-height: 1080px;
+    --title-height: 100px;
+    --foot-height: 100px;
+    --gap: 4px;
+  }
+
 html {
-    width: 1920px;
-    height: 1080px;
+    margin: auto;
+    padding: 0px;
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: var(--screen-height);
+    min-height: var(--screen-height);
+    display: inline-block;
+}
+
+body {
+    margin: auto;
+    padding: 0px;
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: var(--screen-height);
+    min-height: var(--screen-height);
+    display: inline-block;
+    outline:1px #000 dashed;
+}
+
+h1 {
+    margin: auto;
+    padding: 0px;
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: var(--title-height);
+    min-height: var(--title-height);
+    display: inline-block;
+    outline:1px #000 dashed;
+}
+
+#full-text, #full-canvas {
+    margin: auto;
+    padding: 0px;
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
+    min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
+    display: inline-block;
+    outline:1px #000 dashed;
+}
+
+#half-text, #half-canvas {
+    margin: auto;
+    padding: 0px;
+    max-width: calc((var(--screen-width) - var(--gap)) / 2);
+    min-width: calc((var(--screen-width) - var(--gap)) / 2);
+    max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
+    min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
+    display: inline-block;
+    outline:1px #000 dashed;
+}
+
+#foot {
+    margin: auto;
+    padding: 0px;
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: var(--foot-height);
+    min-height: var(--foot-height);
+    display: inline-block;
+    outline:1px #000 dashed;
 }
