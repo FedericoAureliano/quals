@@ -12,26 +12,46 @@
 
 <body>
   <div id="title-box">
-    <div id="title">Example Distributed System: Ring Leader Election Protocol</div>
+    <div id="title">Ring Leader Election Protocol with Message Chains</div>
   </div>
   <div id="half-box"><canvas id="canvas" width="960px" height="730px"></canvas></div>
   <div id="half-box">
     <div id="half-half-box">
       <div style="width: 95%;">
         <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Algorithm</span>
-        <ul style="font-size: 20pt; list-style-type: circle; width: 100%; padding-top: 1em;">
-          <li id="start">Send your own value right</li>
+        <ul style="font-size: 20pt; padding-top: 1em;">
+          <li id="start">Send your own value right
+            <ul style="padding-left: 2em;">
+              <li>starts a message chain</li>
+            </ul>
+          </li>
           <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send received value
-            right</li>
-          <li style="margin-top: 1em;" id="win">If you receive your own value, declare yourself the winner</li>
+            right
+            <ul style="padding-left: 2em;">
+              <li>extends a message chain</li>
+            </ul>
+          </li>
+          <li style="margin-top: 1em;" id="win">If you receive your own value, declare yourself the winner
+            <ul style="padding-left: 2em;">
+              <li>completes a message chain</li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
-    <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span>
-    <div id="log-data" style="width: 95%; padding-top: 0.5em;"></div>
+    <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Message Chain Log</span>
+    <div id="log-data" style="width: 95%; padding-top: 0.5em;">
+      <ul>
+        <li id="mc0"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+        <li id="mc1"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+        <li id="mc2"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+        <li id="mc3"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+        <li id="mc4"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+      </ul>
+    </div>
   </div>
   <div id="foot-box">
-    <div id="footnote">Chang, E., & Roberts, R. (1979)</div>
+    <div id="footnote">In submission</div>
     <div id="slide-number"></div>
   </div>
 </body>
@@ -43,6 +63,7 @@
   var start = document.querySelector('#start');
   var forward = document.querySelector('#forward');
   var win = document.querySelector('#win');
+
   start = annotate(start, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
@@ -57,7 +78,13 @@
   let generator = rc.generator;
 
   // log 
-  var log = document.getElementById("log-data");
+  const log = [
+    document.getElementById("mc0"),
+    document.getElementById("mc1"),
+    document.getElementById("mc2"),
+    document.getElementById("mc3"),
+    document.getElementById("mc4")
+  ]
 
   const radius = 50;
 
@@ -113,7 +140,7 @@
     }
     const from = String(chain[count]);
     const to = String(chain[count + 1]);
-    trace.push([from, to, label, tertiary_color, primary_color]);
+    trace.push([from, to, label, tertiary_color, primary_color, choice, count]);
 
     counts[choice] = count + 1;
   }
@@ -125,6 +152,10 @@
     const label = trace[i][2];
     const arrow_color = trace[i][3];
     const label_color = trace[i][4];
+
+    const choice = trace[i][5];
+    const count = trace[i][6];
+
     const todo = nodes_checkpoint.flat().concat([function (from, to) {
       return function () {
         const center1_x = positions[from][0];
@@ -145,7 +176,7 @@
 
         draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
 
-        log.innerHTML = log.innerHTML + getByValue(nodes, from) + "&nbsp&#8594;<sup>" + label + "</sup>&nbsp" + getByValue(nodes, to) + ";&nbsp ";
+        log[choice].innerHTML = log[choice].innerHTML + getByValue(nodes, from) + "&nbsp&#8594;<sup>" + label + "</sup>&nbsp" + getByValue(nodes, to) + ";&nbsp ";
 
         if (kind) {
           start.show();
@@ -158,12 +189,15 @@
   }
 
   // highlight the node that won
+  var winning_chain = log[trace[trace.length - 1][5]];
+  winning_chain = annotate(winning_chain, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   const winner = nodes.get("4");
   const todo = nodes_checkpoint.flat().concat([function (winner) {
     return function () {
       const x = positions[winner][0];
       const y = positions[winner][1];
       win.show();
+      winning_chain.show()
       draw_node(rc, ctx, x, y, radius * 1.45, "", quaternary_color, quaternary_color);
     }
   }(winner)]);
@@ -178,14 +212,19 @@
         start.hide();
         forward.hide();
         win.hide();
+        winning_chain.hide();
       }
     } else {
       cleaner = function () {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        log.innerHTML = "";
+        // clear logs
+        for (var i = 0; i < log.length; i++) {
+          log[i].innerHTML = "";
+        }
         start.hide();
         forward.hide();
         win.hide();
+        winning_chain.hide();
       }
     }
     to_disappear.push([cleaner]);

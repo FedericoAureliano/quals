@@ -6,7 +6,7 @@
   <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
   <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
-  <link href="https://meyerweb.com/eric/tools/css/reset/reset.css" rel="stylesheet" type="text/css" />
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -17,9 +17,11 @@
   </div>
   <div id="full-subtitle-box">
     <div id="full-subtitle">Federico Mora, <span style="font-size: 30pt;">University of California, Berkeley</span>
-      <br>
+      <br><br>
       <span style="font-size: 25pt;">Follow along at <a
-          href="https://federico.morarocha.ca/quals/">federico.morarocha.ca/quals</a></span>
+          href="https://federico.morarocha.ca/quals/">federico.morarocha.ca/quals</a>
+          using <img style="margin-bottom: -10px" src="../icons/a.png" alt="'a'"><img style="margin-bottom: -10px" src="../icons/s.png" alt="'s'"><img style="margin-bottom: -10px" src="../icons/d.png" alt="'d'"> keys</span>
+      </span>
     </div>
   </div>
   <div id="foot-box">
@@ -50,7 +52,7 @@
 
   var state = 0;
   const body = document.querySelector('body');
-  body.onclick = function (e) { state = step(e, state, to_disappear, to_appear) };
+  body.onkeyup = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
 
 <script type='module' src="../next.js"></script>

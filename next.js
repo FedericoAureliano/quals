@@ -1,4 +1,4 @@
-const NUMBER_OF_SLIDES = 2;
+const NUMBER_OF_SLIDES = 3;
 
 var slide = parseInt(document.URL.split('/').pop().split('.')[0], 10);
 
@@ -16,6 +16,10 @@ const body = document.querySelector('body');
 body.onkeydown = function(e){step(e)};
 
 function step(e) {
+
+  if (e.code != "KeyD" && e.code != "KeyA") {
+    return;
+  }
 
   if (e.code == "KeyD") {
     slide = Math.min(NUMBER_OF_SLIDES, slide + 1);

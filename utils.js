@@ -6,20 +6,21 @@ export const quaternary_color = "#FDB515";
 
 export function step(e, state, dissappear_funcs, appear_funcs) {
     // assert(dissappear_funcs.length == appear_funcs.length);
-
-    state += 1;
-    if (state >= appear_funcs.length) {
-        state = 0;
-    }
-
-    const to_remove = dissappear_funcs[state];
-    for (let i = 0; i < to_remove.length; i++) {
-        to_remove[i]();
-    }
-
-    const to_draw = appear_funcs[state];
-    for (let i = 0; i < to_draw.length; i++) {
-        to_draw[i]();
+    if (e.code == "KeyS") {
+        state += 1;
+        if (state >= appear_funcs.length) {
+            state = state - 1;
+        }
+    
+        const to_remove = dissappear_funcs[state];
+        for (let i = 0; i < to_remove.length; i++) {
+            to_remove[i]();
+        }
+    
+        const to_draw = appear_funcs[state];
+        for (let i = 0; i < to_draw.length; i++) {
+            to_draw[i]();
+        }
     }
 
     return state;

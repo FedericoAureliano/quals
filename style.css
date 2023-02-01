@@ -2,7 +2,7 @@
     --screen-width: 1920px;
     --screen-height: 1080px;
     --title-height: 250px;
-    --subtitle-height: 300px;
+    --subtitle-height: 350px;
     --foot-height: 100px;
 
     --background-color: white;
@@ -163,4 +163,8 @@ body {
 a {
     color: var(--tertiary-color);
     text-decoration: none;
+}
+
+ul {
+    list-style: circle;
 }
