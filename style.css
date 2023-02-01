@@ -31,6 +31,8 @@ body {
     outline:1px var(--primary-color) solid;
     line-height: 1.25;
     clear: both;
+
+    font-size: 24pt;
 }
 
 #title-box {
@@ -89,7 +91,6 @@ body {
     min-width: var(--screen-width);
     max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
     min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
-    display: flex;
     line-height: 1.25;
 }
 
@@ -98,9 +99,18 @@ body {
     min-width: calc(var(--screen-width) / 2);
     max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
     min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
-    display: flex;
     line-height: 1.25;
     float: left; 
+    flex-direction: column;
+}
+
+#half-half-box {
+    max-width: calc(var(--screen-width) / 2);
+    min-width: calc(var(--screen-width) / 2);
+    max-height: calc((var(--screen-height) - var(--title-height) - var(--foot-height)) / 2);
+    min-height: calc((var(--screen-height) - var(--title-height) - var(--foot-height)) / 2);
+    line-height: 1.25;
+    float: left;
 }
 
 #foot-box {

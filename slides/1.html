@@ -31,34 +31,26 @@
 
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
 
   var ddv = document.querySelector('#data-driven-verification');
   var ds = document.querySelector('#distributed-systems');
   var proofs = document.querySelector('#proofs');
 
-  ddv = annotate(ddv, { type: 'circle', color: '#00A598', strokeWidth: 10 });
-  ds = annotate(ds, { type: 'underline', color: '#00A598', strokeWidth: 10 });
-  proofs = annotate(proofs, { type: 'highlight', color: '#00A598', strokeWidth: 10 });
+  ddv = annotate(ddv, { type: 'circle', color: tertiary_color, strokeWidth: 10 });
+  ds = annotate(ds, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  proofs = annotate(proofs, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
 
-  const annotations = [ddv, ds, proofs];
-  var state = -1;
+  const to_appear = [[], 
+    [() => ddv.show()], 
+    [() => ds.show()], 
+    [() => proofs.show()]];
 
+  const to_disappear = [[() => ddv.hide(), () => ds.hide(), () => proofs.hide()], [], [], []];
+
+  var state = 0;
   const body = document.querySelector('body');
-  body.onclick = function (e) { step(e) };
-
-  function step(e) {
-    state += 1;
-    if (state >= annotations.length) {
-      state = -1;
-      annotations.forEach((a, i) => {
-        a.hide();
-      });
-    }
-    if (state >= 0) {
-      annotations[state].show();
-    }
-  }
-
+  body.onclick = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
 
 <script type='module' src="../next.js"></script>
