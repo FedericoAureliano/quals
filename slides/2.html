@@ -11,10 +11,37 @@
 </head>
 
 <body>
-  <div id="title-box"></div>
-  <canvas id="full-canvas-box"></canvas>
-  <div id="foot-box"><div id="footnote"></div><div id="slide-number"></div></div>
+  <div id="title-box"><div id="title">Example Distributed System: Ring Leader Election Protocol</div></div>
+  <div id="half-box"><canvas id="canvas" width="960px" height="730px"></canvas></div>
+  <div id="half-box"></div>
+  <div id="foot-box"><div id="footnote">Chang, E., & Roberts, R. (1979)</div><div id="slide-number"></div></div>
 </body>
+
+
+<script type="module">
+  const rc = rough.canvas(document.getElementById('canvas'));
+  let generator = rc.generator;
+
+  let first = generator.circle(200, 100, 100, {
+    stroke: '#3B7EA1', strokeWidth: 10,
+  });
+
+  var steps = [first];
+
+  var state = -1;
+
+  const body = document.querySelector('body');
+  body.onclick = function (e) { step(e) };
+
+  function step(e) {
+    state += 1;
+    if (state >= 0 && state < steps.length) {
+      rc.draw(steps[state])
+    }
+  }
+
+</script>
+
 <script type='module' src="../next.js"></script>
 
 </html>

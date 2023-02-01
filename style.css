@@ -1,7 +1,7 @@
 :root {
     --screen-width: 1920px;
     --screen-height: 1080px;
-    --title-height: 200px;
+    --title-height: 250px;
     --subtitle-height: 300px;
     --foot-height: 100px;
 
@@ -41,6 +41,17 @@ body {
     display: flex;
 }
 
+#title {
+    margin: auto;
+    width: 90%;
+    font-size: 40pt;
+    font-weight: bold;
+    text-align: left;
+    align-self: flex-end;
+    box-shadow: -10px 0 0 var(--primary-color);
+    padding-left: 10px;
+}
+
 #full-title-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
@@ -73,7 +84,7 @@ body {
     text-align: center;
 }
 
-#full-text-box, #full-canvas-box {
+#full-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
@@ -82,7 +93,7 @@ body {
     line-height: 1.25;
 }
 
-#half-text-box, #half-canvas-box {
+#half-box {
     max-width: calc(var(--screen-width) / 2);
     min-width: calc(var(--screen-width) / 2);
     max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
@@ -112,10 +123,10 @@ body {
     padding: .25em 0;
     color: white;
     background: var(--primary-color);
-    box-shadow: .5em 0 0 var(--primary-color), -.5em 0 0 var(--primary-color);
+    box-shadow: 10px 0 0 var(--primary-color), -10px 0 0 var(--primary-color);
 }
 
-#date {
+#date, #footnote {
     margin-right: auto;
     margin-top: auto;
     margin-bottom: 3px;
@@ -124,10 +135,10 @@ body {
     padding: .25em 0;
     color: white;
     background: var(--primary-color);
-    box-shadow: .5em 0 0 var(--primary-color), -.5em 0 0 var(--primary-color);
+    box-shadow: 10px 0 0 var(--primary-color), -10px 0 0 var(--primary-color);
 }
 
-#footnote {
+#titlenote {
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
@@ -136,7 +147,7 @@ body {
     padding: .25em 0;
     color: white;
     background: var(--primary-color);
-    box-shadow: .5em 0 0 var(--primary-color), -.5em 0 0 var(--primary-color);
+    box-shadow: 10px 0 0 var(--primary-color), -10px 0 0 var(--primary-color);
 }
 
 a {
