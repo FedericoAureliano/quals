@@ -1,72 +1,140 @@
 :root {
     --screen-width: 1920px;
     --screen-height: 1080px;
-    --title-height: 100px;
+    --title-height: 200px;
+    --subtitle-height: 300px;
     --foot-height: 100px;
-    --gap: 4px;
+
+    --background-color: white;
+    --primary-color: #003262;
+    --secondary-color: #3B7EA1;
+    --tertiary-color: #00A598;
   }
 
 html {
-    margin: auto;
-    padding: 0px;
-    max-width: var(--screen-width);
-    min-width: var(--screen-width);
-    max-height: var(--screen-height);
-    min-height: var(--screen-height);
-    display: inline-block;
+    font-family: 'Open Sans';
+    line-height: 1.25;
+    color: var(--primary-color);
 }
 
 body {
-    margin: auto;
-    padding: 0px;
+    background-color: var(--background-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: var(--screen-height);
     min-height: var(--screen-height);
-    display: inline-block;
-    outline:1px #000 dashed;
+    outline:1px var(--primary-color) solid;
+    line-height: 1.25;
+    clear: both;
 }
 
-h1 {
-    margin: auto;
-    padding: 0px;
+#title-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: var(--title-height);
     min-height: var(--title-height);
-    display: inline-block;
-    outline:1px #000 dashed;
+    display: flex;
 }
 
-#full-text, #full-canvas {
-    margin: auto;
-    padding: 0px;
+#full-title-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
-    max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
-    min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
-    display: inline-block;
-    outline:1px #000 dashed;
+    max-height: calc(var(--screen-height) - var(--subtitle-height) - var(--foot-height));
+    min-height: calc(var(--screen-height) - var(--subtitle-height) - var(--foot-height));
+    display: flex;
 }
 
-#half-text, #half-canvas {
-    margin: auto;
-    padding: 0px;
-    max-width: calc((var(--screen-width) - var(--gap)) / 2);
-    min-width: calc((var(--screen-width) - var(--gap)) / 2);
-    max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
-    min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height) - 2 * var(--gap));
-    display: inline-block;
-    outline:1px #000 dashed;
+#full-title {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    font-size: 80pt;
+    text-align: center;
+    align-self: flex-end;
 }
 
-#foot {
+#full-subtitle-box {
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: var(--subtitle-height);
+    min-height: var(--subtitle-height);
+    display: flex;
+}
+
+#full-subtitle {
     margin: auto;
-    padding: 0px;
+    width: 50%;
+    font-size: 40pt;
+    text-align: center;
+}
+
+#full-text-box, #full-canvas-box {
+    max-width: var(--screen-width);
+    min-width: var(--screen-width);
+    max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
+    min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
+    display: flex;
+    line-height: 1.25;
+}
+
+#half-text-box, #half-canvas-box {
+    max-width: calc(var(--screen-width) / 2);
+    min-width: calc(var(--screen-width) / 2);
+    max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
+    min-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
+    display: flex;
+    line-height: 1.25;
+    float: left; 
+}
+
+#foot-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: var(--foot-height);
     min-height: var(--foot-height);
-    display: inline-block;
-    outline:1px #000 dashed;
+    display: flex;
+    line-height: 1.25;
+    clear: both;
+    font-size: 20pt;
+}
+
+#slide-number {
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: 3px;
+    margin-right: 15px;
+
+    padding: .25em 0;
+    color: white;
+    background: var(--primary-color);
+    box-shadow: .5em 0 0 var(--primary-color), -.5em 0 0 var(--primary-color);
+}
+
+#date {
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: 3px;
+    margin-left: 15px;
+
+    padding: .25em 0;
+    color: white;
+    background: var(--primary-color);
+    box-shadow: .5em 0 0 var(--primary-color), -.5em 0 0 var(--primary-color);
+}
+
+#footnote {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: 3px; 
+
+    padding: .25em 0;
+    color: white;
+    background: var(--primary-color);
+    box-shadow: .5em 0 0 var(--primary-color), -.5em 0 0 var(--primary-color);
 }

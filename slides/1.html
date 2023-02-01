@@ -5,15 +5,50 @@
   <title>Data-Driven Verification of Distributed Systems with End-to-End Proofs</title>
   <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
   <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="https://meyerweb.com/eric/tools/css/reset/reset.css" rel="stylesheet" type="text/css"/>
   <link href="../style.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
-  <h1></h1>
-  <canvas id="half-canvas"></canvas>
-  <div id="half-text"></div>
-  <div id="foot"></div>
+  <div id="full-title-box"><div id="full-title"><span id="data-driven-verification">Data-Driven Verification</span> of <span id="distributed-systems">Distributed Systems</span> with End-to-End <span id="proofs">Proofs</span></div></div>
+  <div id="full-subtitle-box">
+    <div id="full-subtitle">Federico Mora, <span style="font-size: 25pt;">University of California, Berkeley</span></div>
+  </div>
+  <div id="foot-box"><div id="date"></div><div id="footnote">Ph.D. Qualifying Examination</div><div id="slide-number"></div></div>
 </body>
+
+<script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  
+  var ddv = document.querySelector('#data-driven-verification');
+  var ds = document.querySelector('#distributed-systems');
+  var proofs = document.querySelector('#proofs');
+
+  ddv = annotate(ddv, { type: 'circle', color: '#00A598', strokeWidth: 10});
+  ds = annotate(ds, { type: 'underline', color: '#00A598', strokeWidth: 10});
+  proofs = annotate(proofs, { type: 'highlight', color: '#00A598', strokeWidth: 10});
+
+  const annotations = [ddv, ds, proofs];
+  var state = -1;
+
+  const body = document.querySelector('body');
+  body.onclick = function(e){step(e)};
+
+  function step(e) {
+    state += 1;
+    if (state >= annotations.length) {
+      state = -1;
+      annotations.forEach((a, i) => {
+        a.hide();
+      });
+    }
+    if (state >= 0) {
+      annotations[state].show();
+    }
+  }
+
+</script>
+
 <script type='module' src="../next.js"></script>
 </html>
