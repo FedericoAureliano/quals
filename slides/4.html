@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Data-Driven Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Ring Leader Election Protocol Verification Goal</div>
+  </div>
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
+  <div class="half-box">
+    <div class="half-half-box" id="top-right" style="display: none;">
+      <div style="width: 95%;">
+        <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Algorithm</span>
+        <ul style="font-size: 20pt; list-style-type: circle; width: 100%; padding-top: 1em;">
+          <li id="start">Send your own value left</li>
+          <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send received value
+            left</li>
+          <li style="margin-top: 1em;" id="win">If you receive your own value, declare yourself the winner</li>
+        </ul>
+      </div>
+    </div>
+    <div class="half-half-box" id="bottom-right" style="display: none;">
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Specification</span>
+    </div>
+  </div>
+  <div class="foot-box">
+    <!-- <div class="footnote">Chang, E., & Roberts, R. (1979)</div> -->
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { step } from "../next.js";
+
+  // regular canvas
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  // Rough.js canvas
+  const rc = rough.canvas(document.getElementById('canvas'));
+  let generator = rc.generator;
+
+  var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
+  const body = document.querySelector('body');
+  body.onkeyup = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+<script type='module' src="../next.js"></script>
+
+</html>

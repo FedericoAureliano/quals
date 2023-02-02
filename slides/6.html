@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Data-Driven Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="section">
+  <div class="full-title-box">
+    <div class="full-title">Verification of Distributed Systems</div>
+  </div>
+  <div class="full-subtitle-box">
+    <div class="full-subtitle">
+      New technique and abstraction
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { step } from "../next.js";
+  var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
+  const body = document.querySelector('body');
+  body.onkeyup = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>
