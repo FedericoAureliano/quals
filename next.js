@@ -22,9 +22,19 @@ function step(e) {
   }
 
   if (e.code == "KeyD") {
-    slide = Math.min(NUMBER_OF_SLIDES, slide + 1);
+    slide = slide + 1;
   } else if (e.code == "KeyA") {
-    slide = Math.max(1, slide - 1)
+    slide = slide - 1;
+  }
+
+  if (slide < 1) {
+    slide = 1;
+    return;
+  }
+
+  if (slide > NUMBER_OF_SLIDES) {
+    slide = NUMBER_OF_SLIDES;
+    return;
   }
 
   const new_slide = document.URL.split('/').slice(0, -1).join('/') + '/' + slide + '.html';

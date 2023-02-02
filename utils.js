@@ -12,6 +12,7 @@ export function step(e, state, dissappear_funcs, appear_funcs) {
         state += 1;
         if (state >= appear_funcs.length) {
             state = state - 1;
+            return state;
         }
     
         const to_remove = dissappear_funcs[state];
