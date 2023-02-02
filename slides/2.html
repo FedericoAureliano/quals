@@ -11,12 +11,12 @@
 </head>
 
 <body>
-  <div id="title-box">
-    <div id="title">Example Distributed System: Ring Leader Election Protocol</div>
+  <div class="title-box">
+    <div class="title">Example Distributed System: Ring Leader Election Protocol</div>
   </div>
-  <div id="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
-  <div id="half-box">
-    <div id="half-half-box">
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
+  <div class="half-box">
+    <div class="half-half-box" id="top-right" style="display: none;">
       <div style="width: 95%;">
         <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Algorithm</span>
         <ul style="font-size: 20pt; list-style-type: circle; width: 100%; padding-top: 1em;">
@@ -27,12 +27,14 @@
         </ul>
       </div>
     </div>
-    <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span>
-    <div id="log-data" style="width: 95%; padding-top: 0.5em;"></div>
+    <div class="half-half-box" id="bottom-right" style="display: none;">
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span>
+      <div id="log-data" style="width: 95%; padding-top: 0.5em;"></div>
+    </div>
   </div>
-  <div id="foot-box">
-    <div id="footnote">Chang, E., & Roberts, R. (1979)</div>
-    <div id="slide-number"></div>
+  <div class="foot-box">
+    <div class="footnote">Chang, E., & Roberts, R. (1979)</div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
@@ -87,6 +89,11 @@
   }
 
   const nodes_checkpoint = to_appear.concat([]);
+
+  const top_right = document.getElementById("top-right");
+  const bottom_right = document.getElementById("bottom-right");
+  to_appear.push(nodes_checkpoint.flat().concat([() => top_right.style.display = "block"]));
+  to_appear.push(nodes_checkpoint.flat().concat([() => bottom_right.style.display = "block"]));
 
   const message_chains = [
     [0, 3, 1, 2, 4, 0, 3, 1, 2, 4],

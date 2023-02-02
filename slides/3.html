@@ -11,12 +11,12 @@
 </head>
 
 <body>
-  <div id="title-box">
-    <div id="title">Ring Leader Election Protocol with Message Chains</div>
+  <div class="title-box">
+    <div class="title">Ring Leader Election Protocol with Message Chains</div>
   </div>
-  <div id="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
-  <div id="half-box">
-    <div id="half-half-box">
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
+  <div class="half-box">
+    <div class="half-half-box" id="top-right" style="display: none;">
       <div style="width: 95%;">
         <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Algorithm</span>
         <ul style="font-size: 20pt; padding-top: 1em;">
@@ -39,8 +39,10 @@
         </ul>
       </div>
     </div>
-    <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Message Chain Log</span>
-    <div id="log-data" style="width: 95%; padding-top: 0.5em;">
+    <div class="half-half-box" id="bottom-right" style="display: none;">
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Unique Message Chain Log</span>
+      <div id="log-data" style="width: 95%; padding-top: 0.5em;">
+    </div>
       <ul>
         <li id="mc0"><span style="color: white;"><sup>&nbsp;</sup></span></li>
         <li id="mc1"><span style="color: white;"><sup>&nbsp;</sup></span></li>
@@ -50,9 +52,9 @@
       </ul>
     </div>
   </div>
-  <div id="foot-box">
-    <div id="footnote">In submission</div>
-    <div id="slide-number"></div>
+  <div class="foot-box">
+    <div class="footnote">In submission</div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
@@ -114,22 +116,30 @@
   }
 
   const nodes_checkpoint = to_appear.concat([]);
+  const top_right = document.getElementById("top-right");
+  const bottom_right = document.getElementById("bottom-right");
+  to_appear.push(nodes_checkpoint.flat().concat([() => top_right.style.display = "block"]));
+  to_appear.push(nodes_checkpoint.flat().concat([() => bottom_right.style.display = "block"]));
 
   const message_chains = [
-    [0, 3, 1, 2, 4, 0, 3, 1, 2, 4],
-    [1, 2, 4, 0, 3, 1, 2, 4],
-    [2, 4, 0, 3, 1, 2, 4],
-    [3, 1, 2, 4, 0, 3, 1, 2, 4],
+    [0, 3],
+    [1, 2],
+    [2, 4],
+    [3, 1, 2, 4],
     [4, 0, 3, 1, 2, 4],
   ];
 
   var counts = [0, 0, 0, 0, 0];
   var trace = [];
-  while (counts[0] < message_chains[0].length - 1 && counts[1] < message_chains[1].length - 1 && counts[2] < message_chains[2].length - 1 && counts[3] < message_chains[3].length - 1 && counts[4] < message_chains[4].length - 1) {
+  while (true) {
     // pick a message chain to draw from
     var choice = Math.floor(Math.random() * 5);
     const chain = message_chains[choice];
     const count = counts[choice];
+
+    if (count >= chain.length - 1) {
+      continue;
+    }
 
     // label is greatest value seen so far in that chain
     var label;
@@ -143,6 +153,10 @@
     trace.push([from, to, label, tertiary_color, primary_color, choice, count]);
 
     counts[choice] = count + 1;
+
+    if (to == label) {
+      break;
+    }
   }
 
   for (var i = 0; i < trace.length; i++) {

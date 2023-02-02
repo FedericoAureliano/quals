@@ -2,10 +2,10 @@ const NUMBER_OF_SLIDES = 3;
 
 var slide = parseInt(document.URL.split('/').pop().split('.')[0], 10);
 
-const footer = document.getElementById('slide-number');
+const footer = document.querySelector('.slide-number');
 footer.innerText = slide + " of " + NUMBER_OF_SLIDES
 
-const date = document.getElementById('date');
+const date = document.querySelector('.date');
 if (date != null) {
   const currentDate = new Date();
   const options = { year: 'numeric', month: 'short', day: 'numeric' };

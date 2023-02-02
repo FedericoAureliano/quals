@@ -35,7 +35,7 @@ body {
     font-size: 24pt;
 }
 
-#title-box {
+.title-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: var(--title-height);
@@ -43,7 +43,7 @@ body {
     display: flex;
 }
 
-#title {
+.title {
     margin: auto;
     width: 90%;
     font-size: 40pt;
@@ -54,7 +54,7 @@ body {
     padding-left: 10px;
 }
 
-#full-title-box {
+.full-title-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: calc(var(--screen-height) - var(--subtitle-height) - var(--foot-height));
@@ -62,7 +62,7 @@ body {
     display: flex;
 }
 
-#full-title {
+.full-title {
     margin-left: auto;
     margin-right: auto;
     width: 75%;
@@ -71,7 +71,7 @@ body {
     align-self: flex-end;
 }
 
-#full-subtitle-box {
+.full-subtitle-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: var(--subtitle-height);
@@ -79,14 +79,14 @@ body {
     display: flex;
 }
 
-#full-subtitle {
+.full-subtitle {
     margin: auto;
     width: 60%;
     font-size: 40pt;
     text-align: center;
 }
 
-#full-box {
+.full-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
@@ -94,7 +94,7 @@ body {
     line-height: 1.25;
 }
 
-#half-box {
+.half-box {
     max-width: calc(var(--screen-width) / 2);
     min-width: calc(var(--screen-width) / 2);
     max-height: calc(var(--screen-height) - var(--title-height) - var(--foot-height));
@@ -104,7 +104,7 @@ body {
     flex-direction: column;
 }
 
-#half-half-box {
+.half-half-box {
     max-width: calc(var(--screen-width) / 2);
     min-width: calc(var(--screen-width) / 2);
     max-height: calc((var(--screen-height) - var(--title-height) - var(--foot-height)) / 2);
@@ -113,7 +113,7 @@ body {
     float: left;
 }
 
-#foot-box {
+.foot-box {
     max-width: var(--screen-width);
     min-width: var(--screen-width);
     max-height: var(--foot-height);
@@ -124,7 +124,7 @@ body {
     font-size: 20pt;
 }
 
-#slide-number {
+.slide-number {
     margin-left: auto;
     margin-top: auto;
     margin-bottom: 3px;
@@ -136,7 +136,7 @@ body {
     box-shadow: 10px 0 0 var(--primary-color), -10px 0 0 var(--primary-color);
 }
 
-#date, #footnote {
+.date, .footnote {
     margin-right: auto;
     margin-top: auto;
     margin-bottom: 3px;
@@ -148,7 +148,7 @@ body {
     box-shadow: 10px 0 0 var(--primary-color), -10px 0 0 var(--primary-color);
 }
 
-#titlenote {
+.titlenote {
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
