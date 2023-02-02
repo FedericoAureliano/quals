@@ -51,8 +51,8 @@ body {
     font-weight: bold;
     text-align: left;
     align-self: flex-end;
-    box-shadow: -10px 0 0 var(--primary-color);
-    padding-left: 10px;
+    box-shadow: -15px 0 0 var(--primary-color);
+    padding-left: 20px;
 }
 
 .full-title-box {
