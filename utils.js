@@ -33,7 +33,7 @@ export function draw_node(rc, ctx, x_small, y_small, radius_small, label, color,
     const radius = radius_small * scale_factor;
     const x = x_small * scale_factor;
     const y = y_small * scale_factor;
-    ctx.font = "200px Open Sans";
+    ctx.font = "300px Open Sans";
     ctx.textBaseline = 'middle';
     ctx.textAlign = "center";
     ctx.fillStyle = color;
@@ -71,7 +71,7 @@ export function gen_node(gen, x_small, y_small, radius_small, color) {
 export function draw_node_from_gen(rc, ctx, node, x_small, y_small, label, color) {
     const x = x_small * scale_factor;
     const y = y_small * scale_factor;
-    ctx.font = "200px Open Sans";
+    ctx.font = "300px Open Sans";
     ctx.textBaseline = 'middle';
     ctx.textAlign = "center";
     ctx.fillStyle = color;
@@ -112,7 +112,7 @@ export function draw_arrow(ctx, fromx_small, fromy_small, tox_small, toy_small, 
     ctx.fillStyle = label_color;
     ctx.fillRect(midx - (15 * scale_factor), midy - (15 * scale_factor), 30 * scale_factor, 30 * scale_factor);
 
-    ctx.font = "160px Open Sans";
+    ctx.font = "200px Open Sans";
     ctx.textBaseline = 'middle';
     ctx.textAlign = "center";
 

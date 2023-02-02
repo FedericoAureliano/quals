@@ -12,7 +12,8 @@
 
 <body>
   <div class="full-title-box">
-    <div class="full-title"><span id="data-driven-verification">Data-Driven Verification</span> of <span
+    <div class="full-title"><span id="data-driven">Data-Driven</span> <span
+      id="verification-of">Verification of</span> <span
         id="distributed-systems">Distributed Systems</span> with End-to-End <span id="proofs">Proofs</span></div>
   </div>
   <div class="full-subtitle-box">
@@ -35,20 +36,22 @@
   import { annotate } from 'https://unpkg.com/rough-notation?module';
   import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
 
-  var ddv = document.querySelector('#data-driven-verification');
+  var dd = document.querySelector('#data-driven');
+  var vo = document.querySelector('#verification-of');
   var ds = document.querySelector('#distributed-systems');
   var proofs = document.querySelector('#proofs');
 
-  ddv = annotate(ddv, { type: 'circle', color: tertiary_color, strokeWidth: 10 });
+  dd = annotate(dd, { type: 'circle', color: tertiary_color, strokeWidth: 10 });
+  vo = annotate(vo, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
   ds = annotate(ds, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
   proofs = annotate(proofs, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
 
   const to_appear = [[], 
-    [() => ddv.show()], 
-    [() => ds.show()], 
+    [() => ds.show(), () => vo.show()], 
+    [() => dd.show()], 
     [() => proofs.show()]];
 
-  const to_disappear = [[() => ddv.hide(), () => ds.hide(), () => proofs.hide()], [], [], []];
+  const to_disappear = [[() => dd.hide(), () => ds.hide(), () => proofs.hide()], [], [], []];
 
   var state = 0;
   const body = document.querySelector('body');
