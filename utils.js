@@ -4,6 +4,8 @@ export const secondary_color = "#3B7EA1";
 export const tertiary_color = "#00A598";
 export const quaternary_color = "#FDB515";
 
+const scale_factor = 8;
+
 export function step(e, state, dissappear_funcs, appear_funcs) {
     // assert(dissappear_funcs.length == appear_funcs.length);
     if (e.code == "KeyS") {
@@ -26,8 +28,11 @@ export function step(e, state, dissappear_funcs, appear_funcs) {
     return state;
 }
 
-export function draw_node(rc, ctx, x, y, radius, label, color, fill_color=null) {
-    ctx.font = "25pt Open Sans";
+export function draw_node(rc, ctx, x_small, y_small, radius_small, label, color, fill_color=null) {
+    const radius = radius_small * scale_factor;
+    const x = x_small * scale_factor;
+    const y = y_small * scale_factor;
+    ctx.font = "200px Open Sans";
     ctx.textBaseline = 'middle';
     ctx.textAlign = "center";
     ctx.fillStyle = color;
@@ -35,29 +40,37 @@ export function draw_node(rc, ctx, x, y, radius, label, color, fill_color=null) 
     if (fill_color) {
         rc.circle(x, y, radius * 2, {
             stroke: color, 
-            strokeWidth: 10,
+            strokeWidth: 10 * scale_factor,
             fill: fill_color,
             fillStyle: 'zigzag',
-            fillWeight: 5,
-            hachureGap: 25
+            fillWeight: 1 * scale_factor,
+            hachureGap: 10 * scale_factor,
+            roughness: 0.25 * scale_factor,
         });
     } else {
         rc.circle(x, y, radius * 2, {
-            stroke: color, strokeWidth: 10,
+            stroke: color, strokeWidth: 10 * scale_factor,
+            roughness: 0.25 * scale_factor,
         });
     }
         
     ctx.restore();
 }
 
-export function gen_node(gen, x, y, radius, color) {
+export function gen_node(gen, x_small, y_small, radius_small, color) {
+    const radius = radius_small * scale_factor;
+    const x = x_small * scale_factor;
+    const y = y_small * scale_factor;
     return gen.circle(x, y, radius * 2, {
-        stroke: color, strokeWidth: 10,
+        stroke: color, strokeWidth: 10 * scale_factor,
+        roughness: 0.25 * scale_factor,
     })
 }
 
-export function draw_node_from_gen(rc, ctx, node, x, y, label, color) {
-    ctx.font = "25pt Open Sans";
+export function draw_node_from_gen(rc, ctx, node, x_small, y_small, label, color) {
+    const x = x_small * scale_factor;
+    const y = y_small * scale_factor;
+    ctx.font = "200px Open Sans";
     ctx.textBaseline = 'middle';
     ctx.textAlign = "center";
     ctx.fillStyle = color;
@@ -66,7 +79,12 @@ export function draw_node_from_gen(rc, ctx, node, x, y, label, color) {
     ctx.restore();
 }
 
-export function draw_arrow(ctx, fromx, fromy, tox, toy, label, arrow_color, label_color) {
+export function draw_arrow(ctx, fromx_small, fromy_small, tox_small, toy_small, label, arrow_color, label_color) {
+    const fromx = fromx_small * scale_factor;
+    const fromy = fromy_small * scale_factor;
+    const tox = tox_small * scale_factor;
+    const toy = toy_small * scale_factor;
+
     const dx = tox - fromx;
     const dy = toy - fromy;
     const headlen = Math.sqrt(dx * dx + dy * dy) * 0.2; // length of head in pixels
@@ -74,7 +92,7 @@ export function draw_arrow(ctx, fromx, fromy, tox, toy, label, arrow_color, labe
 
     ctx.fillStyle = arrow_color;
     ctx.strokeStyle = arrow_color;
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 10 * scale_factor;
     ctx.beginPath();
     ctx.moveTo(fromx, fromy);
     ctx.lineTo(tox, toy);
@@ -91,9 +109,9 @@ export function draw_arrow(ctx, fromx, fromy, tox, toy, label, arrow_color, labe
 
     // draw small square
     ctx.fillStyle = label_color;
-    ctx.fillRect(midx - 15, midy - 15, 30, 30);
+    ctx.fillRect(midx - (15 * scale_factor), midy - (15 * scale_factor), 30 * scale_factor, 30 * scale_factor);
 
-    ctx.font = "20px Open Sans";
+    ctx.font = "160px Open Sans";
     ctx.textBaseline = 'middle';
     ctx.textAlign = "center";
 
