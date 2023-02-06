@@ -11,7 +11,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proposal Overview: Architecture with Learning & Proofs</div>
+    <div class="title">Proposal Overview: <span id="learning">Learning</span> & <span id="proofs">Proofs</span></div>
   </div>
   <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
@@ -20,7 +20,8 @@
 </body>
 
 <script type="module">
-  import { step, primary_color, secondary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
 
   const width = 1920;
   const height = 1080 - 350;
@@ -33,14 +34,14 @@
   var layer = new Konva.Layer();
   stage.add(layer);
 
-  const vert_gap = 100;
-  const horiz_gap = 200;
+  const vert_gap = 50;
+  const horiz_gap = 150;
 
   const doc_width = 150;
   const doc_height = 200;
   const doc_corners = [0, 20, 0, 0];
 
-  const big_process_width = 700;
+  const big_process_width = 1000;
   const big_process_height = 500;
   const process_corners = [0, 0, 0, 0];
 
@@ -50,15 +51,15 @@
   var system = draw_rectangle_konva(layer, left_most_x, upmost_y, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User System");
   var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
 
-  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "Tool");
+  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
   
   var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
-  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "New Likely Invariant");
+  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Invariant");
 
   var ringSystemImage = new Image();
   var ringSystemPng = new Konva.Image({
       x: system[0].x() + 20,
-      y: system[0].y() + 70,
+      y: system[0].y() + 50,
       image: ringSystemImage,
       width: system[0].width()  - 40,
       height: system[0].height() - 80,
@@ -72,7 +73,7 @@
   var ringInvImage = new Image();
   var ringInvPng = new Konva.Image({
       x: invariant[0].x() + 20,
-      y: invariant[0].y() + 70,
+      y: invariant[0].y() + 50,
       image: ringInvImage,
       width: invariant[0].width()  - 40,
       height: invariant[0].height() - 80,
@@ -101,7 +102,7 @@
   var helpText = new Konva.Text({
     x: help[0].x(),
     y: help[0].y() + 20,
-    text: 'f(x)',
+    text: 'P(s)',
     fontSize: 20,
     fontFamily: 'Open Sans',
     fill: secondary_color,
@@ -118,8 +119,101 @@
   proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
   help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
 
+
+  const little_gap = 3.5 * horiz_gap / 7;
+  const little_process_width = (big_process_width - (6 * little_gap)) / 5;
+  const little_process_height = big_process_height - vert_gap;
+  var rewriter = draw_rectangle_konva(layer, tool[0].x() + little_gap, tool[0].y() + vert_gap/3, little_process_width, little_process_height / 1.5, process_corners, "transparent", quaternary_color, quaternary_color, "Learned Rewriter",);
+  var encoder = draw_rectangle_konva(layer, rewriter[0].x() + rewriter[0].width() + little_gap, rewriter[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, tertiary_color, "Encoder",);
+  var solver_interface = draw_rectangle_konva(layer, encoder[0].x() + encoder[0].width() + little_gap, encoder[0].y(), little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, quaternary_color, "Learned Solver Interface",);
+  var solver = draw_rectangle_konva(layer, solver_interface[0].x() + solver_interface[0].width() + little_gap, solver_interface[0].y(), little_process_width, little_process_height / 3, process_corners, "transparent", tertiary_color, tertiary_color, "Solver",);
+  var decoder = draw_rectangle_konva(layer, solver[0].x() + solver[0].width() + little_gap, solver[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, tertiary_color, "Decoder",);
+  
+  var fuzzer = draw_rectangle_konva(layer, rewriter[0].x(), rewriter[0].y() + rewriter[0].height() + vert_gap/3, little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, quaternary_color, "Sampler",);
+  var spec_miner = draw_rectangle_konva(layer, solver_interface[0].x(), encoder[0].y() + encoder[0].height() + vert_gap/3, little_process_width * 3 + little_gap * 2, little_process_height / 3, process_corners, "transparent", quaternary_color, quaternary_color, "Spec. Miner",);
+
+  rewriter = rewriter.concat(draw_arrow_konva(layer, rewriter[0], encoder[0], quaternary_color, quaternary_color, ""));
+  solver_interface = solver_interface.concat(draw_arrow_konva(layer, solver_interface[0], solver[0], quaternary_color, quaternary_color, ""));
+
+  var encoder_to_solver_interface = new Konva.Arrow({
+    points: [encoder[0].x() + encoder[0].width(), solver_interface[0].y() + solver_interface[0].height()/2, solver_interface[0].x() - 10, solver_interface[0].y() + solver_interface[0].height()/2],
+    pointerLength: 10,
+    pointerWidth: 10,
+    fill: tertiary_color,
+    stroke: tertiary_color,
+    strokeWidth: 5,
+  });
+  layer.add(encoder_to_solver_interface);;
+  encoder = encoder.concat(encoder_to_solver_interface);
+
+  var solver_to_decoder = new Konva.Arrow({
+    points: [solver[0].x() + solver[0].width(), solver[0].y() + solver[0].height()/2, decoder[0].x() - 10, solver[0].y() + solver[0].height()/2],
+    pointerLength: 10,
+    pointerWidth: 10,
+    fill: tertiary_color,
+    stroke: tertiary_color,
+    strokeWidth: 5,
+  });
+  layer.add(solver_to_decoder);
+  solver = solver.concat(solver_to_decoder);
+
+  var encoder_to_decoder = new Konva.Arrow({
+    points: [encoder[0].x() + encoder[0].width(), decoder[0].y() + little_process_height / 2, decoder[0].x() - 10, decoder[0].y() + little_process_height / 2],
+    pointerLength: 10,
+    pointerWidth: 10,
+    fill: tertiary_color,
+    stroke: tertiary_color,
+    strokeWidth: 5,
+  });
+  layer.add(encoder_to_decoder);
+  encoder = encoder.concat(encoder_to_decoder);
+
+  var encoder_to_decoder_text = new Konva.Text({
+    x: encoder_to_decoder.points()[0],
+    y: encoder_to_decoder.points()[1] + 10,
+    text: "Encoding Proof",
+    fontSize: 18,
+    fontFamily: 'Open Sans',
+    fill: tertiary_color,
+    width: encoder_to_decoder.points()[2] - encoder_to_decoder.points()[0],
+    align: 'center',
+  });
+  layer.add(encoder_to_decoder_text);
+  encoder = encoder.concat(encoder_to_decoder_text);
+
+  var fuzzer_to_spec_miner = new Konva.Arrow({
+    points: [fuzzer[0].x() + fuzzer[0].width(), fuzzer[0].y() + fuzzer[0].height()/2, spec_miner[0].x() - 10, fuzzer[0].y() + fuzzer[0].height()/2],
+    pointerLength: 10,
+    pointerWidth: 10,
+    fill: quaternary_color,
+    stroke: quaternary_color,
+    strokeWidth: 5,
+  });
+  layer.add(fuzzer_to_spec_miner);
+  fuzzer = fuzzer.concat(fuzzer_to_spec_miner);
+
+  var fuzzer_to_spec_miner_text = new Konva.Text({
+    x: fuzzer_to_spec_miner.points()[0],
+    y: fuzzer_to_spec_miner.points()[1] + 10,
+    text: "Traces and Invariants",
+    fontSize: 18,
+    fontFamily: 'Open Sans',
+    fill: quaternary_color,
+    width: fuzzer_to_spec_miner.points()[2] - fuzzer_to_spec_miner.points()[0],
+    align: 'center',
+  });
+  layer.add(fuzzer_to_spec_miner_text);
+  fuzzer = fuzzer.concat(fuzzer_to_spec_miner_text);
+
+
+  var learning = document.querySelector('#learning');
+  learning = annotate(learning, { type: 'highlight', color: quaternary_color, strokeWidth: 10 });
+
+  var proofs = document.querySelector('#proofs');
+  proofs = annotate(proofs, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+
   function clean() {
-    for (const x of [tool, system, invariant, proof, help]) {
+    for (const x of [tool, system, invariant, proof, help, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
       if (Array.isArray(x)) {
         for (const y of x) {
           y.hide();
@@ -128,12 +222,14 @@
         x.hide();
       }
     }
+    learning.hide();
+    proofs.hide();
   }
 
   clean();
 
   var to_appear = [[]];
-  for (const x of [tool, system, invariant, proof, help]) {
+  for (const x of [tool, system, invariant, proof, help, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {
@@ -145,6 +241,8 @@
     }
     to_appear.push([f]);
   }
+  to_appear.push([() => learning.show()]);
+  to_appear.push([() => proofs.show()]);
 
   var to_disappear = [];
   for (const x of to_appear) { 

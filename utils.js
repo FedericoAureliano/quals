@@ -128,14 +128,14 @@ export function getByValue(map, searchValue) {
     }
 }
 
-export function add_label_to_shape(layer, shape, label, color) {
+export function add_label_to_shape(layer, shape, label, color, font_size) {
     var text = new Konva.Text({
         x: shape.x() + 10,
         y: shape.y() + 10,
         text: label,
         width: shape.width() - 15,
         align: 'left',
-        fontSize: 24,
+        fontSize: font_size,
         fontFamily: 'Open Sans',
         fill: color,
     });
@@ -143,7 +143,7 @@ export function add_label_to_shape(layer, shape, label, color) {
     return text;
 }
 
-export function draw_rectangle_konva(layer, x, y, width, height, corners, fill_color, outline_color, text_color, label) {
+export function draw_rectangle_konva(layer, x, y, width, height, corners, fill_color, outline_color, text_color, label, font_size = 18) {
     var rect = new Konva.Rect({
         x: x,
         y: y,
@@ -155,7 +155,7 @@ export function draw_rectangle_konva(layer, x, y, width, height, corners, fill_c
         cornerRadius: corners,
     });
 
-    var text = add_label_to_shape(layer, rect, label, text_color);
+    var text = add_label_to_shape(layer, rect, label, text_color, font_size);
 
     layer.add(rect);
     layer.add(text);
@@ -194,7 +194,7 @@ export function draw_arrow_konva(layer, from_shape, to_shape, arrow_color, label
         text: label,
         width: points[2] - points[0],
         align: 'center',
-        fontSize: 24,
+        fontSize: 18,
         fontFamily: 'Open Sans',
         fill: label_color,
     });
