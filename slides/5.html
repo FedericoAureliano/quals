@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Data-Driven Verification of Distributed Systems with End-to-End Proofs</title>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
   <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
   <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
@@ -24,7 +24,7 @@
 
 
 <script type="module">
-  import { step } from "../next.js";
+  import { step } from "../utils.js";
 
   // regular canvas
   var canvas = document.getElementById("canvas");
@@ -37,7 +37,7 @@
   const to_disappear = [];
   const to_appear = [];
   const body = document.querySelector('body');
-  body.onkeyup = function (e) { state = step(e, state, to_disappear, to_appear) };
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
 
 <script type='module' src="../next.js"></script>

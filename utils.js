@@ -123,7 +123,85 @@ export function draw_arrow(ctx, fromx_small, fromy_small, tox_small, toy_small, 
 
 export function getByValue(map, searchValue) {
     for (let [key, value] of map.entries()) {
-      if (value === searchValue)
+        if (value === searchValue)
         return key;
     }
-  }
+}
+
+export function add_label_to_shape(layer, shape, label, color) {
+    var text = new Konva.Text({
+        x: shape.x() + 10,
+        y: shape.y() + 10,
+        text: label,
+        width: shape.width() - 15,
+        align: 'left',
+        fontSize: 24,
+        fontFamily: 'Open Sans',
+        fill: color,
+    });
+    layer.add(text);
+    return text;
+}
+
+export function draw_rectangle_konva(layer, x, y, width, height, corners, fill_color, outline_color, text_color, label) {
+    var rect = new Konva.Rect({
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+        fill: fill_color,
+        stroke: outline_color,
+        strokeWidth: 5,
+        cornerRadius: corners,
+    });
+
+    var text = add_label_to_shape(layer, rect, label, text_color);
+
+    layer.add(rect);
+    layer.add(text);
+
+    return [rect, text];
+}
+
+export function draw_arrow_konva(layer, from_shape, to_shape, arrow_color, label_color, label) {
+    var points = [];
+
+    const from_center_y = from_shape.y() + from_shape.height() / 2;
+    const to_center_y = to_shape.y() + to_shape.height() / 2;
+
+    if (from_center_y < to_center_y) {
+        points = [from_shape.x() + from_shape.width(), from_shape.y() + from_shape.height() / 2, to_shape.x() - 10, to_shape.y() + to_shape.height() / 2 - 10];
+    } else if (from_center_y > to_center_y) {
+        points = [from_shape.x() + from_shape.width(), from_shape.y() + from_shape.height() / 2, to_shape.x() - 10, to_shape.y() + to_shape.height() / 2 + 10];
+    } else {
+        points = [from_shape.x() + from_shape.width(), from_shape.y() + from_shape.height() / 2, to_shape.x() - 10, to_shape.y() + to_shape.height() / 2];
+    }
+
+    var arrow = new Konva.Arrow({
+        points: points,
+        pointerLength: 10,
+        pointerWidth: 10,
+        fill: arrow_color,
+        stroke: arrow_color,
+        strokeWidth: 5,
+    });
+    layer.add(arrow);
+
+    // add text on middle of arrow matching angle of arrow
+    var text = new Konva.Text({
+        x: points[0],
+        y: points[1] + 5,
+        text: label,
+        width: points[2] - points[0],
+        align: 'center',
+        fontSize: 24,
+        fontFamily: 'Open Sans',
+        fill: label_color,
+    });
+    // find angle of arrow
+    var angle = Math.atan2(points[3] - points[1], points[2] - points[0]) * 180 / Math.PI;
+    text.rotate(angle);
+    layer.add(text);
+
+    return [arrow, text];
+}

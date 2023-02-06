@@ -1,1 +1,1 @@
-# data-driven-verification-of-distributed-systems-with-end-to-end-proofs
+# learning-enabled-verification-of-distributed-systems-with-end-to-end-proofs

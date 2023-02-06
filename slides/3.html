@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Data-Driven Verification of Distributed Systems with End-to-End Proofs</title>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
   <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
   <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
@@ -14,17 +14,24 @@
   <div class="title-box">
     <div class="title">Asynchronous Message Passing Distributed Systems, Generally</div>
   </div>
-  <div class="half-box"></div>
+  <div class="half-box">
+    <div style="width: 95%; margin-left: 80px;">
+      <ul>
+        <li>N nodes (N >= 2)</li>
+        <li>N multisets of messages, called buffers, one per node.</li>
+        <li>...</li>
+      </ul>      
+    </div>
+  </div>
   <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
   <div class="foot-box">
-    <!-- <div class="footnote">Chang, E., & Roberts, R. (1979)</div> -->
+    <div class="footnote">Fischer, Lynch, and Paterson (1985); Dwork, Lynch, and Stockmeyer (1988)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
-  import { step } from "../next.js";
+  import { step } from "../utils.js";
 
   // regular canvas
   var canvas = document.getElementById("canvas");
@@ -37,7 +44,7 @@
   const to_disappear = [];
   const to_appear = [];
   const body = document.querySelector('body');
-  body.onkeyup = function (e) { state = step(e, state, to_disappear, to_appear) };
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
 
 <script type='module' src="../next.js"></script>

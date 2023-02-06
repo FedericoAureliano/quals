@@ -2,36 +2,158 @@
 <html lang="en">
 
 <head>
-  <title>Data-Driven Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/konva@8/konva.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Verification of Distributed Systems</div>
+<body>
+  <div class="title-box">
+    <div class="title">Proposal Overview: Architecture with Learning & Proofs</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle">
-      New technique and abstraction
-    </div>
-  </div>
+  <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
-  import { step } from "../next.js";
+  import { step, primary_color, secondary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
+
+  const width = 1920;
+  const height = 1080 - 350;
+
+  var stage = new Konva.Stage({
+    container: 'canvas',
+    width: width,
+    height: height,
+  });
+  var layer = new Konva.Layer();
+  stage.add(layer);
+
+  const vert_gap = 100;
+  const horiz_gap = 200;
+
+  const doc_width = 150;
+  const doc_height = 200;
+  const doc_corners = [0, 20, 0, 0];
+
+  const big_process_width = 700;
+  const big_process_height = 500;
+  const process_corners = [0, 0, 0, 0];
+
+  const left_most_x = (width - (big_process_width + doc_width + doc_width + horiz_gap + horiz_gap)) / 2;
+  const upmost_y = (height - (doc_height + doc_height + vert_gap)) / 2;
+
+  var system = draw_rectangle_konva(layer, left_most_x, upmost_y, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User System");
+  var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
+
+  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "Tool");
+  
+  var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
+  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "New Likely Invariant");
+
+  var ringSystemImage = new Image();
+  var ringSystemPng = new Konva.Image({
+      x: system[0].x() + 20,
+      y: system[0].y() + 70,
+      image: ringSystemImage,
+      width: system[0].width()  - 40,
+      height: system[0].height() - 80,
+    });
+  ringSystemImage.onload = function () {
+    layer.add(ringSystemPng);
+  };
+  ringSystemImage.src = '../icons/ring.png';
+  system = system.concat(ringSystemPng);
+
+  var ringInvImage = new Image();
+  var ringInvPng = new Konva.Image({
+      x: invariant[0].x() + 20,
+      y: invariant[0].y() + 70,
+      image: ringInvImage,
+      width: invariant[0].width()  - 40,
+      height: invariant[0].height() - 80,
+    });
+  ringInvImage.onload = function () {
+    layer.add(ringInvPng);
+  };
+  ringInvImage.src = '../icons/ring_inv.png';
+  invariant = invariant.concat(ringInvPng);
+
+  var proofImage = new Image();
+  var proofPng = new Konva.Image({
+      x: proof[0].x() + 30,
+      y: proof[0].y() + 40,
+      image: proofImage,
+      width: proof[0].width() - 60,
+      height: proof[0].height() - 50,
+    });
+  proofImage.onload = function () {
+    layer.add(proofPng);
+  };
+  proofImage.src = '../icons/proof.png';
+  proof = proof.concat(proofPng);
+
+  // add text to center of help
+  var helpText = new Konva.Text({
+    x: help[0].x(),
+    y: help[0].y() + 20,
+    text: 'f(x)',
+    fontSize: 20,
+    fontFamily: 'Open Sans',
+    fill: secondary_color,
+    width: help[0].width(),
+    height: help[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(helpText);
+  help = help.concat(helpText);
+
+  system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
+  invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
+  proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
+  help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
+
+  function clean() {
+    for (const x of [tool, system, invariant, proof, help]) {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.hide();
+        }
+      } else {
+        x.hide();
+      }
+    }
+  }
+
+  clean();
+
+  var to_appear = [[]];
+  for (const x of [tool, system, invariant, proof, help]) {
+    function f() {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.show();
+        }
+      } else {
+        x.show();
+      }
+    }
+    to_appear.push([f]);
+  }
+
+  var to_disappear = [];
+  for (const x of to_appear) { 
+    to_disappear.push([]);
+  }
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
-  body.onkeyup = function (e) { state = step(e, state, to_disappear, to_appear) };
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
 
 <script type='module' src="../next.js"></script>

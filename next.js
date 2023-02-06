@@ -1,19 +1,12 @@
-const NUMBER_OF_SLIDES = 10;
+const NUMBER_OF_SLIDES = 6;
 
 var slide = parseInt(document.URL.split('/').pop().split('.')[0], 10);
 
 const footer = document.querySelector('.slide-number');
 footer.innerText = slide + " of " + NUMBER_OF_SLIDES
 
-const date = document.querySelector('.date');
-if (date != null) {
-  const currentDate = new Date();
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  date.innerText = currentDate.toLocaleDateString('en-us', options);
-}
-
 const body = document.querySelector('body');
-body.onkeydown = function(e){step(e)};
+body.onkeyup = function(e){step(e)};
 
 function step(e) {
 
