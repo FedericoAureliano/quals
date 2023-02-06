@@ -11,7 +11,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proposal Overview: <span id="learning">Learning</span> & <span id="proofs">Proofs</span></div>
+    <div class="title">Proposal Overview: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning Architecture</div>
   </div>
   <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
@@ -123,17 +123,44 @@
   const little_gap = 3.5 * horiz_gap / 7;
   const little_process_width = (big_process_width - (6 * little_gap)) / 5;
   const little_process_height = big_process_height - vert_gap;
-  var rewriter = draw_rectangle_konva(layer, tool[0].x() + little_gap, tool[0].y() + vert_gap/3, little_process_width, little_process_height / 1.5, process_corners, "transparent", quaternary_color, quaternary_color, "Learned Rewriter",);
-  var encoder = draw_rectangle_konva(layer, rewriter[0].x() + rewriter[0].width() + little_gap, rewriter[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, tertiary_color, "Encoder",);
-  var solver_interface = draw_rectangle_konva(layer, encoder[0].x() + encoder[0].width() + little_gap, encoder[0].y(), little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, quaternary_color, "Learned Solver Interface",);
-  var solver = draw_rectangle_konva(layer, solver_interface[0].x() + solver_interface[0].width() + little_gap, solver_interface[0].y(), little_process_width, little_process_height / 3, process_corners, "transparent", tertiary_color, tertiary_color, "Solver",);
-  var decoder = draw_rectangle_konva(layer, solver[0].x() + solver[0].width() + little_gap, solver[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, tertiary_color, "Decoder",);
+  var rewriter = draw_rectangle_konva(layer, tool[0].x() + little_gap, tool[0].y() + vert_gap/3, little_process_width, little_process_height / 1.5, process_corners, "transparent", quaternary_color, primary_color, "Learned Rewriter",);
   
-  var fuzzer = draw_rectangle_konva(layer, rewriter[0].x(), rewriter[0].y() + rewriter[0].height() + vert_gap/3, little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, quaternary_color, "Sampler",);
-  var spec_miner = draw_rectangle_konva(layer, solver_interface[0].x(), encoder[0].y() + encoder[0].height() + vert_gap/3, little_process_width * 3 + little_gap * 2, little_process_height / 3, process_corners, "transparent", quaternary_color, quaternary_color, "Spec. Miner",);
+  //draw dashed box around rewriter
+  var rewriterBox = new Konva.Rect({
+    x: rewriter[0].x(),
+    y: rewriter[0].y(),
+    width: rewriter[0].width(),
+    height: rewriter[0].height(),
+    stroke: tertiary_color,
+    strokeWidth: 5,
+    dash: [10, 10],
+  });
+  layer.add(rewriterBox);
+  rewriter = rewriter.concat(rewriterBox);
+  
+  var encoder = draw_rectangle_konva(layer, rewriter[0].x() + rewriter[0].width() + little_gap, rewriter[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, primary_color, "Encoder",);
+  var solver_interface = draw_rectangle_konva(layer, encoder[0].x() + encoder[0].width() + little_gap, encoder[0].y(), little_process_width, little_process_height / 2, process_corners, "transparent", quaternary_color, primary_color, "Learned Solver Interface",);
+  var solver = draw_rectangle_konva(layer, solver_interface[0].x() + solver_interface[0].width() + little_gap, solver_interface[0].y(), little_process_width, little_process_height / 2, process_corners, "transparent", tertiary_color, primary_color, "Solver",);
+  var decoder = draw_rectangle_konva(layer, solver[0].x() + solver[0].width() + little_gap, solver[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, primary_color, "Decoder",);
+  
+  var fuzzer = draw_rectangle_konva(layer, rewriter[0].x(), rewriter[0].y() + rewriter[0].height() + vert_gap/3, little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, primary_color, "Sampler",);
+  var spec_miner = draw_rectangle_konva(layer, solver_interface[0].x(), encoder[0].y() + encoder[0].height() + vert_gap/3, little_process_width * 3 + little_gap * 2, little_process_height / 3, process_corners, "transparent", quaternary_color, primary_color, "Specification Miner",);
 
-  rewriter = rewriter.concat(draw_arrow_konva(layer, rewriter[0], encoder[0], quaternary_color, quaternary_color, ""));
-  solver_interface = solver_interface.concat(draw_arrow_konva(layer, solver_interface[0], solver[0], quaternary_color, quaternary_color, ""));
+  //draw dashed box around spec miner
+  var specMinerBox = new Konva.Rect({
+    x: spec_miner[0].x(),
+    y: spec_miner[0].y(),
+    width: spec_miner[0].width(),
+    height: spec_miner[0].height(),
+    stroke: tertiary_color,
+    strokeWidth: 5,
+    dash: [10, 10],
+  });
+  layer.add(specMinerBox);
+  spec_miner = spec_miner.concat(specMinerBox);
+
+  rewriter = rewriter.concat(draw_arrow_konva(layer, rewriter[0], encoder[0], quaternary_color, primary_color, ""));
+  solver_interface = solver_interface.concat(draw_arrow_konva(layer, solver_interface[0], solver[0], quaternary_color, primary_color, ""));
 
   var encoder_to_solver_interface = new Konva.Arrow({
     points: [encoder[0].x() + encoder[0].width(), solver_interface[0].y() + solver_interface[0].height()/2, solver_interface[0].x() - 10, solver_interface[0].y() + solver_interface[0].height()/2],
@@ -158,7 +185,7 @@
   solver = solver.concat(solver_to_decoder);
 
   var encoder_to_decoder = new Konva.Arrow({
-    points: [encoder[0].x() + encoder[0].width(), decoder[0].y() + little_process_height / 2, decoder[0].x() - 10, decoder[0].y() + little_process_height / 2],
+    points: [encoder[0].x() + encoder[0].width(), decoder[0].y() + little_process_height / 1.75, decoder[0].x() - 10, decoder[0].y() + little_process_height / 1.75],
     pointerLength: 10,
     pointerWidth: 10,
     fill: tertiary_color,
@@ -174,7 +201,7 @@
     text: "Encoding Proof",
     fontSize: 18,
     fontFamily: 'Open Sans',
-    fill: tertiary_color,
+    fill: primary_color,
     width: encoder_to_decoder.points()[2] - encoder_to_decoder.points()[0],
     align: 'center',
   });
@@ -198,19 +225,18 @@
     text: "Traces and Invariants",
     fontSize: 18,
     fontFamily: 'Open Sans',
-    fill: quaternary_color,
+    fill: primary_color,
     width: fuzzer_to_spec_miner.points()[2] - fuzzer_to_spec_miner.points()[0],
     align: 'center',
   });
   layer.add(fuzzer_to_spec_miner_text);
   fuzzer = fuzzer.concat(fuzzer_to_spec_miner_text);
 
-
   var learning = document.querySelector('#learning');
-  learning = annotate(learning, { type: 'highlight', color: quaternary_color, strokeWidth: 10 });
+  learning = annotate(learning, { type: 'box', color: quaternary_color, strokeWidth: 10 });
 
   var proofs = document.querySelector('#proofs');
-  proofs = annotate(proofs, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
   function clean() {
     for (const x of [tool, system, invariant, proof, help, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
@@ -229,7 +255,7 @@
   clean();
 
   var to_appear = [[]];
-  for (const x of [tool, system, invariant, proof, help, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
+  for (const x of [tool, system, invariant, proof, help, learning, proofs, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {
@@ -241,8 +267,6 @@
     }
     to_appear.push([f]);
   }
-  to_appear.push([() => learning.show()]);
-  to_appear.push([() => proofs.show()]);
 
   var to_disappear = [];
   for (const x of to_appear) { 
