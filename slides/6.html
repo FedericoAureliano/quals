@@ -11,7 +11,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proposal Overview: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning Architecture</div>
+    <div class="title">Proposal Overview: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning</div>
   </div>
   <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
@@ -159,7 +159,18 @@
   layer.add(specMinerBox);
   spec_miner = spec_miner.concat(specMinerBox);
 
-  rewriter = rewriter.concat(draw_arrow_konva(layer, rewriter[0], encoder[0], quaternary_color, primary_color, ""));
+  var rewriter_to_encoder = draw_arrow_konva(layer, rewriter[0], encoder[0], quaternary_color, primary_color, "");
+  rewriter = rewriter.concat(rewriter_to_encoder);
+  // add dashes to rewriter to encoder arrow
+  var rewriter_to_encoder_dash = new Konva.Line({
+    points: [rewriter_to_encoder[0].points()[0], rewriter_to_encoder[0].points()[1], rewriter_to_encoder[0].points()[2] - 10, rewriter_to_encoder[0].points()[3]],
+    stroke: tertiary_color,
+    strokeWidth: 5,
+    dash: [10, 10],
+  });
+  layer.add(rewriter_to_encoder_dash);
+  rewriter = rewriter.concat(rewriter_to_encoder_dash);
+  
   solver_interface = solver_interface.concat(draw_arrow_konva(layer, solver_interface[0], solver[0], quaternary_color, primary_color, ""));
 
   var encoder_to_solver_interface = new Konva.Arrow({
