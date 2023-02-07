@@ -76,7 +76,19 @@ export function draw_rect(rc, ctx, x_small, y_small, width_small, height_small, 
     ctx.restore();
 }
 
-
+export function draw_dashed_line(rc, ctx, fromx_small, fromy_small, tox_small, toy_small, color) {
+    const fromx = fromx_small * scale_factor;
+    const fromy = fromy_small * scale_factor;
+    const tox = tox_small * scale_factor;
+    const toy = toy_small * scale_factor;
+    rc.line(fromx, fromy, tox, toy, {
+        stroke: color, 
+        strokeWidth: 3 * scale_factor,
+        roughness: 0.25 * scale_factor,
+        strokeLineDash: [10 * scale_factor, 10 * scale_factor],
+    });
+    ctx.restore();
+}
 
 export function gen_node(gen, x_small, y_small, radius_small, color) {
     const radius = radius_small * scale_factor;

@@ -14,8 +14,8 @@
   <div class="title-box">
     <div class="title">Asynchronous Message Passing Distributed Systems, <span id="generally">Generally</span></div>
   </div>
-  <div class="half-box">
-    <div style="width: 95%; margin-left: 80px; font-size: 90%;">
+  <div class="half-box" style="margin-top: -1em;">
+    <div style="width: 95%; margin-left: 80px; font-size: 22pt;">
       <ul style="margin-bottom: 1em; display: none;" id="nodes-def">
         <li style="margin-bottom: 0.35em;"><strong>Nodes</strong> are state machines with a unique identifier.</li>
         <li style="margin-bottom: 0.35em;">The set of node identifiers <math>N</math> has at least two elements.</li>
@@ -44,8 +44,13 @@
         </li>
       </ul>
       <ul style="margin-bottom: 1em; display: none;" id="system-def">
-        <li style="margin-bottom: 0.35em;">Node <strong>actions</strong> are atomic procedures.</li>
-        <li>Define a system by defining payload and actions.</li>
+        <li>Define a system by giving
+          <ul>
+            <li>set of node identifiers,</li>
+            <li>payload type, and</li>
+            <li>node actions (atomic procedures).</li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>

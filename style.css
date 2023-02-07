@@ -33,7 +33,7 @@ body {
     line-height: 1.25;
     clear: both;
 
-    font-size: 24pt;
+    font-size: 28pt;
 }
 
 .title-box {
@@ -166,12 +166,12 @@ a {
     text-decoration: none;
 }
 
-ul {
-    list-style: circle;
-    margin-left: 30px;
-}
-
 .section {
     background-color: var(--primary-color);
     color: var(--background-color);
+}
+
+ul, ol {
+    margin-bottom: 0;
+    margin-top: 0;
 }

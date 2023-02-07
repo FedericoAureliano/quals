@@ -14,11 +14,32 @@
   <div class="title-box">
     <div class="title">Ring Leader Election Protocol Verification Goal</div>
   </div>
-  <div class="half-box">
+  <div class="full-box">
     <div style="width: 95%; margin-left: 80px;">
+      <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">System Definition (Verification Assumptions)</span>:
+      <ul style="margin-top: 0.5em; margin-bottom: 1em;">
+        <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers.</li>
+        <li style="margin-bottom: 0.5em;">Payloads are natural numbers.</li>
+        <li style="margin-bottom: 0.5em;">Nodes can perform the following actions:
+          <ol>
+            <li>Send their own value left.</li>
+            <li>Receive a message and, 
+              <ul style="font-size: 90%;">
+                <li>if the payload is greater than their own identifier, send the payload left; </li>
+                <li>if the message is their own identifier, move to a winning state.</li>
+              </ul>
+            </li>
+          </ol>
+        </li>
+        <li>Initially, no node is in the winning state and the message buffer is empty.</li>
+      </ul>
+      <span style="font-size: 110%; font-weight: bolder; text-decoration: underline">System Specification (Verification Goal)</span>:
+      <ul style="margin-top: 0.5em;">
+        <li>There is always at most one node in the winning state.</li>
+      </ul>
     </div>
   </div>
-  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
+  <img src="../icons/ring_inv.png" style="position: absolute; top: 450px; left: 1500px;"/>
   <div class="foot-box">
     <div class="slide-number"></div>
   </div>
@@ -27,14 +48,6 @@
 
 <script type="module">
   import { step } from "../utils.js";
-
-  // regular canvas
-  var canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  // Rough.js canvas
-  const rc = rough.canvas(document.getElementById('canvas'));
-  let generator = rc.generator;
-
   var state = 0;
   const to_disappear = [];
   const to_appear = [];
