@@ -12,7 +12,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Distributed System Verification Challenges, Generally</div>
+    <div class="title">Distributed System Verification Challenges, <span id="generally">Generally</span></div>
   </div>
   <div class="half-box"></div>
   <div class="half-box"></div>
@@ -22,7 +22,12 @@
 </body>
 
 <script type="module">
-  import { step } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
+
+  import { step, tertiary_color } from "../utils.js";
 
   var state = 0;
   const to_disappear = [];

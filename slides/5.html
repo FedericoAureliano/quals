@@ -12,7 +12,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Invariants, Generally</div>
+    <div class="title">Invariants, <span id="generally">Generally</span></div>
   </div>
   <div class="half-box"></div>
   <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
@@ -24,7 +24,12 @@
 
 
 <script type="module">
-  import { step } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
+
+  import { step, tertiary_color } from "../utils.js";
 
   // regular canvas
   var canvas = document.getElementById("canvas");

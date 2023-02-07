@@ -12,15 +12,15 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Asynchronous Message Passing Distributed Systems, Generally</div>
+    <div class="title">Asynchronous Message Passing Distributed Systems, <span id="generally">Generally</span></div>
   </div>
   <div class="half-box">
     <div style="width: 95%; margin-left: 80px; font-size: 90%;">
-      <ul style="margin-bottom: 1em;" id="nodes-def">
+      <ul style="margin-bottom: 1em; display: none;" id="nodes-def">
         <li style="margin-bottom: 0.35em;"><strong>Nodes</strong> are state machines with a unique identifier.</li>
         <li style="margin-bottom: 0.35em;">The set of node identifiers <math>N</math> has at least two elements.</li>
       </ul>
-      <ul style="margin-bottom: 1em;" id="messages-def">
+      <ul style="margin-bottom: 1em; display: none;" id="messages-def">
         <li style="margin-bottom: 0.35em;"><strong>Messages</strong> are pairs <math>(t, p)</math>, where 
           <ul>
             <li><math>t &in; N</math> represents the message target and </li>
@@ -28,7 +28,7 @@
           </ul>
         <li style="margin-bottom: 0.35em;">There is multiset of messages, called the <strong>message buffer</strong>.</li>
       </ul>
-      <ul style="margin-bottom: 1em;" id="interface-def">
+      <ul style="margin-bottom: 1em; display: none;" id="interface-def">
         <li style="margin-bottom: 0.35em;">Nodes can only read/write to their own state.</li>
         <li style="margin-bottom: 0.35em;">Except that every node <math>n</math> can (for any <math>t</math> and <math>p</math>)
           <ul>
@@ -43,7 +43,7 @@
           </ul>
         </li>
       </ul>
-      <ul style="margin-bottom: 1em;" id="system-def">
+      <ul style="margin-bottom: 1em; display: none;" id="system-def">
         <li style="margin-bottom: 0.35em;">Node <strong>actions</strong> are atomic procedures.</li>
         <li style="margin-bottom: 0.35em;">A <strong>step</strong> of the system is the execution of one node's action.</li>
         <li>Define a system by defining payload and actions.</li>
@@ -58,6 +58,11 @@
 </body>
 
 <script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
+
   import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_node, draw_rect, draw_arrow } from "../utils.js";
   const radius = 50;
   const width = 960;
@@ -74,6 +79,7 @@
   const messages_def = document.querySelector('#messages-def');
   const interface_def = document.querySelector('#interface-def');
   const system_def = document.querySelector('#system-def');
+
   
   const elements = [nodes_def, messages_def, interface_def, system_def];
 
@@ -102,7 +108,6 @@
 
   var to_disappear = [[]];
   for (var i = 0; i < elements.length; i++) {
-    elements[i].style.display = 'none';
     to_disappear.push([]);
     for (var j = 0; j < i; j++) {
       const el = elements[j];
