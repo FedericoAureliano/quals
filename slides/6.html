@@ -41,7 +41,7 @@
   const doc_height = 200;
   const doc_corners = [0, 20, 0, 0];
 
-  const big_process_width = 1000;
+  const big_process_width = 1100;
   const big_process_height = 500;
   const process_corners = [0, 0, 0, 0];
 
@@ -59,7 +59,7 @@
   var ringSystemImage = new Image();
   var ringSystemPng = new Konva.Image({
       x: system[0].x() + 20,
-      y: system[0].y() + 50,
+      y: system[0].y() + 70,
       image: ringSystemImage,
       width: system[0].width()  - 40,
       height: system[0].height() - 80,
@@ -73,7 +73,7 @@
   var ringInvImage = new Image();
   var ringInvPng = new Konva.Image({
       x: invariant[0].x() + 20,
-      y: invariant[0].y() + 50,
+      y: invariant[0].y() + 70,
       image: ringInvImage,
       width: invariant[0].width()  - 40,
       height: invariant[0].height() - 80,
@@ -103,7 +103,7 @@
     x: help[0].x(),
     y: help[0].y() + 20,
     text: 'P(s)',
-    fontSize: 20,
+    fontSize: 30,
     fontFamily: 'Open Sans',
     fill: secondary_color,
     width: help[0].width(),
@@ -123,7 +123,7 @@
   const little_gap = 3.5 * horiz_gap / 7;
   const little_process_width = (big_process_width - (6 * little_gap)) / 5;
   const little_process_height = big_process_height - vert_gap;
-  var rewriter = draw_rectangle_konva(layer, tool[0].x() + little_gap, tool[0].y() + vert_gap/3, little_process_width, little_process_height / 1.5, process_corners, "transparent", quaternary_color, primary_color, "Learned Rewriter",);
+  var rewriter = draw_rectangle_konva(layer, tool[0].x() + little_gap, tool[0].y() + vert_gap/3, little_process_width, little_process_height / 2, process_corners, "transparent", quaternary_color, primary_color, "Learned Rewriter",);
   
   //draw dashed box around rewriter
   var rewriterBox = new Konva.Rect({
@@ -138,13 +138,13 @@
   layer.add(rewriterBox);
   rewriter = rewriter.concat(rewriterBox);
   
-  var encoder = draw_rectangle_konva(layer, rewriter[0].x() + rewriter[0].width() + little_gap, rewriter[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, primary_color, "Encoder",);
-  var solver_interface = draw_rectangle_konva(layer, encoder[0].x() + encoder[0].width() + little_gap, encoder[0].y() + little_process_height / 1.5 - little_process_height/2, little_process_width, little_process_height / 1.5, process_corners, "transparent", quaternary_color, primary_color, "Learned Solver Interface",);
-  var solver = draw_rectangle_konva(layer, solver_interface[0].x() + solver_interface[0].width() + little_gap, solver_interface[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, primary_color, "Solver",);
-  var decoder = draw_rectangle_konva(layer, solver[0].x() + solver[0].width() + little_gap, encoder[0].y(), little_process_width, little_process_height / 1.5, process_corners, "transparent", tertiary_color, primary_color, "Decoder",);
+  var encoder = draw_rectangle_konva(layer, rewriter[0].x() + rewriter[0].width() + little_gap, rewriter[0].y(), little_process_width, little_process_height / 2, process_corners, "transparent", tertiary_color, primary_color, "Encoder",);
+  var solver_interface = draw_rectangle_konva(layer, encoder[0].x() + encoder[0].width() + little_gap, encoder[0].y() + little_process_height / 6, little_process_width, little_process_height / 2, process_corners, "transparent", quaternary_color, primary_color, "Learned Solver Interface",);
+  var solver = draw_rectangle_konva(layer, solver_interface[0].x() + solver_interface[0].width() + little_gap, solver_interface[0].y(), little_process_width, little_process_height / 2, process_corners, "transparent", tertiary_color, primary_color, "Solver",);
+  var decoder = draw_rectangle_konva(layer, solver[0].x() + solver[0].width() + little_gap, encoder[0].y(), little_process_width, little_process_height / 2, process_corners, "transparent", tertiary_color, primary_color, "Decoder",);
   
-  var fuzzer = draw_rectangle_konva(layer, rewriter[0].x(), rewriter[0].y() + rewriter[0].height() + vert_gap/3, little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, primary_color, "Sampler",);
-  var spec_miner = draw_rectangle_konva(layer, decoder[0].x(), encoder[0].y() + encoder[0].height() + vert_gap/3, little_process_width, little_process_height / 3, process_corners, "transparent", quaternary_color, primary_color, "Spec. Miner",);
+  var fuzzer = draw_rectangle_konva(layer, rewriter[0].x(), rewriter[0].y() + rewriter[0].height() + vert_gap/3, little_process_width, little_process_height / 2, process_corners, "transparent", quaternary_color, primary_color, "Sampler",);
+  var spec_miner = draw_rectangle_konva(layer, decoder[0].x(), encoder[0].y() + encoder[0].height() + vert_gap/3, little_process_width, little_process_height / 2, process_corners, "transparent", quaternary_color, primary_color, "Spec. Miner",);
 
   //draw dashed box around spec miner
   var specMinerBox = new Konva.Rect({
@@ -208,9 +208,9 @@
 
   var encoder_to_decoder_text = new Konva.Text({
     x: encoder_to_decoder.points()[0],
-    y: encoder_to_decoder.points()[1] - 23,
+    y: encoder_to_decoder.points()[1] - 29,
     text: "Encoding Proof",
-    fontSize: 18,
+    fontSize: 24,
     fontFamily: 'Open Sans',
     fill: primary_color,
     width: encoder_to_decoder.points()[2] - encoder_to_decoder.points()[0],
@@ -234,7 +234,7 @@
     x: fuzzer_to_spec_miner.points()[0],
     y: fuzzer_to_spec_miner.points()[1] + 10,
     text: "Traces and Invariants",
-    fontSize: 18,
+    fontSize: 24,
     fontFamily: 'Open Sans',
     fill: primary_color,
     width: fuzzer_to_spec_miner.points()[2] - fuzzer_to_spec_miner.points()[0],

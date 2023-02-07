@@ -58,6 +58,26 @@ export function draw_node(rc, ctx, x_small, y_small, radius_small, label, color,
     ctx.restore();
 }
 
+
+export function draw_rect(rc, ctx, x_small, y_small, width_small, height_small, label, color) {
+    const width = width_small * scale_factor;
+    const height = height_small * scale_factor;
+    const x = x_small * scale_factor;
+    const y = y_small * scale_factor;
+    ctx.font = "300px Open Sans";
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = "center";
+    ctx.fillStyle = color;
+    ctx.fillText(label, x+width/2, y+height/2);
+    rc.rectangle(x, y, width, height, {
+        stroke: color, strokeWidth: 10 * scale_factor,
+        roughness: 0.25 * scale_factor,
+    });
+    ctx.restore();
+}
+
+
+
 export function gen_node(gen, x_small, y_small, radius_small, color) {
     const radius = radius_small * scale_factor;
     const x = x_small * scale_factor;
@@ -68,7 +88,18 @@ export function gen_node(gen, x_small, y_small, radius_small, color) {
     })
 }
 
-export function draw_node_from_gen(rc, ctx, node, x_small, y_small, label, color) {
+export function gen_rect(gen, x_small, y_small, width_small, height_small, color) {
+    const width = width_small * scale_factor;
+    const height = height_small * scale_factor;
+    const x = x_small * scale_factor;
+    const y = y_small * scale_factor;
+    return gen.rectangle(x, y, width, height, {
+        stroke: color, strokeWidth: 10 * scale_factor,
+        roughness: 0.25 * scale_factor,
+    })
+}
+
+export function draw_from_gen(rc, ctx, node, x_small, y_small, label, color) {
     const x = x_small * scale_factor;
     const y = y_small * scale_factor;
     ctx.font = "300px Open Sans";
@@ -110,7 +141,8 @@ export function draw_arrow(ctx, fromx_small, fromy_small, tox_small, toy_small, 
 
     // draw small square
     ctx.fillStyle = label_color;
-    ctx.fillRect(midx - (15 * scale_factor), midy - (15 * scale_factor), 30 * scale_factor, 30 * scale_factor);
+    const text_width = label.length * 12 + 10;
+    ctx.fillRect(midx - (text_width/2 * scale_factor), midy - (15 * scale_factor), text_width * scale_factor, 30 * scale_factor);
 
     ctx.font = "200px Open Sans";
     ctx.textBaseline = 'middle';
@@ -143,7 +175,7 @@ export function add_label_to_shape(layer, shape, label, color, font_size) {
     return text;
 }
 
-export function draw_rectangle_konva(layer, x, y, width, height, corners, fill_color, outline_color, text_color, label, font_size = 18) {
+export function draw_rectangle_konva(layer, x, y, width, height, corners, fill_color, outline_color, text_color, label, font_size = 24) {
     var rect = new Konva.Rect({
         x: x,
         y: y,
@@ -194,7 +226,7 @@ export function draw_arrow_konva(layer, from_shape, to_shape, arrow_color, label
         text: label,
         width: points[2] - points[0],
         align: 'center',
-        fontSize: 18,
+        fontSize: 24,
         fontFamily: 'Open Sans',
         fill: label_color,
     });

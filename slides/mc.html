@@ -71,7 +71,7 @@
   forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
 
-  import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_node_from_gen } from "../utils.js";
+  import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_from_gen } from "../utils.js";
 
   // regular canvas
   var canvas = document.getElementById("canvas");
@@ -111,7 +111,7 @@
     const y = positions[i][1];
     to_appear[1].push(function (x, y, i) {
       return function () {
-        draw_node_from_gen(rc, ctx, node, x, y, getByValue(nodes, i), secondary_color)
+        draw_from_gen(rc, ctx, node, x, y, getByValue(nodes, i), secondary_color)
       }
     }(x, y, i));
   }
