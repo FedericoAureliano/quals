@@ -119,10 +119,10 @@
   proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
   help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
 
-  var toolText = new Konva.Text({
+  var toolText2 = new Konva.Text({
     x: tool[0].x(),
-    y: tool[0].y() + 20,
-    text: 'Why is this hard?',
+    y: tool[0].y() + tool[0].height() / 4,
+    text: 'This turns out to be hard!',
     fontSize: 80,
     fontFamily: 'Open Sans',
     fill: primary_color,
@@ -131,10 +131,24 @@
     align: 'center',
     verticalAlign: 'middle',
   });
-  layer.add(toolText);
+  layer.add(toolText2);
+
+  var toolText1 = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y() - tool[0].height() / 4,
+    text: 'Is the invariant inductive?',
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText1);
 
   function clean() {
-    for (const x of [tool, system, invariant, proof, help, toolText]) {
+    for (const x of [tool, toolText1, system, invariant, proof, help, toolText2]) {
       if (Array.isArray(x)) {
         for (const y of x) {
           y.hide();
@@ -148,7 +162,7 @@
   clean();
 
   var to_appear = [[]];
-  for (const x of [tool, system, invariant, proof, help, toolText]) {
+  for (const x of [tool, toolText1, system, invariant, proof, help, toolText2]) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {
