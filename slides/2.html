@@ -28,7 +28,8 @@
       </div>
     </div>
     <div class="half-half-box" id="bottom-right" style="display: none;">
-      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span>
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span> 
+      <span style="font-size: 75%; opacity: 0.5; margin-left: 1em;">send(to, payload) | receive(from, payload) | win(node) </span>
       <div id="log-data" style="width: 95%; padding-top: 0.5em;"></div>
     </div>
   </div>
@@ -152,13 +153,14 @@
 
         draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
 
-        log.innerHTML = log.innerHTML + getByValue(nodes, from) + "&nbsp&#8594;<sup>" + label + "</sup>&nbsp" + getByValue(nodes, to) + ";&nbsp ";
-
+        
         if (kind) {
           start.show();
         } else {
+          log.innerHTML = log.innerHTML + "receive(" + getByValue(nodes, from) + ", " + label + ") and ";
           forward.show();
         }
+        log.innerHTML = log.innerHTML + "send(" + getByValue(nodes, to) + ", " + label + ");&nbsp ";
       }
     }(from, to)]);
     to_appear.push(todo);
@@ -171,6 +173,7 @@
       const x = positions[winner][0];
       const y = positions[winner][1];
       win.show();
+      log.innerHTML = log.innerHTML + "receive(" + getByValue(nodes, winner) + ", " + getByValue(nodes, winner) + ") and win(" + getByValue(nodes, winner) + ").";
       draw_node(rc, ctx, x, y, radius * 1.45, "", quaternary_color, quaternary_color);
     }
   }(winner)]);
