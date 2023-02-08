@@ -13,7 +13,8 @@
   <div class="title-box">
     <div class="title">Proposal Overview: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning</div>
   </div>
-  <div class="full-box"><div id="canvas"></div></div>
+  <div class="full-box" style="margin-top: -100px;"><div id="canvas"></div></div>
+  <div id="goals" style="height: 100px; text-align: center;"></div>
   <div class="foot-box">
     <div class="slide-number"></div>
   </div>
@@ -83,20 +84,6 @@
   };
   ringInvImage.src = '../icons/ring_inv.png';
   invariant = invariant.concat(ringInvPng);
-
-  var proofImage = new Image();
-  var proofPng = new Konva.Image({
-      x: proof[0].x() + 30,
-      y: proof[0].y() + 40,
-      image: proofImage,
-      width: proof[0].width() - 60,
-      height: proof[0].height() - 50,
-    });
-  proofImage.onload = function () {
-    layer.add(proofPng);
-  };
-  proofImage.src = '../icons/proof.png';
-  proof = proof.concat(proofPng);
 
   // add text to center of help
   var helpText = new Konva.Text({
@@ -300,49 +287,58 @@
   proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
 
-  // draw a rectangle to highlight instrumenter
-  var instrumenter_highlight = new Konva.Rect({
-    x: instrumenter[0].x() + 20,
-    y: instrumenter[0].y() + 100,
-    width: instrumenter[0].width() - 40,
-    height: instrumenter[0].height() - 120,
-    fill: 'black',
-    stroke: 'red',
-    dash: [10, 10],
-    strokeWidth: 10,
+  // add text to middle of instrumenter saying "1"
+  var instrumenter_text = new Konva.Text({
+    x: instrumenter[0].x() + instrumenter[0].width()/2 - 20,
+    y: instrumenter[0].y() + instrumenter[0].height()/2 - 20,
+    text: "1",
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: "red",
   });
-  layer.add(instrumenter_highlight);
-  instrumenter_highlight = [instrumenter_highlight];
+  layer.add(instrumenter_text);
+  instrumenter_text = [instrumenter_text];
 
-  // draw a rectangle to highlight solver_interface
-  var solver_interface_highlight = new Konva.Rect({
-    x: solver_interface[0].x() + 20,
-    y: solver_interface[0].y() + 100,
-    width: solver_interface[0].width() - 40,
-    height: solver_interface[0].height() - 120,
-    fill: 'black',
-    stroke: 'red',
-    dash: [10, 10],
-    strokeWidth: 10,
+  // add text to middle of spec_miner saying "2"
+  var spec_miner_text = new Konva.Text({
+    x: spec_miner[0].x() + spec_miner[0].width()/2 - 20,
+    y: spec_miner[0].y() + spec_miner[0].height()/2 - 20,
+    text: "2",
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: "red",
   });
-  layer.add(solver_interface_highlight);
-  solver_interface_highlight = [solver_interface_highlight];
+  layer.add(spec_miner_text);
+  spec_miner_text = [spec_miner_text];
 
-  // draw a rectangle to highlight spec_miner
-  var spec_miner_highlight = new Konva.Rect({
-    x: spec_miner[0].x() + 20,
-    y: spec_miner[0].y() + 100,
-    width: spec_miner[0].width() - 40,
-    height: spec_miner[0].height() - 120,
-    fill: 'black',
-    stroke: 'red',
-    dash: [10, 10],
-    strokeWidth: 10,
+  // add text to middle of solver_interface saying "3"
+  var solver_interface_text = new Konva.Text({
+    x: solver_interface[0].x() + solver_interface[0].width()/2 - 20,
+    y: solver_interface[0].y() + solver_interface[0].height()/2 - 20,
+    text: "3",
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: "red",
   });
-  layer.add(spec_miner_highlight);
-  spec_miner_highlight = [spec_miner_highlight];
+  layer.add(solver_interface_text);
+  solver_interface_text = [solver_interface_text];
 
-  const elements = [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner, instrumenter_highlight, spec_miner_highlight, solver_interface_highlight];
+  // add text to middle of decoder saying "4"
+  var proof_text = new Konva.Text({
+    x: proof[0].x() + proof[0].width()/2 - 20,
+    y: proof[0].y() + proof[0].height()/2 - 20,
+    text: "4",
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: "red",
+  });
+  layer.add(proof_text);
+  proof_text = [proof_text];
+
+  // select goals element 
+  var goals = document.querySelector('#goals');
+
+  const elements = [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner, instrumenter_text, spec_miner_text, solver_interface_text, proof_text];
 
   function clean() {
     for (const x of elements) {
@@ -371,7 +367,18 @@
         x.show();
       }
     }
-    to_appear.push([f]);
+    function g() {
+      if (x == instrumenter_text) {
+        goals.innerHTML = "(1) Reasoning about \"stray\" messages. &nbsp;"
+      } else if (x == spec_miner_text) {
+        goals.innerHTML = goals.innerHTML + "(2) Coming up with true invariants.<br>"
+      } else if (x == solver_interface_text) {
+        goals.innerHTML = goals.innerHTML + "(3) Getting solvers to terminate. &nbsp;"
+      } else if (x == proof_text) {
+        goals.innerHTML = goals.innerHTML + "(4) Checking and sharing verification results."
+      }
+    }
+    to_appear.push([f, g]);
   }
 
   var to_disappear = [];
