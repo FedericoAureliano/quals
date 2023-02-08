@@ -299,8 +299,53 @@
   var proofs = document.querySelector('#proofs');
   proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
+
+  // draw a rectangle to highlight instrumenter
+  var instrumenter_highlight = new Konva.Rect({
+    x: instrumenter[0].x() + 20,
+    y: instrumenter[0].y() + 100,
+    width: instrumenter[0].width() - 40,
+    height: instrumenter[0].height() - 120,
+    fill: 'black',
+    stroke: 'red',
+    dash: [10, 10],
+    strokeWidth: 10,
+  });
+  layer.add(instrumenter_highlight);
+  instrumenter_highlight = [instrumenter_highlight];
+
+  // draw a rectangle to highlight solver_interface
+  var solver_interface_highlight = new Konva.Rect({
+    x: solver_interface[0].x() + 20,
+    y: solver_interface[0].y() + 100,
+    width: solver_interface[0].width() - 40,
+    height: solver_interface[0].height() - 120,
+    fill: 'black',
+    stroke: 'red',
+    dash: [10, 10],
+    strokeWidth: 10,
+  });
+  layer.add(solver_interface_highlight);
+  solver_interface_highlight = [solver_interface_highlight];
+
+  // draw a rectangle to highlight spec_miner
+  var spec_miner_highlight = new Konva.Rect({
+    x: spec_miner[0].x() + 20,
+    y: spec_miner[0].y() + 100,
+    width: spec_miner[0].width() - 40,
+    height: spec_miner[0].height() - 120,
+    fill: 'black',
+    stroke: 'red',
+    dash: [10, 10],
+    strokeWidth: 10,
+  });
+  layer.add(spec_miner_highlight);
+  spec_miner_highlight = [spec_miner_highlight];
+
+  const elements = [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner, instrumenter_highlight, spec_miner_highlight, solver_interface_highlight];
+
   function clean() {
-    for (const x of [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
+    for (const x of elements) {
       if (Array.isArray(x)) {
         for (const y of x) {
           y.hide();
@@ -316,7 +361,7 @@
   clean();
 
   var to_appear = [[]];
-  for (const x of [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
+  for (const x of elements) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {
