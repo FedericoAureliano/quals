@@ -34,7 +34,7 @@
   var layer = new Konva.Layer();
   stage.add(layer);
 
-  const vert_gap = 50;
+  const vert_gap = 60;
   const horiz_gap = 150;
 
   const doc_width = 150;
@@ -116,9 +116,6 @@
 
   system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
   invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
-  proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
-  help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
-
 
   const little_gap = 3.5 * horiz_gap / 7;
   const little_process_width = (big_process_width - (6 * little_gap)) / 5;
@@ -159,17 +156,10 @@
   layer.add(tool_to_instrumenter);
   instrumenter = instrumenter.concat(tool_to_instrumenter);
 
-  // draw an arrow from the right of decoder to the right of tool
-  var decoder_to_tool = new Konva.Arrow({
-    points: [decoder[0].x() + decoder[0].width(), decoder[0].y() + decoder[0].height()/4, tool[0].x() + tool[0].width() - 10, decoder[0].y() + decoder[0].height()/4],
-    pointerLength: 10,
-    pointerWidth: 10,
-    fill: primary_color,
-    stroke: primary_color,
-    strokeWidth: 5,
-  });
-  layer.add(decoder_to_tool);
-  decoder = decoder.concat(decoder_to_tool);
+  decoder = decoder.concat(draw_arrow_konva(layer, decoder[0], proof[0], primary_color, primary_color, "      success"));
+  decoder = decoder.concat(proof);
+  spec_miner = spec_miner.concat(draw_arrow_konva(layer, spec_miner[0], help[0], primary_color, primary_color, "    failure"));
+  spec_miner = spec_miner.concat(help);
 
   //draw dashed box around spec miner
   var specMinerBox = new Konva.Rect({
@@ -281,7 +271,7 @@
 
   // draw elbow connector between right of decoder and right of spec miner
   var decoder_to_spec_miner = new Konva.Arrow({
-    points: [decoder[0].x() + decoder[0].width(), decoder[0].y() + decoder[0].height()/2, decoder[0].x() + decoder[0].width() + 45, decoder[0].y() + decoder[0].height()/2, decoder[0].x() + decoder[0].width() + 45, spec_miner[0].y() + spec_miner[0].height()/2, spec_miner[0].x() + spec_miner[0].width() + 10, spec_miner[0].y() + spec_miner[0].height()/2],
+    points: [decoder[0].x() + decoder[0].width(), decoder[0].y() + decoder[0].height()/2 + 30, decoder[0].x() + decoder[0].width() + 45, decoder[0].y() + decoder[0].height()/2 + 30, decoder[0].x() + decoder[0].width() + 45, spec_miner[0].y() + spec_miner[0].height()/2 - 30, spec_miner[0].x() + spec_miner[0].width() + 10, spec_miner[0].y() + spec_miner[0].height()/2 - 30],
     pointerLength: 10,
     pointerWidth: 10,
     fill: tertiary_color,
@@ -310,7 +300,7 @@
   proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
   function clean() {
-    for (const x of [tool, system, invariant, proof, help, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
+    for (const x of [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
       if (Array.isArray(x)) {
         for (const y of x) {
           y.hide();
@@ -326,7 +316,7 @@
   clean();
 
   var to_appear = [[]];
-  for (const x of [tool, system, invariant, proof, help, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
+  for (const x of [tool, system, invariant, learning, proofs, instrumenter, rewriter, encoder, solver_interface, solver, decoder, fuzzer, spec_miner]) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {
