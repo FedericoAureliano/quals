@@ -17,21 +17,21 @@
   <div class="full-box">
     <div style="width: 95%; margin-left: 80px">
       <ul>
-        <li style="margin-bottom: 1em;">The <strong>state</strong> of the system is the
+        <li id="state-def1" style="margin-bottom: 1em; display: none;">The <strong>state</strong> of the system is the
           <ul>
             <li>state of every node, and</li>
             <li>the state of the message buffer.</li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">An <strong>invariant</strong> is a predicate over the state of the system.</li>
-        <li style="margin-bottom: 1em;">Invariants can encode
+        <li id="invariant-def1" style="margin-bottom: 1em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system.</li>
+        <li id="invariant-def2" style="margin-bottom: 1em; display: none;">Invariants can encode
           <ul>
             <li><strong>safety</strong> properties, and</li>
             <li>some types of <strong>liveness</strong> properties.</li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">A system <strong>transition</strong> is a pair of states <math>(s, s')</math>, where <math>s'</math> is the result of a node's action on <math>s</math>.</li>
-        <li>An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(s, s')</math> is a transition.</li>
+        <li id="transition-def1" style="margin-bottom: 1em; display: none;">A system <strong>transition</strong> is a pair of states <math>(s, s')</math>, where <math>s'</math> is the result of a node's action on <math>s</math>.</li>
+        <li id="transition-def2" style="display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(s, s')</math> is a transition.</li>
       </ul>
     </div>
   </div>
@@ -50,9 +50,17 @@
 
   import { step, tertiary_color } from "../utils.js";
 
+  var state_element = document.querySelector('#state-def1');
+  const state_def = [() => state_element.style.display = 'block'];
+  var invariant_elements = [document.querySelector('#invariant-def1'), document.querySelector('#invariant-def2')];
+  const invariant_def = [() => invariant_elements[0].style.display = 'block', () => invariant_elements[1].style.display = 'block'];
+  var transition_elements = [document.querySelector('#transition-def1'), document.querySelector('#transition-def2')];
+  const transition_def = [() => transition_elements[0].style.display = 'block', () => transition_elements[1].style.display = 'block'];
+
+  const to_appear = [[], state_def, invariant_def, transition_def];
+  const to_disappear = [[], [], [], []];
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

@@ -16,30 +16,34 @@
   </div>
   <div class="full-box">
     <div style="width: 95%; margin-left: 80px;">
-      <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">System Definition (Verification Assumptions)</span>:
-      <ul style="margin-top: 0.5em; margin-bottom: 1em;">
-        <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers.</li>
-        <li style="margin-bottom: 0.5em;">Payloads are natural numbers.</li>
-        <li style="margin-bottom: 0.5em;">Nodes can perform the following actions:
-          <ol>
-            <li>Send their own value left.</li>
-            <li>Receive a message and, 
-              <ul style="font-size: 90%;">
-                <li>if the payload is greater than their own identifier, send the payload left; </li>
-                <li>if the message is their own identifier, move to a winning state.</li>
-              </ul>
-            </li>
-          </ol>
-        </li>
-        <li>Initially, no node is in the winning state and the message buffer is empty.</li>
-      </ul>
-      <span style="font-size: 110%; font-weight: bolder; text-decoration: underline">System Specification (Verification Goal)</span>:
-      <ul style="margin-top: 0.5em;">
-        <li>There is always at most one node in the winning state.</li>
-      </ul>
+      <div id="system-def" style="display: none;">
+        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">System Definition (Verification Assumptions)</span>:
+        <ul style="margin-top: 0.5em; margin-bottom: 1em;">
+          <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers.</li>
+          <li style="margin-bottom: 0.5em;">Payloads are natural numbers.</li>
+          <li style="margin-bottom: 0.5em;">Nodes can perform the following actions:
+            <ol>
+              <li>Send their own value left.</li>
+              <li>Receive a message and, 
+                <ul style="font-size: 90%;">
+                  <li>if the payload is greater than their own identifier, send the payload left; </li>
+                  <li>if the message is their own identifier, move to a winning state.</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+          <li>Initially, no node is in the winning state and the message buffer is empty.</li>
+        </ul>
+      </div>
+      <div id="system-spec" style="display: none;">
+        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline">System Specification (Verification Goal)</span>:
+        <ul style="margin-top: 0.5em;">
+          <li>There is always at most one node in the winning state.</li>
+        </ul>
+        <img src="../icons/ring_inv.png" style="position: absolute; top: 450px; left: 1500px;"/>
+      </div>
     </div>
   </div>
-  <img src="../icons/ring_inv.png" style="position: absolute; top: 450px; left: 1500px;"/>
   <div class="foot-box">
     <div class="slide-number"></div>
   </div>
@@ -48,9 +52,16 @@
 
 <script type="module">
   import { step } from "../utils.js";
+
+  var system_def_element = document.querySelector('#system-def');
+  const system_def = [() => system_def_element.style.display = 'block'];
+  var system_spec_element = document.querySelector('#system-spec');
+  const system_spec = [() => system_spec_element.style.display = 'block'];
+
+  const to_disappear = [[], system_def, system_spec];
+  const to_appear = [[], [], []];
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
