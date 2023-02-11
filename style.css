@@ -175,3 +175,11 @@ ul, ol {
     margin-bottom: 0;
     margin-top: 0;
 }
+
+math {
+    color: var(--tertiary-color);
+}
+
+sub, sup {
+    font-size: 50%;
+}

@@ -12,25 +12,25 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Executions and Invariants, <span id="generally">Generally</span></div>
+    <div class="title">Distributed Systems Verification Goal, <span id="generally">Generally</span></div>
   </div>
   <div class="full-box">
-    <div style="width: 95%; margin-left: 80px">
+    <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li id="step-def" style="margin-bottom: 1em; display: none;">A system <strong>step</strong> is a pair of states <math>(&sigma;, &sigma;')</math>, where <math>&sigma;'</math> is the result of a node's action on <math>&sigma;</math>.</li>
-        <li id="execution-def" style="margin-bottom: 1em; display: none;">An <strong>execution</strong> is a sequence of states <math>&sigma;<sub>1</sub>&#8729;&#8729;&#8729; &sigma;<sub>n</sub></math> such that
+        <li id="step-def" style="margin-bottom: 1em; display: none;">A system <strong>step</strong> is a pair of states <math>(&sigma;, &sigma;')</math>, where <math>&sigma;'</math> is the result of a node's action on <math>&sigma;</math></li>
+        <li id="execution-def" style="margin-bottom: 1em; display: none;">An <strong>execution</strong> is a sequence of states <math>&sigma;</math><sub><math>1</math></sub><math>&#8729;&#8729;&#8729; &sigma;</math><sub><math>n</math></sub> such that
           <ul>
-            <li><math>&sigma;<sub>1</sub></math> is an initial state, and</li>
-            <li>for each <math>i</math>, <math>(&sigma;<sub>i</sub>, &sigma;<sub>i+1</sub>)</math> is a step of the system.</li>
+            <li><math>&sigma;</math><sub><math>1</math></sub> is an initial state, and</li>
+            <li>for each <math>i</math>, <math>(&sigma;</math><sub><math>i</math></sub><math>, &sigma;</math><sub><math>i+1</math></sub><math>)</math> is a step of the system</li>
           </ul>
         </li>
-        <li id="invariant-def" style="margin-bottom: 1em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system.</li>
-        <li id="inductive-def" style="margin-bottom: 1em; display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(&sigma;, &sigma;')</math> is a step.</li>
-        <li id="proof-def" style="margin-bottom: 1em; display: none;">If an invariant <math>I</math> is inductive and holds for all initial states, then <math>I</math> holds for all executions.</li>
+        <li id="invariant-def" style="margin-bottom: 1em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system</li>
+        <li id="inductive-def" style="margin-bottom: 1em; display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(&sigma;, &sigma;')</math> is a step</li>
+        <li id="proof-def" style="margin-bottom: 1em; display: none;">If an invariant <math>I</math> is inductive and holds for all initial states, then <math>I</math> holds for all executions</li>
         <li id="kinds-def" style="margin-bottom: 1em; display: none;">Invariants can encode
           <ul>
             <li><strong>safety</strong> properties, and</li>
-            <li>some types of <strong>liveness</strong> properties.</li>
+            <li>some types of <strong>liveness</strong> properties</li>
           </ul>
         </li>
       </ul>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">What Other Systems Does This Work For?</div>
+  </div>
+  <div class="half-box" style="box-shadow: 2px 0 0 var(--primary-color);">
+    <div style="margin-left: 80px; margin-right: 20px">
+      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
+      <br>
+      If a client receives a response, then the client must have sent a matching request.
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em;">
+        <img src="../images/tor.png" style="width: 80%">
+      </div>
+      <br>
+      Every message chain follows the path <math>C</math><math>N</math><sup><math>+</math></sup><math>S</math><math>N</math><sup><math>+</math></sup><math>C</math>.
+    </div>
+  </div>
+  <div class="half-box">
+    <div style="margin-right: 80px; margin-left: 40px;">
+      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
+      <br>
+      All participants agree to either commit or abort.
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em;">
+        <img src="../images/2pc.png" style="width: 60%">
+      </div>
+      <br>
+      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
+      <br>
+      But what happens between <math>Vote &rarr; Decision</math>?
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote">Reed, Syverson, and Goldschlag (1998); Gray (1978); Ayari (2010)</div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+<script type="module">
+  import { step } from "../utils.js";
+
+  var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

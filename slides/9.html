@@ -11,7 +11,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proposal Overview: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning</div>
+    <div class="title">Proposal Details: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning</div>
   </div>
   <div class="full-box" style="margin-top: -100px;"><div id="canvas"></div></div>
   <div id="goals" style="height: 100px; text-align: center;"></div>
@@ -68,7 +68,7 @@
   ringSystemImage.onload = function () {
     layer.add(ringSystemPng);
   };
-  ringSystemImage.src = '../icons/ring.png';
+  ringSystemImage.src = '../images/ring.png';
   system = system.concat(ringSystemPng);
 
   var ringInvImage = new Image();
@@ -82,7 +82,7 @@
   ringInvImage.onload = function () {
     layer.add(ringInvPng);
   };
-  ringInvImage.src = '../icons/ring_inv.png';
+  ringInvImage.src = '../images/ring_inv.png';
   invariant = invariant.concat(ringInvPng);
 
   // add text to center of help
