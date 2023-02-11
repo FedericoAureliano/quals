@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Message Sequence Charts</div>
+  </div>
+  <div class="full-box">
+    <div style="width: 100%; text-align: center;">
+      <img src="../icons/msc.png" style="width: 70%; margin-top: 20px;"/>
+    </div>
+    <div style="margin-left: 100px; margin-right: 80px; margin-top: 1em;">
+      <ul>
+        <li style="margin-bottom: 0.5em;">"A Message Sequence Chart... describes the message flow between instances. One Message Sequence Chart describes a partial behaviour of a system."</li>
+        <li>Intuitive way to keep track of messages.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote">Bollig et al. 2010; International Telecommunication Union (ITU) Recommendation Z.120</div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { step } from "../utils.js";
+
+  var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

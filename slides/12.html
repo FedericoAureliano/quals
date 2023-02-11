@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Message Chains Definition</div>
+  </div>
+  <div class="full-box">
+    <div style="width: 95%; margin-left: 80px">
+      The set of message chains is the smallest set such that:
+      <ul style="margin-bottom: 1em;">
+        <li style="margin-top: 0.25em;"><math>nil</math> is a message chain; and</li>
+        <li>if <math>c</math> is a message chain, <math>m</math> is a message, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, m, c)</math> is.</li>
+      </ul>
+      Let <math>&sigma;<sub>1</sub>&#8729;&#8729;&#8729; &sigma;<sub>n</sub></math> be an execution, <math>&alpha;</math> be the last action taken, and let <math>s</math> be the address of the node that took <math>&alpha;</math>.
+      <br>
+      A message chain <math>c</math> exists in <math>&sigma;<sub>1</sub>&#8729;&#8729;&#8729; &sigma;<sub>n</sub></math> iff one of the following conditions holds:
+      <ul>
+        <li><math>c</math> is <math>nil</math></li>
+        <li><span style="margin-right: 1.25em; opacity: 0.5; font-size: 80%;">[Start A Message Chain]</span> <math>c</math> is <math>cons(s, t, m, nil)</math>
+        <ul>
+          <li><math>&alpha;</math> contains no receive actions</li>
+          <li><math>&alpha;</math> contains <math>send(t, m)</math></li>
+        </ul>
+        </li>
+        <li><span style="margin-right: 0.25em; opacity: 0.5; font-size: 80%;">[Extend A Message Chain]</span> <math>c</math> is <math>cons(s, t, m, cons(s', s, m', c'))</math>
+        <ul>
+          <li><math>&alpha;</math> begins with <math>receive(s, m')</math></li>
+          <li><math>&alpha;</math> contains <math>send(t, m)</math></li>
+          <li><math>cons(s', s, m', c')</math> exists in <math>&sigma;<sub>1</sub>&#8729;&#8729;&#8729; &sigma;<sub>n-1</sub></math></li>
+        </ul>
+        </li>
+      </ul>
+      <ul></ul>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote">Mora et al. (In submission)</div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { step } from "../utils.js";
+
+  var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

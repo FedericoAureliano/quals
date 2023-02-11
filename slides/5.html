@@ -12,31 +12,32 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Invariants, <span id="generally">Generally</span></div>
+    <div class="title">Executions and Invariants, <span id="generally">Generally</span></div>
   </div>
   <div class="full-box">
     <div style="width: 95%; margin-left: 80px">
       <ul>
-        <li id="state-def1" style="margin-bottom: 1em; display: none;">The <strong>state</strong> of the system is the
+        <li id="step-def" style="margin-bottom: 1em; display: none;">A system <strong>step</strong> is a pair of states <math>(&sigma;, &sigma;')</math>, where <math>&sigma;'</math> is the result of a node's action on <math>&sigma;</math>.</li>
+        <li id="execution-def" style="margin-bottom: 1em; display: none;">An <strong>execution</strong> is a sequence of states <math>&sigma;<sub>1</sub>&#8729;&#8729;&#8729; &sigma;<sub>n</sub></math> such that
           <ul>
-            <li>state of every node, and</li>
-            <li>the state of the message buffer.</li>
+            <li><math>&sigma;<sub>1</sub></math> is an initial state, and</li>
+            <li>for each <math>i</math>, <math>(&sigma;<sub>i</sub>, &sigma;<sub>i+1</sub>)</math> is a step of the system.</li>
           </ul>
         </li>
-        <li id="invariant-def1" style="margin-bottom: 1em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system.</li>
-        <li id="invariant-def2" style="margin-bottom: 1em; display: none;">Invariants can encode
+        <li id="invariant-def" style="margin-bottom: 1em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system.</li>
+        <li id="inductive-def" style="margin-bottom: 1em; display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(&sigma;, &sigma;')</math> is a step.</li>
+        <li id="proof-def" style="margin-bottom: 1em; display: none;">If an invariant <math>I</math> is inductive and holds for all initial states, then <math>I</math> holds for all executions.</li>
+        <li id="kinds-def" style="margin-bottom: 1em; display: none;">Invariants can encode
           <ul>
             <li><strong>safety</strong> properties, and</li>
             <li>some types of <strong>liveness</strong> properties.</li>
           </ul>
         </li>
-        <li id="transition-def1" style="margin-bottom: 1em; display: none;">A system <strong>transition</strong> is a pair of states <math>(s, s')</math>, where <math>s'</math> is the result of a node's action on <math>s</math>.</li>
-        <li id="transition-def2" style="display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(s, s')</math> is a transition.</li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Fang, McMillan, Pnueli, and Zuck (2006); Lynch (1996)</div>
+    <div class="footnote">Lynch (1996); Fang, McMillan, Pnueli, and Zuck (2006)</div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -50,15 +51,28 @@
 
   import { step, tertiary_color } from "../utils.js";
 
-  var state_element = document.querySelector('#state-def1');
-  const state_def = [() => state_element.style.display = 'block'];
-  var invariant_elements = [document.querySelector('#invariant-def1'), document.querySelector('#invariant-def2')];
-  const invariant_def = [() => invariant_elements[0].style.display = 'block', () => invariant_elements[1].style.display = 'block'];
-  var transition_elements = [document.querySelector('#transition-def1'), document.querySelector('#transition-def2')];
-  const transition_def = [() => transition_elements[0].style.display = 'block', () => transition_elements[1].style.display = 'block'];
+  const step_def = document.querySelector('#step-def');
+  const execution_def = document.querySelector('#execution-def');
+  const invariant_def = document.querySelector('#invariant-def');
+  const inductive_def = document.querySelector('#inductive-def');
+  const proof_def = document.querySelector('#proof-def');
+  const kinds_def = document.querySelector('#kinds-def');
 
-  const to_appear = [[], state_def, invariant_def, transition_def];
-  const to_disappear = [[], [], [], []];
+  const elements = [step_def, execution_def, invariant_def, inductive_def, proof_def, kinds_def];
+
+  var to_appear = [[]];
+  for (const el of elements) {
+    to_appear.push([() => el.style.display = 'block']);
+  }
+
+  var to_disappear = [[]];
+  for (var i = 0; i < elements.length; i++) {
+    to_disappear.push([]);
+    for (var j = 0; j < i; j++) {
+      const el = elements[j];
+      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
+    }
+  }
 
   var state = 0;
   const body = document.querySelector('body');

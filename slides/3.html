@@ -15,22 +15,22 @@
     <div class="title">Asynchronous Message Passing Distributed Systems, <span id="generally">Generally</span></div>
   </div>
   <div class="half-box" style="margin-top: -1em;">
-    <div style="width: 95%; margin-left: 80px; font-size: 22pt;">
-      <ul style="margin-bottom: 1em; display: none;" id="nodes-def">
-        <li style="margin-bottom: 0.35em;"><strong>Nodes</strong> are state machines with a unique identifier.</li>
-        <li style="margin-bottom: 0.35em;">The set of node identifiers <math>N</math> has at least two elements.</li>
+    <div style="width: 95%; margin-left: 80px; font-size: 20pt;">
+      <ul style="margin-bottom: 0.75em; display: none;" id="nodes-def">
+        <li><strong>Nodes</strong> are state machines with a unique identifier.</li>
+        <li>The set of node identifiers <math>N</math> has at least two elements.</li>
       </ul>
-      <ul style="margin-bottom: 1em; display: none;" id="messages-def">
-        <li style="margin-bottom: 0.35em;"><strong>Messages</strong> are pairs <math>(t, p)</math>, where 
+      <ul style="margin-bottom: 0.75em; display: none;" id="messages-def">
+        <li><strong>Messages</strong> are pairs <math>(t, p)</math>, where 
           <ul>
             <li><math>t &in; N</math> represents the message target and </li>
             <li><math>p</math> is the message <strong>payload</strong>.</li>
           </ul>
-        <li style="margin-bottom: 0.35em;">There is multiset of messages, called the <strong>message buffer</strong>.</li>
+        <li>There is multiset of messages, called the <strong>message buffer</strong>.</li>
       </ul>
-      <ul style="margin-bottom: 1em; display: none;" id="interface-def">
-        <li style="margin-bottom: 0.35em;">Nodes can only read/write to their own state.</li>
-        <li style="margin-bottom: 0.35em;">Except that every node <math>n</math> can (for any <math>t</math> and <math>p</math>)
+      <ul style="margin-bottom: 0.75em; display: none;" id="interface-def">
+        <li>Nodes can only read/write to their own state.</li>
+        <li>Except that every node <math>n</math> can (for any <math>t</math> and <math>p</math>)
           <ul>
             <li><code>send</code><math>(t, p)</math> in the message buffer, or</li>
             <li>
@@ -43,12 +43,19 @@
           </ul>
         </li>
       </ul>
-      <ul style="margin-bottom: 1em; display: none;" id="system-def">
+      <li id="state-def1" style="margin-bottom: 0.75em; display: none;">The <strong>state</strong> of the system is the
+        <ul>
+          <li>state of every node, and</li>
+          <li>the state of the message buffer.</li>
+        </ul>
+      </li>
+      <ul style="margin-bottom: 0.75em; display: none;" id="system-def">
         <li>Define a system by giving
           <ul>
-            <li>set of node identifiers,</li>
-            <li>payload type, and</li>
-            <li>node actions (atomic procedures).</li>
+            <li>the set of node identifiers,</li>
+            <li>the payload type,</li>
+            <li>the available node actions (atomic procedures), and</li>
+            <li>an initial set of states.</li>
           </ul>
         </li>
       </ul>
@@ -82,10 +89,10 @@
   const nodes_def = document.querySelector('#nodes-def');  
   const messages_def = document.querySelector('#messages-def');
   const interface_def = document.querySelector('#interface-def');
+  const state_def = document.querySelector('#state-def1');
   const system_def = document.querySelector('#system-def');
-
   
-  const elements = [nodes_def, messages_def, interface_def, system_def];
+  const elements = [nodes_def, messages_def, interface_def, state_def, system_def];
 
   var to_appear = [[]];
   for (const el of elements) {

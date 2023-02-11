@@ -1,9 +1,11 @@
-const NUMBER_OF_SLIDES = 9;
+const NUMBER_OF_SLIDES = 13;
 
 var slide = parseInt(document.URL.split('/').pop().split('.')[0], 10);
 
 const footer = document.querySelector('.slide-number');
-footer.innerText = slide + " of " + NUMBER_OF_SLIDES
+if (footer) {
+  footer.innerText = slide + " of " + NUMBER_OF_SLIDES
+}
 
 const body = document.querySelector('body');
 body.onkeyup = function(e){step(e)};
