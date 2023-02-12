@@ -10,40 +10,22 @@
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Learned Solver Interface</div>
+<body>
+  <div class="title-box">
+    <div class="title">Path Patterns and <math>k</math>-Histories in the Wild</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle-box">
-      <div class="full-subtitle" style="font-size: 95%;">
-      <ol>
-        <li style="opacity: 0.25;">
-          Reasoning about "stray" messages
-        </li>
-        <li style="opacity: 0.25;">
-          Coming up with true invariants
-        </li>
-        <li id="current">
-          Getting solvers to terminate
-        </li>
-        <li style="opacity: 0.25;">
-          Checking and sharing verification results
-        </li>
-      </ol>
-      </div>
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
     </div>
   </div>
   <div class="foot-box">
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
 
+<script type="module">
   import { step, tertiary_color } from "../utils.js";
 
   var state = 0;
