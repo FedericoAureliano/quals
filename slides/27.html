@@ -3,8 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <script src="https://unpkg.com/konva@8/konva.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -12,25 +11,180 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Future Work</div>
+    <div class="title">Verification Collaboration</div>
   </div>
   <div class="full-box">
-    <div style="margin-right: 80px; margin-left: 80px">
+    <div style="margin-left: 80px; margin-right: 80px;">
+      <ul>
+        <li style="margin-bottom: 0.5em;">
+          Proof sharing instead of verification sharing
+          <ul>
+            <li>hardware and software independent</li>
+          </ul>
+        </li>
+        <li>Parts of the verification can offloaded to a server
+          <ul>
+            <li>modular verification with proof stiching</li>
+          </ul>
+        </li>
+      </ul>
     </div>
+    <div id="canvas" style="margin-top: -4em; margin-bottom: 4em;"></div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Drawings by Elizabeth Polgreen</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { step, tertiary_color } from "../utils.js";
+  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
+
+  const width = 1920;
+  const height = 1080 - 350;
+
+  var stage = new Konva.Stage({
+    container: 'canvas',
+    width: width,
+    height: height,
+  });
+  var layer = new Konva.Layer();
+  stage.add(layer);
+
+  var federicoImage = new Image();
+  var federicoPng = new Konva.Image({
+      x: width / 6 - 150,
+      y: height / 4 * 3 - 150,
+      image: federicoImage,
+      width: 300,
+      height: 300,
+    });
+  federicoImage.onload = function () {
+    layer.add(federicoPng);
+  };
+  federicoImage.src = '../images/federico.png';
+
+  var federico_tool = draw_rectangle_konva(layer, width / 3 - 350, height / 4 * 3 - 300, 300, 300, [0, 0, 0, 0], "transparent", primary_color, primary_color, "Tool");
+
+  var federico_proof = draw_rectangle_konva(layer, federico_tool[0].x() + federico_tool[0].width() + 100, federico_tool[0].y() + federico_tool[0].height() / 2 - 75, 150, 150, [20, 0, 0, 0], "transparent", primary_color, primary_color, "Proof");
+  var federico_proofImage = new Image();
+  var federico_proofPng = new Konva.Image({
+      x: federico_proof[0].x() + 30,
+      y: federico_proof[0].y() + 40,
+      image: federico_proofImage,
+      width: federico_proof[0].width() - 60,
+      height: federico_proof[0].height() - 50,
+    });
+  federico_proofImage.onload = function () {
+    layer.add(federico_proofPng);
+  };
+  federico_proofImage.src = '../images/proof.png';
+  federico_proof = federico_proof.concat(federico_proofPng);
+
+  federico_proof = federico_proof.concat(draw_arrow_konva(layer, federico_tool[0], federico_proof[0], primary_color, primary_color, ""));
+
+  var federico_system = draw_rectangle_konva(layer, width / 3 - 150, height / 4 * 3 - 100, 150, 150, [0, 0, 0, 0], "white", primary_color, primary_color, "System");
+  var federico_ringSystemImage = new Image();
+  var federico_ringSystemPng = new Konva.Image({
+      x: federico_system[0].x() + 20,
+      y: federico_system[0].y() + 40,
+      image: federico_ringSystemImage,
+      width: federico_system[0].width()  - 40,
+      height: federico_system[0].height() - 80,
+    });
+  federico_ringSystemImage.onload = function () {
+    layer.add(federico_ringSystemPng);
+  };
+  federico_ringSystemImage.src = '../images/ring.png';
+  federico_system = federico_system.concat(federico_ringSystemPng);
+
+
+  var kevinImage = new Image();
+  var kevinPng = new Konva.Image({
+      x: width / 6 * 4 - 150,
+      y: height / 4 * 3 - 150,
+      image: kevinImage,
+      width: 300,
+      height: 300,
+    });
+  kevinImage.onload = function () {
+    layer.add(kevinPng);
+  };
+  kevinImage.src = '../images/kevin.png';
+
+  var kevin_tool = draw_rectangle_konva(layer, width / 6 * 5 - 350, height / 4 * 3 - 300, 300, 300, [0, 0, 0, 0], "transparent", primary_color, primary_color, "Tool");
+
+  var kevin_timeout = draw_rectangle_konva(layer, kevin_tool[0].x() + kevin_tool[0].width() + 100, kevin_tool[0].y() + kevin_tool[0].height() / 2 - 75, 150, 150, [20, 0, 0, 0], "transparent", primary_color, primary_color, "Timeout");
+  var kevin_timeoutImage = new Image();
+  var kevin_timeoutPng = new Konva.Image({
+      x: kevin_timeout[0].x() + 30,
+      y: kevin_timeout[0].y() + 40,
+      image: kevin_timeoutImage,
+      width: kevin_timeout[0].width() - 60,
+      height: kevin_timeout[0].height() - 60,
+    });
+  kevin_timeoutImage.onload = function () {
+    layer.add(kevin_timeoutPng);
+  };
+  kevin_timeoutImage.src = '../images/alarm.png';
+  kevin_timeout = kevin_timeout.concat(kevin_timeoutPng);
+
+  kevin_timeout = kevin_timeout.concat(draw_arrow_konva(layer, kevin_tool[0], kevin_timeout[0], primary_color, primary_color, ""));
+
+  var kevin_system = draw_rectangle_konva(layer, width / 6 * 5 - 150, height / 4 * 3 - 100, 150, 150, [0, 0, 0, 0], "white", primary_color, primary_color, "System");
+  var kevin_ringSystemImage = new Image();
+  var kevin_ringSystemPng = new Konva.Image({
+      x: kevin_system[0].x() + 20,
+      y: kevin_system[0].y() + 40,
+      image: kevin_ringSystemImage,
+      width: kevin_system[0].width()  - 40,
+      height: kevin_system[0].height() - 80,
+    });
+  kevin_ringSystemImage.onload = function () {
+    layer.add(kevin_ringSystemPng);
+  };
+  kevin_ringSystemImage.src = '../images/ring.png';
+  kevin_system = kevin_system.concat(kevin_ringSystemPng);
+
+  kevin_system = kevin_system.concat(draw_arrow_konva(layer, federico_system[0], kevin_system[0], "red", "red", "Email"));
+
+  const elements = [federico_tool.flat().concat(federicoPng), federico_system, federico_proof, kevin_tool.flat().concat(kevinPng), kevin_system, kevin_timeout];
+
+  function clean() {
+    for (const x of elements) {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.hide();
+        }
+      } else {
+        x.hide();
+      }
+    }
+  }
+
+  clean();
+
+  var to_appear = [[]];
+  for (const x of elements) {
+    function f() {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.show();
+        }
+      } else {
+        x.show();
+      }
+    }
+    to_appear.push([f]);
+  }
+
+  var to_disappear = [];
+  for (const x of to_appear) { 
+    to_disappear.push([]);
+  }
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

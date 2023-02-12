@@ -10,45 +10,50 @@
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Proofs (Future)</div>
+<body>
+  <div class="title-box">
+    <div class="title">What Can Path-Patterns Learn?</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle-box">
-      <div class="full-subtitle" style="font-size: 95%;">
-      <ol>
-        <li style="opacity: 0.25;">
-          Reasoning about "stray" messages
-        </li>
-        <li style="opacity: 0.25;">
-          Coming up with true invariants
-        </li>
-        <li style="opacity: 0.25;">
-          Getting solvers to terminate
-        </li>
-        <li id="current">
-          Checking and sharing verification results
-        </li>
-      </ol>
+  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
+    <div style="margin-left: 80px; margin-right: 20px">
+      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
+      <br>
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em; margin-bottom: 2em;">
+        <img src="../images/tor.png" style="width: 80%">
       </div>
+      <br>
+      <math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
+      <br> where the first and last client are the same. 
+    </div>
+  </div>
+  <div id="right" class="half-box" style="opacity: 0;">
+    <div style="margin-right: 80px; margin-left: 40px;">
+      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
+      <br>
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em; margin-bottom: 1em;">
+        <img src="../images/2pc.png" style="width: 60%">
+      </div>
+      <br>
+      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
+      <br> where the three coordinator nodes are the same, but the participants before and after the decision may be different.; 
     </div>
   </div>
   <div class="foot-box">
+    <div class="footnote">Ayari (2010)</div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
+  import { step } from "../utils.js";
 
-  import { step, tertiary_color } from "../utils.js";
+  var left = document.getElementById('left');
+  var right = document.getElementById('right');
+  
+  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
+  const to_disappear = [[], [], []];
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
