@@ -12,36 +12,30 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Message Chains Example</div>
+    <div class="title">Specification Mining Example</div>
   </div>
-  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style='width:960px; height:730px;'></canvas>
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style='width:960px; height:730px; margin-top: -1.5em;'></canvas>
+    <div id="learned" style="margin-top: -4.25em; margin-left: 80px; font-size: 80%; margin-right: 80px; display: none;">
+      For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math>.
+    </div>
   </div>
-  <div class="half-box">
+  <div class="half-box">  
     <div class="half-half-box" id="top-right" style="display: none;">
       <div style="width: 95%;">
         <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Algorithm</span>
         <ul style="font-size: 20pt; padding-top: 1em;">
           <li id="start">Send your own value left
-            <ul style="padding-left: 2em;">
-              <li>starts a message chain</li>
-            </ul>
           </li>
           <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send received value
             left
-            <ul style="padding-left: 2em;">
-              <li>extends a message chain</li>
-            </ul>
           </li>
           <li style="margin-top: 1em;" id="win">If you receive your own value, declare yourself the winner
-            <ul style="padding-left: 2em;">
-              <li>completes a message chain</li>
-            </ul>
           </li>
         </ul>
       </div>
     </div>
     <div class="half-half-box" id="bottom-right" style="display: none;">
-      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Unique Message Chains in Current State</span>
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Unique Message Chains in Final State</span>
       <div id="log-data" style="width: 95%; padding-top: 0.5em;">
         <ul>
           <li id="mc0"><span style="color: white;"><sup>&nbsp;</sup></span></li>
@@ -65,10 +59,12 @@
   var start = document.querySelector('#start');
   var forward = document.querySelector('#forward');
   var win = document.querySelector('#win');
+  var learned_el = document.querySelector('#learned');
 
   start = annotate(start, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  learned = annotate(learned_el, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
   import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_from_gen } from "../utils.js";
 
@@ -188,15 +184,15 @@
         const p2x = center2_x - ((radius + 25) * betweenVec.x);
         const p2y = center2_y - ((radius + 25) * betweenVec.y);
 
-        draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
+        // draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
 
         log[choice].innerHTML = log[choice].innerHTML + getByValue(nodes, from) + "&nbsp&#8594;<sup>" + label + "</sup>&nbsp" + getByValue(nodes, to) + ";&nbsp ";
 
-        if (kind) {
-          start.show();
-        } else {
-          forward.show();
-        }
+        // if (kind) {
+        //   start.show();
+        // } else {
+        //   forward.show();
+        // }
       }
     }(from, to)]);
     to_appear.push(todo);
@@ -206,16 +202,11 @@
   var winning_chain = log[trace[trace.length - 1][5]];
   winning_chain = annotate(winning_chain, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
   const winner = nodes.get("4");
-  const todo = nodes_checkpoint.flat().concat([function (winner) {
-    return function () {
-      const x = positions[winner][0];
-      const y = positions[winner][1];
-      win.show();
-      winning_chain.show()
-      draw_node(rc, ctx, x, y, radius * 1.45, "", quaternary_color, quaternary_color);
-    }
-  }(winner)]);
-  to_appear.push(todo);
+
+  // make to appear a flattened array
+  to_appear = to_appear.flat();
+  const last = nodes_checkpoint.flat().concat([() => learned.show(), () => learned_el.style.display = "block"]);
+  to_appear = [[], to_appear, last];
 
   var to_disappear = []
   for (var i = 0; i < to_appear.length; i++) {
