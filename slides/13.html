@@ -45,6 +45,11 @@
       <ul></ul>
     </div>
   </div>
+  <div id="basically" style="display: none; font-size: 125%; position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
+    If you receive a message and then send a message in the same action, then extend a message chain. 
+    <br>
+    If you send a message without receiving, then you start a new message chain.
+  </div>
   <div class="foot-box">
     <div class="footnote">Mora et al. (In submission)</div>
     <div class="slide-number"></div>
@@ -60,9 +65,12 @@
 
   import { step, tertiary_color } from "../utils.js";
 
+  // select basically element
+  const basically = document.querySelector('#basically');
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
+  const to_appear = [[], [() => basically.style.display = 'flex']];
+  const to_disappear = [[], []];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

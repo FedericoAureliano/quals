@@ -15,14 +15,14 @@
     <div class="title">How do Developers Reason About Messages?</div>
   </div>
   <div class="full-box">
-    <div style="width: 100%; text-align: center;">
+    <div id="msc" style="width: 100%; text-align: center; display: none;">
       <img src="../images/msc.png" style="width: 70%; margin-top: 0px;"/>
     </div>
-    <div style="margin-left: 100px; margin-right: 80px; margin-top: 1em;">
+    <div style="margin-left: 100px; margin-right: 80px">
       <ul>
-        <li style="margin-bottom: 0.5em;">"A <strong>Message Sequence Chart</strong>... describes the message flow between instances. One Message Sequence Chart describes a partial behaviour of a system."</li>
-        <li style="margin-bottom: 0.5em;">Developers rarely think at the level of individual messages</li>
-        <li>We propose <strong>message chains</strong> as a way to reason about these kinds of sequences formally</li>
+        <li id="bullet1" style="display: none; margin-bottom: 0.5em; margin-top: 1em;">"A <strong>Message Sequence Chart</strong>... describes the message flow between instances. One Message Sequence Chart describes a partial behaviour of a system."</li>
+        <li id="bullet2" style="display: none; margin-bottom: 0.5em;">Developers rarely think at the level of individual messages</li>
+        <li id="bullet3" style="display: none; ">We propose <strong>message chains</strong> as a way to reason about these kinds of sequences formally</li>
       </ul>
     </div>
   </div>
@@ -36,9 +36,14 @@
 <script type="module">
   import { step } from "../utils.js";
 
+  const msc = document.querySelector('#msc');  
+  const bullet1 = document.querySelector('#bullet1');
+  const bullet2 = document.querySelector('#bullet2');
+  const bullet3 = document.querySelector('#bullet3');
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
+  const to_appear = [[], [() => msc.style.display = 'block'], [() => bullet1.style.display = 'list-item'], [() => bullet2.style.display = 'list-item'], [() => bullet3.style.display = 'list-item']];
+  const to_disappear = [[], [], [], [], []];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

@@ -44,6 +44,7 @@
     </div>
   </div>
   <div class="foot-box">
+    <!-- https://dl.acm.org/doi/abs/10.1145/3533767.3534382 -->
     <div class="footnote">Feldman et al. (2019); Hawblitzel et al. (2015); Yao et al. (2021); McMillan and Padon (2020); Piskac et al. (2008); Aguirre (2016); Irfan et al. (2022)</div>
     <div class="slide-number"></div>
   </div>
@@ -60,11 +61,11 @@
   var goal1 = document.querySelector('#goal1');
   const first_goal = [() => goal1.style.display = 'block'];
   var goal2 = document.querySelector('#goal2');
-  const second_goal = [() => goal2.style.display = 'block'];
+  const second_goal = [() => goal2.style.display = 'block', () => goal1.style.opacity = 0.25];
   var goal3 = document.querySelector('#goal3');
-  const third_goal = [() => goal3.style.display = 'block'];
+  const third_goal = [() => goal3.style.display = 'block', () => goal2.style.opacity = 0.25];
   var goal4 = document.querySelector('#goal4');
-  const fourth_goal = [() => goal4.style.display = 'block'];
+  const fourth_goal = [() => goal4.style.display = 'block', () => goal3.style.opacity = 0.25];
 
   const to_appear = [[], first_goal, second_goal, third_goal, fourth_goal];
   const to_disappear = [[], [], [], [], []];
