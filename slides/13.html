@@ -19,36 +19,42 @@
       The set of message chains is the smallest set such that:
       <ul style="margin-bottom: 1em;">
         <li style="margin-bottom: 0.25em; margin-top: 0.25em;"><math>nil</math> is a message chain; and</li>
-        <li>if <math>c</math> is a message chain, <math>m</math> is a message, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, m, c)</math> is</li>
+        <li>if <math>c</math> is a message chain, <math>p</math> is a payload, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, p, c)</math> is</li>
       </ul>
       Every system state <math>&sigma;</math> has an associated multiset of message chains, denoted <math>chains(&sigma;)</math>. 
       Let <math>(&sigma;, &sigma;')</math> be a system step for an action <math>&alpha;</math> taken by node <math>n</math>. Then <math>chains(&sigma;')</math> is the smallest multiset such that:
       <ul>
         <li><math>chains(&sigma;')</math> contains <math>nil</math><sup><math>1</math></sup></li>
-        <li><math>chains(&sigma;')</math> contains <math>cons(n, t, m, nil)</math><sup><math>k+1</math></sup> if
+        <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, nil)</math><sup><math>k+1</math></sup> if
           <ul>
             <li><math>&alpha;</math> contains no receive actions</li>
-            <li><math>&alpha;</math> contains <math>send(t, m)</math></li>
-            <li><math>chains(&sigma;)</math> contains <math>cons(n, t, m, nil)</math><sup><math>k</math></sup></li>
+            <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
+            <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, nil)</math><sup><math>k</math></sup></li>
           </ul>
         </li>
-        <li><math>chains(&sigma;')</math> contains <math>cons(n, t, m, cons(s, n, m', c))</math><sup><math>k+1</math></sup> if
+        <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k+1</math></sup> if
           <ul>
-            <li><math>&alpha;</math> contains <math>receive(n, m')</math></li>
-            <li><math>&alpha;</math> contains <math>send(t, m)</math></li>
-            <li><math>chains(&sigma;)</math> contains at least one <math>cons(s, n, m', c)</math></li>
-            <li><math>chains(&sigma;)</math> contains <math>cons(n, t, m, cons(s, n, m', c))</math><sup><math>k</math></sup></li>
+            <li><math>&alpha;</math> contains <math>receive(n, p')</math></li>
+            <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
+            <li><math>chains(&sigma;)</math> contains at least one <math>cons(s, n, p', c)</math></li>
+            <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k</math></sup></li>
           </ul>
         </li>
-        <li>if <math>chains(&sigma;)</math> contains <math>cons(s, n, m', c)</math><sup><math>k</math></sup> and <math>&alpha;</math> does not contain <math>receive(n, m')</math>, then <math>chains(&sigma;')</math> contains <math>cons(s, n, m', c)</math><sup><math>k</math></sup></li>
+        <li>if <math>chains(&sigma;)</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup> and <math>&alpha;</math> does not contain <math>receive(n, p')</math>, then <math>chains(&sigma;')</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup></li>
       </ul>
       <ul></ul>
     </div>
   </div>
-  <div id="basically" style="display: none; font-size: 125%; position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
-    If you receive a message and then send a message in the same action, then extend a message chain. 
-    <br>
-    If you send a message without receiving, then you start a new message chain.
+  <div id="basically" style="display: none; font-size: 200%; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
+    <ul style="margin-left: 2em; margin-right: 2em;">
+      <li style="margin-bottom: 2em;">
+        If you receive and then send in the same action, then extend the message chain. 
+      </li>
+      <li>
+        If you send without first receiving, then start a new message chain.
+      </li>
+    </ul>
+    
   </div>
   <div class="foot-box">
     <div class="footnote">Mora et al. (In submission)</div>
