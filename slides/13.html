@@ -16,33 +16,36 @@
   </div>
   <div class="full-box">
     <div style="margin-left: 80px; margin-right: 80px; font-size: 80%;">
-      The set of message chains is the smallest set such that:
-      <ul style="margin-bottom: 1em;">
-        <li style="margin-bottom: 0.25em; margin-top: 0.25em;"><math>nil</math> is a message chain; and</li>
-        <li>if <math>c</math> is a message chain, <math>p</math> is a payload, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, p, c)</math> is</li>
-      </ul>
-      Every system state <math>&sigma;</math> has an associated multiset of message chains, denoted <math>chains(&sigma;)</math>. 
-      Let <math>(&sigma;, &sigma;')</math> be a system step for an action <math>&alpha;</math> taken by node <math>n</math>. Then <math>chains(&sigma;')</math> is the smallest multiset such that:
-      <ul>
-        <li><math>chains(&sigma;')</math> contains <math>nil</math><sup><math>1</math></sup></li>
-        <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, nil)</math><sup><math>k+1</math></sup> if
-          <ul>
-            <li><math>&alpha;</math> contains no receive actions</li>
-            <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
-            <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, nil)</math><sup><math>k</math></sup></li>
-          </ul>
-        </li>
-        <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k+1</math></sup> if
-          <ul>
-            <li><math>&alpha;</math> contains <math>receive(n, p')</math></li>
-            <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
-            <li><math>chains(&sigma;)</math> contains at least one <math>cons(s, n, p', c)</math></li>
-            <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k</math></sup></li>
-          </ul>
-        </li>
-        <li>if <math>chains(&sigma;)</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup> and <math>&alpha;</math> does not contain <math>receive(n, p')</math>, then <math>chains(&sigma;')</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup></li>
-      </ul>
-      <ul></ul>
+      <div id="mc-def" style="opacity: 0;">
+        The set of message chains is the smallest set such that:
+        <ul style="margin-bottom: 1em;">
+          <li style="margin-bottom: 0.25em; margin-top: 0.25em;"><math>nil</math> is a message chain; and</li>
+          <li>if <math>c</math> is a message chain, <math>p</math> is a payload, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, p, c)</math> is</li>
+        </ul>
+      </div>
+      <div id="mc-buffer" style="opacity: 0;">
+        Every system state <math>&sigma;</math> has an associated multiset of message chains, denoted <math>chains(&sigma;)</math>. 
+        Let <math>(&sigma;, &sigma;')</math> be a system step for an action <math>&alpha;</math> taken by node <math>n</math>. Then <math>chains(&sigma;')</math> is the smallest multiset such that:
+        <ul>
+          <li><math>chains(&sigma;')</math> contains <math>nil</math><sup><math>1</math></sup></li>
+          <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, nil)</math><sup><math>k+1</math></sup> if
+            <ul>
+              <li><math>&alpha;</math> contains no receive actions</li>
+              <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
+              <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, nil)</math><sup><math>k</math></sup></li>
+            </ul>
+          </li>
+          <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k+1</math></sup> if
+            <ul>
+              <li><math>&alpha;</math> contains <math>receive(n, p')</math></li>
+              <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
+              <li><math>chains(&sigma;)</math> contains at least one <math>cons(s, n, p', c)</math></li>
+              <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k</math></sup></li>
+            </ul>
+          </li>
+          <li>if <math>chains(&sigma;)</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup> and <math>&alpha;</math> does not contain <math>receive(n, p')</math>, then <math>chains(&sigma;')</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup></li>
+        </ul>
+      </div>
     </div>
   </div>
   <div id="basically" style="display: none; font-size: 200%; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
@@ -73,10 +76,13 @@
 
   // select basically element
   const basically = document.querySelector('#basically');
+  const mc_def = document.querySelector('#mc-def');
+  const mc_buffer = document.querySelector('#mc-buffer');
+
+  const to_appear = [[], [() => mc_def.style.opacity = 1], [() => mc_buffer.style.opacity = 1], [() => basically.style.display = 'flex']];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
-  const to_appear = [[], [() => basically.style.display = 'flex']];
-  const to_disappear = [[], []];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

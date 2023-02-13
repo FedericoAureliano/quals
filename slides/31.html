@@ -381,6 +381,9 @@
     to_appear.push([f, g]);
   }
 
+  to_appear = to_appear.flat();
+  to_appear = [[], to_appear];
+
   var to_disappear = [];
   for (const x of to_appear) { 
     to_disappear.push([]);
