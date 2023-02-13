@@ -11,20 +11,20 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Verification Collaboration</div>
+    <div class="title">Verification Collaboration and Offloading</div>
   </div>
   <div class="full-box">
     <div style="margin-left: 80px; margin-right: 80px;">
       <ul>
-        <li style="margin-bottom: 0.5em;">
+        <li id="sharing" style="margin-bottom: 0.5em; opacity: 0;">
           Proof sharing instead of verification sharing
           <ul>
             <li>hardware and software independent</li>
           </ul>
         </li>
-        <li>Parts of the verification can offloaded to a server
+        <li id="offloading" style="opacity: 0;">Parts of the verification can offloaded to a server
           <ul>
-            <li>modular verification with proof stiching</li>
+            <li>modular verification with proof stitching</li>
           </ul>
         </li>
       </ul>
@@ -67,21 +67,7 @@
 
   var federico_tool = draw_rectangle_konva(layer, width / 3 - 350, height / 4 * 3 - 300, 300, 300, [0, 0, 0, 0], "transparent", primary_color, primary_color, "Tool");
 
-  var federico_proof = draw_rectangle_konva(layer, federico_tool[0].x() + federico_tool[0].width() + 100, federico_tool[0].y() + federico_tool[0].height() / 2 - 75, 150, 150, [20, 0, 0, 0], "transparent", primary_color, primary_color, "Proof");
-  var federico_proofImage = new Image();
-  var federico_proofPng = new Konva.Image({
-      x: federico_proof[0].x() + 30,
-      y: federico_proof[0].y() + 40,
-      image: federico_proofImage,
-      width: federico_proof[0].width() - 60,
-      height: federico_proof[0].height() - 50,
-    });
-  federico_proofImage.onload = function () {
-    layer.add(federico_proofPng);
-  };
-  federico_proofImage.src = '../images/proof.png';
-  federico_proof = federico_proof.concat(federico_proofPng);
-
+  var federico_proof = draw_rectangle_konva(layer, federico_tool[0].x() + federico_tool[0].width() + 100, federico_tool[0].y() + federico_tool[0].height() / 2 - 75, 150, 150, [20, 0, 0, 0], "transparent", primary_color, primary_color, "Yay it works!");
   federico_proof = federico_proof.concat(draw_arrow_konva(layer, federico_tool[0], federico_proof[0], primary_color, primary_color, ""));
 
   var federico_system = draw_rectangle_konva(layer, width / 3 - 150, height / 4 * 3 - 100, 150, 150, [0, 0, 0, 0], "white", primary_color, primary_color, "System");
@@ -178,6 +164,11 @@
     }
     to_appear.push([f]);
   }
+
+  var sharing = document.getElementById("sharing");
+  var offloading = document.getElementById("offloading");
+
+  to_appear = [[], [() => sharing.style.opacity = 1], to_appear.flat(), [() => offloading.style.opacity = 1]];
 
   var to_disappear = [];
   for (const x of to_appear) { 
