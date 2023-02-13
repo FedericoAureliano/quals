@@ -16,13 +16,13 @@
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div style="margin-bottom: 1em;">
+      <div id="setup" style="margin-bottom: 1em; opacity: 0;">
         <ul>
           <li><math>&Sigma; = {</math><math>C</math><sub><math>1</math></sub><math>, C</math><sub><math>2</math></sub><math>, C</math><sub><math>3</math></sub><math></math><math>, S</math><sub><math>1</math></sub><math>, S</math><sub><math>2</math></sub><math>, S</math><sub><math>3</math></sub><math>}</math></li>
           <li><math>V = {X, Y, Z}</math></li>
         </ul>
       </div>
-      <div style="margin-bottom: 1em;">
+      <div  id="input" style="margin-bottom: 1em; opacity: 0;">
         <ul>
           <li> Input strings (message chains sampled from a client-server system):
             <ul>
@@ -33,12 +33,12 @@
           </li>
         </ul>
       </div>
-      <div style="margin-bottom: 1em;">
+      <div id="output"  style="margin-bottom: 1em; opacity: 0;">
         <ul>
           <li>Output pattern: <math>XYX</math></li>
         </ul>
       </div>
-      <div>
+      <div id="bad" style="opacity: 0;">
         <ul>
           <li>Strings that match the pattern but are kind of dissapointing: 
             <ul>
@@ -62,15 +62,13 @@
   import { annotate } from 'https://unpkg.com/rough-notation?module';
   import { step, tertiary_color } from "../utils.js";
 
+  var setup = document.querySelector('#setup');
+  var input = document.querySelector('#input');
+  var output = document.querySelector('#output');
+  var bad = document.querySelector('#bad');
 
-  var justifies = document.querySelector('#justifies');
-  justifies = annotate(justifies, { type: 'box', color: tertiary_color, strokeWidth: 10 });
-
-  var non_erasing = document.querySelector('#non-erasing');
-  var learning = document.querySelector('#learning');
-
-  const to_appear = [[], [() => non_erasing.style.opacity = 1], [() => justifies.show()],  [() => learning.style.opacity = 1]];
-  const to_disappear = [[], [], [], []];
+  const to_appear = [[], [() => setup.style.opacity = 1], [() => input.style.opacity = 1], [() => output.style.opacity = 1], [() => bad.style.opacity = 1]];
+  const to_disappear = [[], [], [], [], []];
 
   var state = 0;
   const body = document.querySelector('body');

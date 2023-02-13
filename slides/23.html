@@ -16,7 +16,7 @@
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div style="margin-bottom: 2em;">
+      <div id="justified" style="margin-bottom: 2em; opacity: 0;">
         <ul>
           <li>
             Let <math>S</math> be an input set of strings and <math>p</math> be a learned pattern
@@ -25,7 +25,7 @@
             The set of <em>justifications</em> <math>J(S, p)</math> is the set of assignments <math>&mu;</math> such that <math>&Exists; s &in; S &mu;(s) = p</math>
           </li>
           <li>
-            A constraint is <em>justified</em> if it does not block any justifying assignment
+            A semantic constraint is <em>justified</em> if it does not block any justifying assignment
             <ul>
               <li>
                 In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
@@ -35,7 +35,7 @@
         </ul>
       </div>
 
-      <div style="margin-bottom: 2em;">
+      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
         <ul>
           <li>We consider two domain-specific constraint classes
             <ul>
@@ -45,7 +45,8 @@
           </li>
         </ul>
       </div>
-      <div style="margin-bottom: 1em;">
+  
+      <div id="example" style="margin-bottom: 1em; opacity: 0;">
         <ul>
           <li> Input strings (message chains sampled from a client-server system):
             <ul>
@@ -69,9 +70,14 @@
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
 
+  var justified = document.getElementById('justified');
+  var classes = document.getElementById('classes');
+  var example = document.getElementById('example');
+
+  const to_appear = [[], [() => justified.style.opacity = 1], [() => classes.style.opacity = 1], [() => example.style.opacity = 1]];
+  const to_disappear = [[], [], [], []];
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
