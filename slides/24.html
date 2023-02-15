@@ -12,46 +12,74 @@
 
 <body>
   <div class="title-box">
-    <div class="title">What Can Path-Patterns Learn?</div>
+    <div class="title">Non-Erasing Pattern Learning</div>
   </div>
-  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
-    <div style="margin-left: 80px; margin-right: 20px">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em; margin-bottom: 2em;">
-        <img src="../images/tor.png" style="width: 80%">
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <div id="non-erasing" style="margin-bottom: 1em; opacity: 0;">
+        <ul>
+          <li><strong>Non-Erasing Patterns</strong>
+            <ul>
+              <li style="margin-bottom: 0.5em; margin-top: 0.25em">
+                Let <math>&Sigma;</math> and <math>V</math> be two disjoint sets of symbols with at least two elements each
+              </li>
+              <li style="margin-bottom: 0.5em;">
+                A <strong>non-erasing pattern</strong> is a finite sequence of symbols drawn from <math>&Sigma;</math> and <math>V</math>
+              </li>
+              <li style="margin-bottom: 0.5em;">
+                A <strong>string</strong> is a finite sequence of symbols drawn from <math>&Sigma;</math>
+              </li>
+              <li style="margin-bottom: 0.5em;">
+                Every non-erasing pattern <math>p</math> represents a <strong>language</strong>, <math>L(p)</math>. For a given pattern <math>p</math> and string <math>s</math>
+                <ul>
+                  <li id="justifies">If there is a mapping <math>&mu;</math> from <math>V</math> to <math>&Sigma;</math><sup><math>+</math></sup> such that <math>&mu;(p) = s</math>, then <math>s &in; L(p)</math></li>
+                  <li>Otherwise, <math>s &notin; L(p)</math></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
-      <br>
-      <math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
-      <br> where the first and last client are the same. 
-    </div>
-  </div>
-  <div id="right" class="half-box" style="opacity: 0;">
-    <div style="margin-right: 80px; margin-left: 40px;">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em; margin-bottom: 1em;">
-        <img src="../images/2pc.png" style="width: 60%">
+      
+      <div id="learning" style="opacity: 0;">
+        <ul>
+          <li>
+            <strong>The Learning Problem:</strong>
+            <ul>
+              <li style="margin-bottom: 0.5em; margin-top: 0.25em">Input: set of strings <math>S</math></li>
+              <li style="margin-bottom: 0.5em;">
+                Output: a non-erasing pattern <math>p</math> such that
+                <ul>
+                  <li><math>L(p) &subseteq; S</math></li>
+                  <li><math>p</math> is <em>the most specific pattern</em></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
-      <br>
-      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
-      <br> where the three coordinator nodes are the same, but the participants before and after the decision may be different. 
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Ayari (2010)</div>
+    <div class="footnote">Angluin (1980)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { step } from "../utils.js";
 
-  var left = document.getElementById('left');
-  var right = document.getElementById('right');
-  
-  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
-  const to_disappear = [[], [], []];
+<script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, tertiary_color } from "../utils.js";
+
+
+  var justifies = document.querySelector('#justifies');
+  justifies = annotate(justifies, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var non_erasing = document.querySelector('#non-erasing');
+  var learning = document.querySelector('#learning');
+
+  const to_appear = [[], [() => non_erasing.style.opacity = 1], [() => justifies.show()],  [() => learning.style.opacity = 1]];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
   const body = document.querySelector('body');

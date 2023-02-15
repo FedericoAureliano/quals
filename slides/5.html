@@ -12,74 +12,59 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Distributed Systems Verification Goal, <span id="generally">Generally</span></div>
+    <div class="title">Distributed Systems Verification Goal Example</div>
   </div>
   <div class="full-box">
-    <div style="margin-right: 80px; margin-left: 80px">
-      <ul>
-        <li id="invariant-def" style="margin-bottom: 0.5em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system</li>
-        <li id="kinds-def" style="margin-bottom: 0.5em; display: none;">Invariants can encode
-          <ul>
-            <li><strong>safety</strong> properties, and</li>
-            <li>some types of <strong>liveness</strong> properties</li>
-          </ul>
-        </li>
-        <li id="inductive-def" style="margin-bottom: 0.5em; display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(&sigma;, &sigma;')</math> is a step</li>
-        <li id="proof-def" style="margin-bottom: 4em; display: none;">If an invariant <math>I</math> is inductive and holds for all initial states, then <math>I</math> holds for all executions</li>
-
-        <li id="step-def" style="margin-bottom: 0.5em; display: none;">A system <strong>step</strong> is a pair of states <math>(&sigma;, &sigma;')</math>, where <math>&sigma;'</math> is the result of a node's action on <math>&sigma;</math></li>
-        <li id="execution-def" style="margin-bottom: 0.5em; display: none;">An <strong>execution</strong> is a sequence of states <math>&sigma;</math><sub><math>1</math></sub><math>&#8729;&#8729;&#8729; &sigma;</math><sub><math>n</math></sub> such that
-          <ul>
-            <li><math>&sigma;</math><sub><math>1</math></sub> is an initial state, and</li>
-            <li>for each <math>i</math>, <math>(&sigma;</math><sub><math>i</math></sub><math>, &sigma;</math><sub><math>i+1</math></sub><math>)</math> is a step of the system</li>
-          </ul>
-        </li>
-      </ul>
+    <div style="width: 95%; margin-left: 80px;">
+      <div id="system-def" style="display: none;">
+        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">Ring System Definition (Verification Assumptions)</span>:
+        <ul style="margin-top: 0.5em; margin-bottom: 1em;">
+          <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers</li>
+          <li style="margin-bottom: 0.5em;">Payloads are natural numbers</li>
+          <li style="margin-bottom: 0.5em;">Nodes can perform the following actions:
+            <ol>
+              <li>Send their own identifier left</li>
+              <li>Receive a message and, 
+                <ul style="font-size: 90%;">
+                  <li>if the payload is greater than their own identifier, send the payload left; </li>
+                  <li>if the message is their own identifier, move to a winning state</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+          <li>Initially, no node is in the winning state and the message buffer is empty</li>
+        </ul>
+      </div>
+      <div id="system-spec" style="display: none;">
+        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline">Ring System Specification (Verification Goal)</span>:
+        <ul style="margin-top: 0.5em;">
+          <li>There is always at most one node in the winning state</li>
+        </ul>
+        <img src="../images/ring_inv.png" style="position: absolute; top: 450px; left: 1500px;"/>
+      </div>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Lynch (1996); Fang, McMillan, Pnueli, and Zuck (2006)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var generally = document.querySelector('#generally');
-  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
-  generally.show();
+  import { step } from "../utils.js";
 
-  import { step, tertiary_color } from "../utils.js";
+  var system_def_element = document.querySelector('#system-def');
+  const system_def = [() => system_def_element.style.display = 'block'];
+  var system_spec_element = document.querySelector('#system-spec');
+  const system_spec = [() => system_spec_element.style.display = 'block'];
 
-  const step_def = document.querySelector('#step-def');
-  const execution_def = document.querySelector('#execution-def');
-  const invariant_def = document.querySelector('#invariant-def');
-  const inductive_def = document.querySelector('#inductive-def');
-  const proof_def = document.querySelector('#proof-def');
-  const kinds_def = document.querySelector('#kinds-def');
-
-  const elements = [invariant_def, kinds_def, inductive_def, proof_def, step_def, execution_def];
-
-  var to_appear = [[]];
-  for (const el of elements) {
-    to_appear.push([() => el.style.display = 'block']);
-  }
-
-  var to_disappear = [[]];
-  for (var i = 0; i < elements.length; i++) {
-    to_disappear.push([]);
-    for (var j = 0; j < i; j++) {
-      const el = elements[j];
-      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
-    }
-  }
+  const to_disappear = [[], system_def, system_spec];
+  const to_appear = [[], [], []];
 
   var state = 0;
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
-
 <script type='module' src="../next.js"></script>
 
 </html>

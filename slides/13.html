@@ -12,77 +12,38 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Message Chains, <span id="generally">Generally</span></div>
+    <div class="title">How do Developers Reason About Messages?</div>
   </div>
   <div class="full-box">
-    <div style="margin-left: 80px; margin-right: 80px; font-size: 80%;">
-      <div id="mc-def" style="opacity: 0;">
-        The set of message chains is the smallest set such that:
-        <ul style="margin-bottom: 1em;">
-          <li style="margin-bottom: 0.25em; margin-top: 0.25em;"><math>nil</math> is a message chain; and</li>
-          <li>if <math>c</math> is a message chain, <math>p</math> is a payload, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, p, c)</math> is</li>
-        </ul>
-      </div>
-      <div id="mc-buffer" style="opacity: 0;">
-        Every system state <math>&sigma;</math> has an associated multiset of message chains, denoted <math>chains(&sigma;)</math>. 
-        Let <math>(&sigma;, &sigma;')</math> be a system step for an action <math>&alpha;</math> taken by node <math>n</math>. Then <math>chains(&sigma;')</math> is the smallest multiset such that:
-        <ul>
-          <li><math>chains(&sigma;')</math> contains <math>nil</math><sup><math>1</math></sup></li>
-          <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, nil)</math><sup><math>k+1</math></sup> if
-            <ul>
-              <li><math>&alpha;</math> contains no receive actions</li>
-              <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
-              <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, nil)</math><sup><math>k</math></sup></li>
-            </ul>
-          </li>
-          <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k+1</math></sup> if
-            <ul>
-              <li><math>&alpha;</math> contains <math>receive(n, p')</math></li>
-              <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
-              <li><math>chains(&sigma;)</math> contains at least one <math>cons(s, n, p', c)</math></li>
-              <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k</math></sup></li>
-            </ul>
-          </li>
-          <li>if <math>chains(&sigma;)</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup> and <math>&alpha;</math> does not contain <math>receive(n, p')</math>, then <math>chains(&sigma;')</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup></li>
-        </ul>
-      </div>
+    <div id="msc" style="width: 100%; text-align: center; display: none;">
+      <img src="../images/msc.png" style="width: 70%; margin-top: 0px;"/>
+    </div>
+    <div style="margin-left: 100px; margin-right: 80px">
+      <ul>
+        <li id="bullet1" style="display: none; margin-bottom: 0.5em; margin-top: 1em;">"A <strong>Message Sequence Chart</strong>... describes the message flow between instances. One Message Sequence Chart describes a partial behaviour of a system."</li>
+        <li id="bullet2" style="display: none; margin-bottom: 0.5em;">Developers rarely think at the level of individual messages</li>
+        <li id="bullet3" style="display: none; ">We propose <strong>message chains</strong> as a way to reason about these kinds of sequences formally</li>
+      </ul>
     </div>
   </div>
-  <div id="basically" style="display: none; font-size: 200%; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
-    <ul style="margin-left: 2em; margin-right: 2em;">
-      <li style="margin-bottom: 2em;">
-        If you receive and then send in the same action, then extend the message chain. 
-      </li>
-      <li>
-        If you send without first receiving, then start a new message chain.
-      </li>
-    </ul>
-    
-  </div>
   <div class="foot-box">
-    <div class="footnote">Mora et al. (In submission)</div>
+    <div class="footnote">Bollig et al. 2010; International Telecommunication Union (ITU) Recommendation Z.120</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var generally = document.querySelector('#generally');
-  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
-  generally.show();
+  import { step } from "../utils.js";
 
-  import { step, tertiary_color } from "../utils.js";
-
-  // select basically element
-  const basically = document.querySelector('#basically');
-  const mc_def = document.querySelector('#mc-def');
-  const mc_buffer = document.querySelector('#mc-buffer');
-
-  const to_appear = [[], [() => mc_def.style.opacity = 1], [() => mc_buffer.style.opacity = 1], [() => basically.style.display = 'flex']];
-  const to_disappear = [[], [], [], []];
+  const msc = document.querySelector('#msc');  
+  const bullet1 = document.querySelector('#bullet1');
+  const bullet2 = document.querySelector('#bullet2');
+  const bullet3 = document.querySelector('#bullet3');
 
   var state = 0;
+  const to_appear = [[], [() => msc.style.display = 'block'], [() => bullet1.style.display = 'list-item'], [() => bullet2.style.display = 'list-item'], [() => bullet3.style.display = 'list-item']];
+  const to_disappear = [[], [], [], [], []];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

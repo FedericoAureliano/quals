@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Future Work</div>
+  </div>
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li id="generalized" style="margin-bottom: 0.5em; opacity: 0;">Generalized notions of message chains
+          <ul>
+            <li>e.g., message trees</li>
+          </ul>
+        </li>
+        <li id="spec-mining" style="margin-bottom: 0.5em; opacity: 0;">New specification mining techniques
+          <ul>
+            <li>
+              e.g., learning recursive functions from examples
+            </li>
+          </ul>
+        </li>
+        <li id="solver" style="margin-bottom: 0.5em; opacity: 0;">Solver and query optimizations
+          <ul>
+            <li>e.g., learning and selecting domain-specific rewrite rules</li>
+            <li>e.g., graph neural networks for solver selection</li>
+            <li>e.g., eager solver for algebraic datatypes</li>
+            <li>e.g., learning rewrite rule orderings</li>
+            <li>e.g., cloud-based solvers</li>
+          </ul>
+        </li>
+        <li id="proof" style="margin-bottom: 0.5em; opacity: 0;">Proof management
+          <ul>
+            <li>e.g., proof caching and reading</li>
+            <li>e.g., modular verification for proof offloading</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { step, tertiary_color } from "../utils.js";
+  
+  var generalized = document.getElementById('generalized');
+  var spec_mining = document.getElementById('spec-mining');
+  var solver = document.getElementById('solver');
+  var proof = document.getElementById('proof');
+
+  const to_appear = [[], [() => generalized.style.opacity = 1], [() => spec_mining.style.opacity = 1], [() => solver.style.opacity = 1], [() => proof.style.opacity = 1]];
+  const to_disappear = [[], [], [], [], []];
+
+  var state = 0;
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

@@ -12,67 +12,52 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Extending Non-Erasing Patterns with Justified Constraints</div>
+    <div class="title">Specification Mining, <span id="generally">Generally</span></div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="example" style="margin-bottom: 2em; opacity: 0;">
-        <ul>
-          <li> Input strings (message chains sampled from a client-server system):
-            <ul>
-              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>1</math></sub></li>
-              <li><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub></li>
-              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
-            </ul>
-          </li>
-          <li>Output pattern: <math>XYX &wedge; |X| = 1 &wedge; |Y| = 1 &wedge; X &in; C</math><sup><math>+</math></sup> <math> &wedge; Y &in; S</math><sup><math>+</math></sup></li>
+      <div id="def" style="margin-bottom: 2em; opacity: 0;">
+        "... a machine learning approach to discovering formal specifications" that code <em>likely</em> obeys.
+        <ul style="margin-top: 0.5em;">
+          <li style="margin-bottom: 0.25em;">Input: observed program executions</li>
+          <li>Output: suggested invariant</li>
         </ul>
       </div>
-      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
-        <ul>
-          <li>We consider two domain-specific constraint classes
-            <ul>
-              <li>Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
-              <li>Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
-            </ul>
-          </li>
-        </ul>
+
+      <div id="is-not" style="margin-bottom: 2em; opacity: 0;">
+        The goal is <strong>not</strong> to reverse engineer the code from observations (or to discover a model).
       </div>
-      <div id="justified" style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li>
-            Let <math>S</math> be an input set of strings and <math>p</math> be a learned pattern
-          </li>
-          <li>
-            The set of <em>justifications</em> <math>J(S, p)</math> is the set of assignments <math>&mu;</math> such that <math>&Exists; s &in; S &mu;(p) = s</math>
-          </li>
-          <li>
-            A semantic constraint is <em>justified</em> if it does not block any justification
-            <ul>
-              <li>
-                In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
-              </li>
-            </ul>
-          </li>
+
+      <div id="us" style="opacity: 0;">
+        In our setting, we are interested in mining <strong>message chain</strong> invariants:
+        <ul style="margin-top: 0.5em;">
+          <li style="margin-bottom: 0.25em;">predicates that hold for every message chain that appears during the execution of a system</li>
         </ul>
       </div>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <!-- https://dl.acm.org/doi/10.1145/503272.503275 -->
+    <!-- https://homes.cs.washington.edu/~mernst/pubs/invariants-ernst-phdthesis.pdf -->
+    <div class="footnote">Ernst (2000); Ammons, Bod&#237;k, and Larus (2002); Biermann and Feldman (1972)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
+
   import { step, tertiary_color } from "../utils.js";
 
-  var example = document.getElementById('example');
-  var classes = document.getElementById('classes');
-  var justified = document.getElementById('justified');
-
-  const to_appear = [[], [() => example.style.opacity = 1], [() => classes.style.opacity = 1], [() => justified.style.opacity = 1]];
+  var def = document.querySelector('#def');
+  var is_not = document.querySelector('#is-not');
+  var us = document.querySelector('#us');
+  
+  const to_appear = [[], [() => def.style.opacity = 1], [() => is_not.style.opacity = 1], [() => us.style.opacity = 1]];
   const to_disappear = [[], [], [], []];
 
   var state = 0;

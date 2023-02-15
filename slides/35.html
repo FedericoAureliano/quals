@@ -11,7 +11,7 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proposal Details: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning</div>
+    <div class="title">Proposal Summary: <span id="learning">Inductive</span> & <span id="proofs">Deductive</span> Reasoning</div>
   </div>
   <div class="full-box" style="margin-top: -100px;"><div id="canvas"></div></div>
   <div id="goals" style="height: 100px; text-align: center;"></div>
@@ -380,6 +380,9 @@
     }
     to_appear.push([f, g]);
   }
+
+  to_appear = to_appear.flat();
+  to_appear = [[], to_appear];
 
   var to_disappear = [];
   for (const x of to_appear) { 

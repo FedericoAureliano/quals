@@ -3,7 +3,8 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/konva@8/konva.min.js"></script>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -11,173 +12,67 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proposal Overview: Distributed Systems Verification Framework</div>
+    <div class="title">Distributed Systems Verification Goal, <span id="generally">Generally</span></div>
   </div>
-  <div class="full-box"><div id="canvas"></div></div>
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li id="invariant-def" style="margin-bottom: 0.5em; display: none;">An <strong>invariant</strong> is a predicate over the state of the system</li>
+        <li id="kinds-def" style="margin-bottom: 0.5em; display: none;">Invariants can encode
+          <ul>
+            <li><strong>safety</strong> properties, and</li>
+            <li>some types of <strong>liveness</strong> properties</li>
+          </ul>
+        </li>
+        <li id="inductive-def" style="margin-bottom: 0.5em; display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(&sigma;, &sigma;')</math> is a step</li>
+        <li id="proof-def" style="margin-bottom: 4em; display: none;">If an invariant <math>I</math> is inductive and holds for all initial states, then <math>I</math> holds for all executions</li>
+
+        <li id="step-def" style="margin-bottom: 0.5em; display: none;">A system <strong>step</strong> is a pair of states <math>(&sigma;, &sigma;')</math>, where <math>&sigma;'</math> is the result of a node's action on <math>&sigma;</math></li>
+        <li id="execution-def" style="margin-bottom: 0.5em; display: none;">An <strong>execution</strong> is a sequence of states <math>&sigma;</math><sub><math>1</math></sub><math>&#8729;&#8729;&#8729; &sigma;</math><sub><math>n</math></sub> such that
+          <ul>
+            <li><math>&sigma;</math><sub><math>1</math></sub> is an initial state, and</li>
+            <li>for each <math>i</math>, <math>(&sigma;</math><sub><math>i</math></sub><math>, &sigma;</math><sub><math>i+1</math></sub><math>)</math> is a step of the system</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
   <div class="foot-box">
+    <div class="footnote">Lynch (1996); Fang, McMillan, Pnueli, and Zuck (2006)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
+
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
-  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
 
-  const width = 1920;
-  const height = 1080 - 350;
+  import { step, tertiary_color } from "../utils.js";
 
-  var stage = new Konva.Stage({
-    container: 'canvas',
-    width: width,
-    height: height,
-  });
-  var layer = new Konva.Layer();
-  stage.add(layer);
+  const step_def = document.querySelector('#step-def');
+  const execution_def = document.querySelector('#execution-def');
+  const invariant_def = document.querySelector('#invariant-def');
+  const inductive_def = document.querySelector('#inductive-def');
+  const proof_def = document.querySelector('#proof-def');
+  const kinds_def = document.querySelector('#kinds-def');
 
-  const vert_gap = 50;
-  const horiz_gap = 150;
-
-  const doc_width = 150;
-  const doc_height = 200;
-  const doc_corners = [0, 20, 0, 0];
-
-  const big_process_width = 1100;
-  const big_process_height = 500;
-  const process_corners = [0, 0, 0, 0];
-
-  const left_most_x = (width - (big_process_width + doc_width + doc_width + horiz_gap + horiz_gap)) / 2;
-  const upmost_y = (height - (doc_height + doc_height + vert_gap)) / 2;
-
-  var system = draw_rectangle_konva(layer, left_most_x, upmost_y, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User System");
-  var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
-
-  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
-  
-  var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
-  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Invariant");
-
-  var ringSystemImage = new Image();
-  var ringSystemPng = new Konva.Image({
-      x: system[0].x() + 20,
-      y: system[0].y() + 70,
-      image: ringSystemImage,
-      width: system[0].width()  - 40,
-      height: system[0].height() - 80,
-    });
-  ringSystemImage.onload = function () {
-    layer.add(ringSystemPng);
-  };
-  ringSystemImage.src = '../images/ring.png';
-  system = system.concat(ringSystemPng);
-
-  var ringInvImage = new Image();
-  var ringInvPng = new Konva.Image({
-      x: invariant[0].x() + 20,
-      y: invariant[0].y() + 70,
-      image: ringInvImage,
-      width: invariant[0].width()  - 40,
-      height: invariant[0].height() - 80,
-    });
-  ringInvImage.onload = function () {
-    layer.add(ringInvPng);
-  };
-  ringInvImage.src = '../images/ring_inv.png';
-  invariant = invariant.concat(ringInvPng);
-
-  var proofImage = new Image();
-  var proofPng = new Konva.Image({
-      x: proof[0].x() + 30,
-      y: proof[0].y() + 40,
-      image: proofImage,
-      width: proof[0].width() - 60,
-      height: proof[0].height() - 50,
-    });
-  proofImage.onload = function () {
-    layer.add(proofPng);
-  };
-  proofImage.src = '../images/proof.png';
-  proof = proof.concat(proofPng);
-
-  // add text to center of help
-  var helpText = new Konva.Text({
-    x: help[0].x(),
-    y: help[0].y() + 20,
-    text: 'P(s)',
-    fontSize: 30,
-    fontFamily: 'Open Sans',
-    fill: secondary_color,
-    width: help[0].width(),
-    height: help[0].height(),
-    align: 'center',
-    verticalAlign: 'middle',
-  });
-  layer.add(helpText);
-  help = help.concat(helpText);
-
-  system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
-  invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
-  proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
-  help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
-
-  var toolText2 = new Konva.Text({
-    x: tool[0].x(),
-    y: tool[0].y() + tool[0].height() / 4,
-    text: 'This turns out to be hard!',
-    fontSize: 80,
-    fontFamily: 'Open Sans',
-    fill: primary_color,
-    width: tool[0].width(),
-    height: tool[0].height(),
-    align: 'center',
-    verticalAlign: 'middle',
-  });
-  layer.add(toolText2);
-
-  var toolText1 = new Konva.Text({
-    x: tool[0].x(),
-    y: tool[0].y() - tool[0].height() / 4,
-    text: 'Is the invariant inductive?',
-    fontSize: 80,
-    fontFamily: 'Open Sans',
-    fill: primary_color,
-    width: tool[0].width(),
-    height: tool[0].height(),
-    align: 'center',
-    verticalAlign: 'middle',
-  });
-  layer.add(toolText1);
-
-  function clean() {
-    for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
-      if (Array.isArray(x)) {
-        for (const y of x) {
-          y.hide();
-        }
-      } else {
-        x.hide();
-      }
-    }
-  }
-
-  clean();
+  const elements = [invariant_def, kinds_def, inductive_def, proof_def, step_def, execution_def];
 
   var to_appear = [[]];
-  for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
-    function f() {
-      if (Array.isArray(x)) {
-        for (const y of x) {
-          y.show();
-        }
-      } else {
-        x.show();
-      }
-    }
-    to_appear.push([f]);
+  for (const el of elements) {
+    to_appear.push([() => el.style.display = 'block']);
   }
 
-  var to_disappear = [];
-  for (const x of to_appear) { 
+  var to_disappear = [[]];
+  for (var i = 0; i < elements.length; i++) {
     to_disappear.push([]);
+    for (var j = 0; j < i; j++) {
+      const el = elements[j];
+      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
+    }
   }
 
   var state = 0;
