@@ -345,13 +345,15 @@
     }
     function g() {
       if (x == instrumenter_text) {
-        goals.innerHTML = "(1) Reasoning about \"stray\" messages. &nbsp;"
+        goals.innerHTML = "(1) Reasoning about messages. &nbsp;"
       } else if (x == spec_miner_text) {
         goals.innerHTML = goals.innerHTML + "(2) Coming up with true invariants.<br>"
       }
     }
     to_appear.push([f, g]);
   }
+
+  to_appear.push([() => goals.innerHTML = goals.innerHTML + "(3) Future work: extensions, proofs, and cloud solving."]);
 
   var to_disappear = [];
   for (const x of to_appear) { 
