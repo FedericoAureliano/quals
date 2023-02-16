@@ -1,4 +1,4 @@
-const NUMBER_OF_SLIDES = 35;
+const NUMBER_OF_SLIDES = 36;
 
 var slide = parseInt(document.URL.split('/').pop().split('.')[0], 10);
 
