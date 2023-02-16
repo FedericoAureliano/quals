@@ -16,16 +16,6 @@
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
-        <ul>
-          <li>We consider two domain-specific constraint classes
-            <ul>
-              <li>Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
-              <li>Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
       <div id="justified" style="margin-bottom: 1em; opacity: 0;">
         <ul>
           <li>
@@ -40,6 +30,16 @@
               <li>
                 In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
               </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
+        <ul>
+          <li>We consider two domain-specific constraint classes
+            <ul>
+              <li>Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
+              <li>Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
             </ul>
           </li>
         </ul>
@@ -64,7 +64,7 @@
   var classes = document.getElementById('classes');
   var justified = document.getElementById('justified');
 
-  const to_appear = [[], [() => classes.style.opacity = 1], [() => justified.style.opacity = 1]];
+  const to_appear = [[], [() => justified.style.opacity = 1], [() => classes.style.opacity = 1]];
   const to_disappear = [[], [], []];
 
   var state = 0;
