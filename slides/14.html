@@ -6,6 +6,11 @@
   <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
   <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/erlang.min.js"></script>
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/scala.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@11.7.0/styles/atom-one-dark.css">
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
@@ -15,11 +20,24 @@
     <div class="title">How do Developers Implement Message-Passing Systems?</div>
   </div>
   <div class="full-box">
-    <div style="margin-right: 80px; margin-left: 80px">
+    <div style="margin-right: 80px; margin-left: 80px; font-size: 85%;">
+      <pre><code class="language-erlang">receive
+  pong ->
+      io:format("received pong~n", [])
+end,</code></pre>
+<br>
+<pre><code class="language-scala">def receive = {
+  case "pong" => log.info("received pong")
+  case _      => log.info("received unknown message")
+}</code></pre>
+<br>
+<pre><code>on ePing do {
+  print "received pong";
+}</code></pre>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Erlang, Akka (Scala), P</div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -27,6 +45,9 @@
 
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
+
+  hljs.debugMode();
+  hljs.highlightAll();
 
   var state = 0;
   const to_disappear = [];

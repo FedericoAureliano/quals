@@ -16,6 +16,10 @@
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li id="inductive-def" style="margin-bottom: 0.5em; display: none;">An invariant <math>I</math> is <strong>inductive</strong> if <math>I(s) &rArr; I(s')</math>, where <math>(&sigma;, &sigma;')</math> is a step</li>
+        <li id="proof-def" style="margin-bottom: 4em; display: none;">If an invariant <math>I</math> is inductive and holds for all initial states, then <math>I</math> holds for all executions</li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
@@ -28,9 +32,26 @@
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
 
+  const inductive_def = document.querySelector('#inductive-def');
+  const proof_def = document.querySelector('#proof-def');
+
+  const elements = [inductive_def, proof_def];
+
+  var to_appear = [[]];
+  for (const el of elements) {
+    to_appear.push([() => el.style.display = 'block']);
+  }
+
+  var to_disappear = [[]];
+  for (var i = 0; i < elements.length; i++) {
+    to_disappear.push([]);
+    for (var j = 0; j < i; j++) {
+      const el = elements[j];
+      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
+    }
+  }
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

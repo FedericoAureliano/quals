@@ -16,6 +16,18 @@
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
+      <div id="example" style="margin-bottom: 2em; opacity: 0;">
+        <ul>
+          <li>Input strings:
+            <ul>
+              <li><math>abcd</math></li>
+              <li><math>cbd</math></li>
+              <li><math>dc</math></li>
+            </ul>
+          </li>
+          <li>Output pattern: <math>XY</math></li>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="foot-box">
@@ -28,9 +40,12 @@
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
 
+  var example = document.getElementById('example');
+
+  const to_appear = [[], [() => example.style.opacity = 1]];
+  const to_disappear = [[], []];
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

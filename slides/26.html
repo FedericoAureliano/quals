@@ -28,34 +28,6 @@
           <li>Output pattern: <math>XYX &wedge; |X| = 1 &wedge; |Y| = 1 &wedge; X &in; C</math><sup><math>+</math></sup> <math> &wedge; Y &in; S</math><sup><math>+</math></sup></li>
         </ul>
       </div>
-      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
-        <ul>
-          <li>We consider two domain-specific constraint classes
-            <ul>
-              <li>Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
-              <li>Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div id="justified" style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li>
-            Let <math>S</math> be an input set of strings and <math>p</math> be a learned pattern
-          </li>
-          <li>
-            The set of <em>justifications</em> <math>J(S, p)</math> is the set of assignments <math>&mu;</math> such that <math>&Exists; s &in; S &mu;(p) = s</math>
-          </li>
-          <li>
-            A semantic constraint is <em>justified</em> if it does not block any justification
-            <ul>
-              <li>
-                In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
   <div class="foot-box">
@@ -69,11 +41,9 @@
   import { step, tertiary_color } from "../utils.js";
 
   var example = document.getElementById('example');
-  var classes = document.getElementById('classes');
-  var justified = document.getElementById('justified');
 
-  const to_appear = [[], [() => example.style.opacity = 1], [() => classes.style.opacity = 1], [() => justified.style.opacity = 1]];
-  const to_disappear = [[], [], [], []];
+  const to_appear = [[], [() => example.style.opacity = 1]];
+  const to_disappear = [[], []];
 
   var state = 0;
   const body = document.querySelector('body');
