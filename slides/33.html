@@ -3,6 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,38 +11,56 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Extensions: Partial Synchrony</div>
+    <div class="title">Challenges Revisited</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <ul>
-        <li style="margin-bottom: 1em;">Let <math>&Delta;</math> be the max message delivery time</li>
-        <li style="margin-bottom: 1em;">Let <math>&Phi;</math> be the max difference in node computation speeds</li>
-        <li style="margin-bottom: 1em;">In the asynchronous setting, no <math>&Delta;</math> or <math>&Phi;</math> exist
+      <ul style="width: 70%;">
+        <li style="margin-bottom: 1em;">Reasoning about messages
           <ul>
-            <li style="margin-top: 0.5em;">our setting so far</li>
-            <li style="margin-top: 0.5em;">"there is no consensus protocol resilient to even one fail-stop fault"</li>
+            <li>Message chains help but
+              <ul id="extend">
+                <li>they do not remove the limitations of asynchrony</li>
+                <li>they do not yet support modular reasoning</li>
+              </ul>
+            </li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">In the synchronous setting, <math>&Delta;</math> and <math>&Phi;</math> exist and are known</li>
-        <li style="margin-bottom: 1em;">In the partially synchronous setting, <math>&Delta;</math> and <math>&Phi;</math> exist but are not known</li>
-        <li>What kinds of proofs can message chains help with in the partially synchronous setting?</li>
+        <li style="margin-bottom: 1em;">Coming up with true invariants
+          <ul>
+            <li>Path pattern learning helps but captures only one class of invariants</li>
+            <li>Programming-by-example helps but requires negative examples</li>
+          </ul>
+        </li>
+        <li id="proofs" style="margin-bottom: 1em;">Independently checking verification results</li>
+        <li id="cloud" style="margin-bottom: 1em;">Getting solvers to terminate</li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Dwork and Lynch (1988)</div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { step, tertiary_color } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
+
+  var extend = document.querySelector('#extend');
+  extend = annotate(extend, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var proofs = document.querySelector('#proofs');
+  proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var cloud = document.querySelector('#cloud');
+  cloud = annotate(cloud, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  const to_appear = [[], [() => extend.show()], [() => proofs.show()], [() => cloud.show()]];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

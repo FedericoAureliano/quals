@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Timeline</div>
+  </div>
+  <div class="half-box">
+    <div style="margin-right: 20px; margin-left: 80px; font-size: 75%;">
+      <ul>
+        <li style="margin-bottom: 1em;">Message Chains for Asynchronous Verification
+          <ul>
+            <li>in submission; resubmit to SOSP in April 2023</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">Learning Invariants using Message Chain Examples
+          <ul>
+            <li>in submission; resubmit to FMCAD in May 2023</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">Modular Message Chains and Partially Synchronous Systems 
+          <ul>
+            <li> September 2023 to December 2023
+              <ul>
+                <li>formalize modular message chains</li>
+                <li>encode partial synchrony in our framework</li>
+              </ul>
+            </li>
+            <li>January 2023 to March 2023
+              <ul>
+                <li>
+                  challenge: verify one system per week of 294-234
+                </li>
+              </ul>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="half-box">
+    <div style="margin-left: 20px; margin-right: 80px; font-size: 75%;">
+      <ul>
+        <li style="margin-bottom: 1em;">Proof-Producing Verification Encodings with Learned Rewrites
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">SMT Solver and Platform Selection: When and How to Cloud
+          <ul>
+            <li>E-graph-based rewriting for eager SMT solving in the cloud</li>
+            <li>algorithm selection for deciding when to go to the cloud</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;"><span id="grad">Graduation: May, 2025</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
+
+  var grad = document.querySelector('#grad');
+  grad = annotate(grad, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+
+  const to_appear = [[], [() => grad.show()]];
+  const to_disappear = [[], []];
+
+  var state = 0;
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

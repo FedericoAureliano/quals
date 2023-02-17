@@ -11,56 +11,34 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Non-Erasing Pattern Learning</div>
+    <div class="title">Specification Mining, <span id="generally">Generally</span></div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="non-erasing" style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li><strong>Non-Erasing Patterns</strong>
-            <ul>
-              <li style="margin-bottom: 0.5em; margin-top: 0.25em">
-                Let <math>&Sigma;</math> and <math>V</math> be two disjoint sets of symbols with at least two elements each
-              </li>
-              <li style="margin-bottom: 0.5em;">
-                A <strong>non-erasing pattern</strong> is a finite sequence of symbols drawn from <math>&Sigma;</math> and <math>V</math>
-              </li>
-              <li style="margin-bottom: 0.5em;">
-                A <strong>string</strong> is a finite sequence of symbols drawn from <math>&Sigma;</math>
-              </li>
-              <li style="margin-bottom: 0.5em;">
-                Every non-erasing pattern <math>p</math> represents a <strong>language</strong>, <math>L(p)</math>. For a given pattern <math>p</math> and string <math>s</math>
-                <ul>
-                  <li id="justifies">If there is a mapping <math>&mu;</math> from <math>V</math> to <math>&Sigma;</math><sup><math>+</math></sup> such that <math>&mu;(p) = s</math>, then <math>s &in; L(p)</math></li>
-                  <li>Otherwise, <math>s &notin; L(p)</math></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
+      <div id="def" style="margin-bottom: 2em; opacity: 0;">
+        "... a machine learning approach to discovering formal specifications" that code <em>likely</em> obeys.
+        <ul style="margin-top: 0.5em;">
+          <li style="margin-bottom: 0.25em;">Input: observed program executions</li>
+          <li>Output: suggested invariant</li>
         </ul>
       </div>
-      
-      <div id="learning" style="opacity: 0;">
-        <ul>
-          <li>
-            <strong>The Learning Problem:</strong>
-            <ul>
-              <li style="margin-bottom: 0.5em; margin-top: 0.25em">Input: set of strings <math>S</math></li>
-              <li style="margin-bottom: 0.5em;">
-                Output: a non-erasing pattern <math>p</math> such that
-                <ul>
-                  <li><math>L(p) &subseteq; S</math></li>
-                  <li><math>p</math> is <em>the most specific pattern</em></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
+
+      <div id="is-not" style="margin-bottom: 2em; opacity: 0;">
+        The goal is <strong>not</strong> to reverse engineer the code from observations (or to discover a model).
+      </div>
+
+      <div id="us" style="opacity: 0;">
+        In our setting, we are interested in mining <strong>message chain</strong> invariants:
+        <ul style="margin-top: 0.5em;">
+          <li style="margin-bottom: 0.25em;">predicates that hold for every message chain that appears during the execution of a system</li>
         </ul>
       </div>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Angluin (1980)</div>
+    <!-- https://dl.acm.org/doi/10.1145/503272.503275 -->
+    <!-- https://homes.cs.washington.edu/~mernst/pubs/invariants-ernst-phdthesis.pdf -->
+    <div class="footnote">Ernst (2000); Ammons, Bod&#237;k, and Larus (2002); Biermann and Feldman (1972)</div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -68,16 +46,17 @@
 
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
+
   import { step, tertiary_color } from "../utils.js";
 
-
-  var justifies = document.querySelector('#justifies');
-  justifies = annotate(justifies, { type: 'box', color: tertiary_color, strokeWidth: 10 });
-
-  var non_erasing = document.querySelector('#non-erasing');
-  var learning = document.querySelector('#learning');
-
-  const to_appear = [[], [() => non_erasing.style.opacity = 1], [() => justifies.show()],  [() => learning.style.opacity = 1]];
+  var def = document.querySelector('#def');
+  var is_not = document.querySelector('#is-not');
+  var us = document.querySelector('#us');
+  
+  const to_appear = [[], [() => def.style.opacity = 1], [() => is_not.style.opacity = 1], [() => us.style.opacity = 1]];
   const to_disappear = [[], [], [], []];
 
   var state = 0;

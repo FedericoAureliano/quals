@@ -3,7 +3,6 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -11,36 +10,20 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Non-Erasing Patterns with Justified Constraints, <span id="generally">Generally</span></div>
+    <div class="title">Non-Erasing Patterns with Justified Constraints Example</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="justified" style="margin-bottom: 1em; opacity: 0;">
+      <div style="margin-bottom: 2em;">
         <ul>
-          <li style="margin-bottom: 1em;">
-            Let <math>S</math> be an input set of strings and <math>p</math> be a learned pattern
-          </li>
-          <li style="margin-bottom: 1em;">
-            The set of <em>justifications</em> <math>J(S, p)</math> is the set of assignments <math>&mu;</math> such that <math>&Exists; s &in; S &mu;(p) = s</math>
-          </li>
-          <li style="margin-bottom: 1em;">
-            A semantic constraint is <em>justified</em> if it does not block any justification
+          <li style="margin-bottom: 1em;"> Input strings (message chains sampled from a client-server system):
             <ul>
-              <li>
-                In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
-              </li>
+              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>1</math></sub></li>
+              <li><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub></li>
+              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
             </ul>
           </li>
-        </ul>
-      </div>
-      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
-        <ul>
-          <li style="margin-bottom: 1em;">We consider two domain-specific constraint classes
-            <ul>
-              <li style="margin-top: 0.5em;">Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
-              <li style="margin-top: 0.5em;">Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
-            </ul>
-          </li>
+          <li style="margin-bottom: 1em;">Output pattern: <math>XYX &wedge; |X| = 1 &wedge; |Y| = 1 &wedge; X &in; C</math><sup><math>+</math></sup> <math> &wedge; Y &in; S</math><sup><math>+</math></sup></li>
         </ul>
       </div>
     </div>
@@ -53,18 +36,12 @@
 
 
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var generally = document.querySelector('#generally');
-  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
-  generally.show();
-  
   import { step, tertiary_color } from "../utils.js";
 
-  var classes = document.getElementById('classes');
-  var justified = document.getElementById('justified');
+  var example = document.getElementById('example');
 
-  const to_appear = [[], [() => justified.style.opacity = 1], [() => classes.style.opacity = 1]];
-  const to_disappear = [[], [], []];
+  const to_appear = [];
+  const to_disappear = [];
 
   var state = 0;
   const body = document.querySelector('body');

@@ -3,41 +3,46 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Limitations and Future Work</div>
+<body>
+  <div class="title-box">
+    <div class="title">Learning Even More With Negative Examples</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle" style="font-size: 95%;">
-    <ul style="list-style: none;">
-      <li style="opacity: 0.25;">
-        Reasoning About Messages
-      </li>
-      <li style="opacity: 0.25;">
-        Coming Up with True Invariants
-      </li>
-      <li id="current">
-        Extensions, Proofs, and Cloud Solving
-      </li>
-    </ul style="list-style: none;">
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li style="margin-bottom: 1em;">Positive message chain examples are easy to get
+          <ul>
+            <li style="margin-top: 0.5em;">Sample by fuzzing the target system</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 3em;">Negative examples are harder
+          <ul>
+            <li style="margin-top: 0.5em;">We must prove that a message chain can never happen</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">PBE tools can synthesize predicates from positive <strong>and</strong> negative examples</li>
+        <li style="margin-bottom: 1em;">Assuming users can provide negative examples, PBE tools can suggest invariants</li>
+        <li>Smyth and Burst, with less than 10 examples, can learn (among other things)
+          <ul>
+            <li style="font-size: 90%; margin-top: 0.5em;">For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
+    <div class="footnote">Lubin et al. (2020);  Miltner et al. (2022)</div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
 
+<script type="module">
   import { step, tertiary_color } from "../utils.js";
 
   var state = 0;
