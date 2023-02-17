@@ -12,14 +12,24 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Cloud Solving: Solvers and Selection</div>
+    <div class="title">Proofs: Independently Checking Certificates</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
+      <div id="table" style="opacity: 0; display: flex; justify-content: center; align-items: center; margin-bottom: 2em;">
+        <img src="../images/dafny.png" style="width: 40%">
+      </div>
+      <ul>
+        <li id="bugs" style="opacity: 0; margin-bottom: 0.5em;">Modern, state-of-the-art automated verification tools, like Dafny, have bugs.</li>
+        <li id="smt" style="opacity: 0; margin-bottom: 0.5em;">So do SMT solvers, which are used under the hood.</li>
+        <li id="rely" style="opacity: 0; margin-bottom: 0.5em;">Users should not "have to rely on the correctness of a large and frequently-changing code base."</li>
+        <li id="mc" style="opacity: 0;">We need to generate end-to-end proofs that can be checked independently.</li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <!-- https://leodemoura.github.io/files/SMTProofs.pdf -->
+    <div class="footnote">Irfan et al. (2022); Blotsky et al. (2018); Barrett, de Moura, and Fontaine (2015)</div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -28,9 +38,16 @@
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
 
+  var table = document.getElementById('table');
+  var bugs = document.getElementById('bugs');
+  var smt = document.getElementById('smt');
+  var rely = document.getElementById('rely');
+  var mc = document.getElementById('mc');
+
+  const to_appear = [[], [() => table.style.opacity = 1, () => bugs.style.opacity = 1], [() => smt.style.opacity = 1], [() => rely.style.opacity = 1], [() => mc.style.opacity = 1]];
+  const to_disappear = [[], [], [], [], []];
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

@@ -17,10 +17,24 @@
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li style="margin-bottom: 1em;">Reasoning about messages.</li>
-        <li style="margin-bottom: 1em;">Coming up with true invariants.</li>
-        <li style="margin-bottom: 1em;">Getting solvers to terminate.</li>
-        <li>Independently checking verification results.</li>
+        <li style="margin-bottom: 1em;">Reasoning about messages
+          <ul>
+            <li>Message chains help but
+              <ul>
+                <li>they do not remove the limitations of asynchrony</li>
+                <li>they do not yet support modular reasoning</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">Coming up with true invariants
+          <ul>
+            <li>Path pattern learning helps but captures only one class of invariants</li>
+            <li>Programming-by-example helps but requires negative examples</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">Independently checking verification results</li>
+        <li style="margin-bottom: 1em;">Getting solvers to terminate</li>
       </ul>
     </div>
   </div>
