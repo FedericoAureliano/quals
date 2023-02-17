@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Timeline</div>
+  </div>
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px; font-size: 80%;">
+      <ul>
+        <li style="margin-bottom: 1em; list-style-type: none;"><span id="today">Today: February 2023</span>
+          <ul>
+            <li style="margin-top: 1em;">Message Chains for Asynchronous Distributed System Verification
+              <ul>
+                <li>In submission. Plan to resubmit to SOSP in April 2023</li>
+              </ul>
+            </li>
+            <li style="margin-top: 1em;">Learning Distributed System Invariants using Message Chain Examples
+              <ul>
+                <li>In submission. Plan to resubmit to FMCAD in May 2023</li>
+              </ul>
+            </li>
+            <li style="margin-top: 1em;">Modular Message Chains and Verification of Partially Synchronous Systems 
+              <ul>
+                <li></li>
+              </ul>
+            </li>
+            <li style="margin-top: 1em;">Proof-Producing Verification Encodings with Learned Domain-Specific Rewrites
+              <ul>
+                <li></li>
+              </ul>
+            </li>
+            <li style="margin-top: 1em;">Automated SMT Solver and Platform Selection: When and How to Use the Cloud
+              <ul>
+                <li>E-graph-based rewriting for eager SMT solving in the cloud</li>
+                <li>algorithm selection techniques for deciding when to go to the cloud</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li style="list-style-type: none;"><span id="grad">Graduation: May, 2025</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
+
+  var today = document.querySelector('#today');
+  today = annotate(today, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+
+  var grad = document.querySelector('#grad');
+  grad = annotate(grad, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+
+  const to_appear = [[], [() => today.show()], [() => grad.show()]];
+  const to_disappear = [[], [], []];
+
+  var state = 0;
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

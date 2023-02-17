@@ -12,14 +12,32 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Proofs: Performance Optimizations</div>
+    <div class="title">Proofs: E-Graphs to the Rescue</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
+      <div id="table" style="opacity: 0; display: flex; justify-content: center; align-items: center; margin-bottom: 2em;">
+        <img src="../images/egraphs.svg" style="width: 70%">
+      </div>
+      <ul>
+        <li id="egraphs" style="opacity: 0; margin-bottom: 0.5em;">E-graphs are a data structure for representing and rewriting terms</li>
+        <li id="proofs" style="opacity: 0; margin-bottom: 0.5em;">You can extract proofs from e-graphs</li>
+        <li id="usually" style="opacity: 0; margin-bottom: 0.5em;">Usually input and output terms are supposed to be in the same language
+          <ul>
+            <li>e.g., when optimizing programs</li>
+          </ul>
+        </li>
+        <li id="compilation" style="opacity: 0; margin-bottom: 0.5em;">But can we use e-graphs as a proof generating compiler?
+          <ul>
+            <li>Yes! At least for some pairs of languages (which ones?)</li>
+            <li>But you cannot just extract the smallest term anymore</li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Willsey et al. (2021); Flatt et al. (2022)</div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -28,9 +46,16 @@
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
 
+  var table = document.getElementById('table');
+  var egraphs = document.getElementById('egraphs');
+  var proofs = document.getElementById('proofs');
+  var usually = document.getElementById('usually');
+  var compilation = document.getElementById('compilation');
+
+  const to_appear = [[], [() => table.style.opacity = 1], [() => egraphs.style.opacity = 1], [() => proofs.style.opacity = 1], [() => usually.style.opacity = 1], [() => compilation.style.opacity = 1]];
+  const to_disappear = [[], [], [], [], [], []];
+
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
