@@ -9,44 +9,58 @@
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Limitations and Future Work</div>
+<body>
+  <div class="title-box">
+    <div class="title">Challenges Revisited</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle" style="font-size: 95%;">
-    <ul style="list-style: none;">
-      <li style="opacity: 0.25;">
-        Asynchronous Systems and Verification
-      </li>
-      <li style="opacity: 0.25;">
-        Reasoning About Messages
-      </li>
-      <li style="opacity: 0.25;">
-        Coming Up with True Invariants
-      </li>
-      <li id="current">
-        Extensions, Proofs, and Cloud Solving
-      </li>
-    </ul style="list-style: none;">
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul style="width: 70%;">
+        <li style="margin-bottom: 1em;">Reasoning about messages
+          <ul>
+            <li>Message chains help but
+              <ul id="extend">
+                <li>they do not remove the limitations of asynchrony</li>
+                <li>they do not yet support modular reasoning</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">Coming up with true invariants
+          <ul>
+            <li>Path pattern learning helps but captures only one class of invariants</li>
+            <li>Programming-by-example helps but requires negative examples</li>
+          </ul>
+        </li>
+        <li id="proofs" style="margin-bottom: 1em;">Independently checking verification results</li>
+        <li id="cloud" style="margin-bottom: 1em;">Getting solvers to terminate</li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="slide-number" style="background-color: white; color: var(--primary-color); box-shadow: 10px 0 0 white, -10px 0 0 white;"></div>
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
+
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
 
-  import { step, tertiary_color } from "../utils.js";
+  var extend = document.querySelector('#extend');
+  extend = annotate(extend, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var proofs = document.querySelector('#proofs');
+  proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var cloud = document.querySelector('#cloud');
+  cloud = annotate(cloud, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  const to_appear = [[], [() => extend.show()], [() => proofs.show()], [() => cloud.show()]];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
