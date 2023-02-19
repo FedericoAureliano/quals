@@ -8,8 +8,6 @@ page = """<!DOCTYPE html>
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -31,7 +29,7 @@ page = """<!DOCTYPE html>
 
 
 <script type="module">
-  import { step, tertiary_color } from "../utils.js";
+  import { step } from "../utils.js";
 
   var state = 0;
   const to_disappear = [];
@@ -45,7 +43,7 @@ page = """<!DOCTYPE html>
 </html>
 """
 
-input = int(sys.argv[1])
+args = map(int, sys.argv[1:])
 
 # get all files in the slides directory
 files = [f for f in os.listdir('slides') if os.path.isfile(os.path.join('slides', f))]
@@ -82,10 +80,28 @@ def delete(i):
     
     return len(files) - 1
 
-if input > 0:
-    new_count = insert(input)
+def move(old_location, new_location):
+    # get the contents of the file at the old location
+    with open(os.path.join('slides', str(old_location) + '.html'), 'r') as f:
+        contents = f.read()
+    delete(old_location)
+    new_location = new_location if new_location < old_location else new_location - 1
+    insert(new_location)
+    with open(os.path.join('slides', str(new_location) + '.html'), 'w') as f:
+        f.write(contents)
+
+if len(args) == 1:
+  if args[0] > 0:
+      new_count = insert(args[0])
+  else:
+      new_count = delete(-args[0])
+elif len(args) == 2:
+    assert args[0] > 0 and args[1] > 0
+    move(args[0], args[1])
 else:
-    new_count = delete(-input)
+    print("Usage: edit.py args")
+    print("\tif args is a positive number, insert a slide at that position\n\tif args is a negative number, delete the slide at that position\n\tif args is x y, move slide x to position y")
+    exit(1)
 
 # open next.js and replace the first line with "const NUMBER_OF_SLIDES = k;" where k is the number of slides
 with open('next.js', 'r') as f:
