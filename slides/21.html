@@ -3,41 +3,51 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Specification Mining</div>
+<body>
+  <div class="title-box">
+    <div class="title">Message Chains v. <math>k</math>-States</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle" style="font-size: 95%;">
-    <ul style="list-style: none;">
-      <li style="opacity: 0.25;">
-        Reasoning About Messages
-      </li>
-      <li id="current">
-        Coming Up with True Invariants
-      </li>
-      <li style="opacity: 0.25;">
-        Future work: Extensions, Proofs, and Cloud Solving
-      </li>
-    </ul style="list-style: none;">
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li style="margin-bottom: 1em;">Verification engines often offer something like an <math>old</math> keyword
+          <ul>
+            <li>e.g., Boogie and mypyvy</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 2em;">This gives users access to previous states
+          <ul>
+            <li style="margin-top: 0.5em;">A <math>k</math>-state predicate is one that looks <math>k-1</math> states back</li>
+            <li style="margin-top: 0.5em;">But usually only one step back is allowed (<math>old</math> is idempotent)</li>
+            <li style="margin-top: 0.5em;">So <math>old</math> is like an extremely high-definition, wide-angle picture of what just happened</li>
+          </ul>
+        </li>
+        <li>Message chains can hold information from any number of previous states
+          <ul>
+            <li style="margin-top: 0.5em;">But less information is kept from each state
+              <ul>
+                <li style="margin-top: 0.25em;">So each message chain is more like a movie</li>
+                <li style="margin-top: 0.25em;">Our instrumentation defines where our many filmmakers are standing</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
+    <div class="footnote">Leino (2008)</div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
 
+<script type="module">
   import { step, tertiary_color } from "../utils.js";
 
   var state = 0;

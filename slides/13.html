@@ -3,45 +3,46 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
-  <div class="title-box">
-    <div class="title">How do Developers Reason About Messages?</div>
+<body class="section">
+  <div class="full-title-box">
+    <div class="full-title">Message Chains</div>
   </div>
-  <div class="full-box">
-    <div id="msc" style="width: 100%; text-align: center; display: none;">
-      <img src="../images/msc.png" style="width: 70%; margin-top: 0px;"/>
-    </div>
-    <div style="margin-left: 100px; margin-right: 80px">
-      <ul>
-        <li id="bullet1" style="display: none; margin-bottom: 0.5em; margin-top: 1em;">"A <strong>Message Sequence Chart</strong>... describes the message flow between instances. One Message Sequence Chart describes a partial behaviour of a system."</li>
-        <li id="bullet2" style="display: none; margin-bottom: 0.5em;">Developers rarely think at the level of individual messages</li>
-        <li id="bullet3" style="display: none; ">We propose <strong>message chains</strong> as a way to reason about these kinds of sequences formally</li>
-      </ul>
+  <div class="full-subtitle-box">
+    <div class="full-subtitle" style="font-size: 95%;">
+    <ul style="list-style: none;">
+      <li id="current">
+        Reasoning About Messages
+      </li>
+      <li style="opacity: 0.25;">
+        Coming Up with True Invariants
+      </li>
+      <li style="opacity: 0.25;">
+        Future work: Extensions, Proofs, and Cloud Solving
+      </li>
+    </ul style="list-style: none;">
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Bollig et al. 2010; International Telecommunication Union (ITU) Recommendation Z.120</div>
-    <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
-  import { step } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var current = document.querySelector('#current');
+  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  current.show();
 
-  const msc = document.querySelector('#msc');  
-  const bullet1 = document.querySelector('#bullet1');
-  const bullet2 = document.querySelector('#bullet2');
-  const bullet3 = document.querySelector('#bullet3');
+  import { step, tertiary_color } from "../utils.js";
 
   var state = 0;
-  const to_appear = [[], [() => msc.style.display = 'block'], [() => bullet1.style.display = 'list-item'], [() => bullet2.style.display = 'list-item'], [() => bullet3.style.display = 'list-item']];
-  const to_disappear = [[], [], [], [], []];
+  const to_disappear = [];
+  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

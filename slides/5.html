@@ -3,6 +3,8 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,59 +12,124 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Distributed Systems Verification Goal Example</div>
+    <div class="title">Asynchronous Message Passing Distributed Systems, <span id="generally">Generally</span></div>
   </div>
-  <div class="full-box">
-    <div style="width: 95%; margin-left: 80px;">
-      <div id="system-def" style="display: none;">
-        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">Ring System Definition (Verification Assumptions)</span>:
-        <ul style="margin-top: 0.5em; margin-bottom: 1em;">
-          <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers</li>
-          <li style="margin-bottom: 0.5em;">Payloads are natural numbers</li>
-          <li style="margin-bottom: 0.5em;">Nodes can perform the following actions:
-            <ol>
-              <li>Send their own identifier left</li>
-              <li>Receive a message and, 
-                <ul style="font-size: 90%;">
-                  <li>if the payload is greater than their own identifier, send the payload left; </li>
-                  <li>if the message is their own identifier, move to a winning state</li>
-                </ul>
-              </li>
-            </ol>
-          </li>
-          <li>Initially, no node is in the winning state and the message buffer is empty</li>
+  <div class="half-box" style="margin-top: -1em;">
+    <div style="width: 95%; margin-left: 80px; font-size: 20pt;">
+      <ul style="margin-bottom: 0.75em; display: none;" id="nodes-def">
+        <li><strong>Nodes</strong> are state machines with a unique identifier.</li>
+        <li>The set of node identifiers <math>N</math> has at least two elements.</li>
+      </ul>
+      <ul style="margin-bottom: 0.75em; display: none;" id="messages-def">
+        <li><strong>Messages</strong> are pairs <math>(t, p)</math>, where 
+          <ul>
+            <li><math>t &in; N</math> represents the message target and </li>
+            <li><math>p</math> is the message <strong>payload</strong>.</li>
+          </ul>
+        <li>There is multiset of messages, called the <strong>message buffer</strong>.</li>
+      </ul>
+      <ul style="margin-bottom: 0.75em; display: none;" id="interface-def">
+        <li>Nodes can only read/write to their own state.</li>
+        <li>Except that every node <math>n</math> can (for any <math>t</math> and <math>p</math>)
+          <ul>
+            <li><math>send(t, p)</math> in the message buffer, or</li>
+            <li>
+              <math>receive(n, p)</math> from the message buffer.
+              <ul>
+                <li>If <math>(n, p)</math> is present, then <math>receive(n, p)</math> returns <math>p</math>.</li>
+                <li>Otherwise, <math>receive(n, p)</math> returns <math>&empty;</math>.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <li id="state-def1" style="margin-bottom: 0.75em; display: none;">The <strong>state</strong> of the system is the
+        <ul>
+          <li>state of every node, and</li>
+          <li>the state of the message buffer.</li>
         </ul>
-      </div>
-      <div id="system-spec" style="display: none;">
-        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline">Ring System Specification (Verification Goal)</span>:
-        <ul style="margin-top: 0.5em;">
-          <li>There is always at most one node in the winning state</li>
-        </ul>
-        <img src="../images/ring_inv.png" style="position: absolute; top: 450px; left: 1500px;"/>
-      </div>
+      </li>
+      <ul style="margin-bottom: 0.75em; display: none;" id="system-def">
+        <li>Define a system by giving
+          <ul>
+            <li>the set of node identifiers,</li>
+            <li>the payload type,</li>
+            <li>the available node actions (atomic procedures), and</li>
+            <li>an initial set of states.</li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
   <div class="foot-box">
+    <div class="footnote">Fischer, Lynch, and Paterson (1985); Dwork, Lynch, and Stockmeyer (1988)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
-  import { step } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
 
-  var system_def_element = document.querySelector('#system-def');
-  const system_def = [() => system_def_element.style.display = 'block'];
-  var system_spec_element = document.querySelector('#system-spec');
-  const system_spec = [() => system_spec_element.style.display = 'block'];
+  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_node, draw_rect, draw_arrow } from "../utils.js";
+  const radius = 50;
+  const width = 960;
+  const height = 730;
 
-  const to_disappear = [[], system_def, system_spec];
-  const to_appear = [[], [], []];
+  // regular canvas
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  // Rough.js canvas
+  const rc = rough.canvas(document.getElementById('canvas'));
+  let generator = rc.generator;
+
+  const nodes_def = document.querySelector('#nodes-def');  
+  const messages_def = document.querySelector('#messages-def');
+  const interface_def = document.querySelector('#interface-def');
+  const state_def = document.querySelector('#state-def1');
+  const system_def = document.querySelector('#system-def');
+  
+  const elements = [nodes_def, messages_def, interface_def, state_def, system_def];
+
+  var to_appear = [[]];
+  for (const el of elements) {
+    to_appear.push([() => el.style.display = 'block']);
+    if (el == nodes_def) {
+      to_appear[to_appear.length - 1].push(function () {
+        draw_node(rc, ctx, width / 2, height / 6, radius, "A", secondary_color)
+        draw_node(rc, ctx, width / 2, 5 * height / 6, radius, "B", secondary_color)
+      })
+    } else if (el == messages_def) {
+      to_appear[to_appear.length - 1].push(function () {
+        draw_rect(rc, ctx, width / 2 - 300/2, height / 2 - 100/2, 300, 100, "Message Buffer", secondary_color)
+      })
+    } else if (el == interface_def) {
+      to_appear[to_appear.length - 1].push(function () {
+        draw_arrow(ctx, width / 2,  height / 2 + 57, width / 2, 5 * height / 6 - radius - 20, "receive(B, 7)", quaternary_color, primary_color) 
+      })
+      to_appear[to_appear.length - 1].push(function () {
+        draw_arrow(ctx, width / 2,  height / 6 + radius + 4, width / 2, height / 2 - 70, "send(B, 7)", tertiary_color, primary_color) 
+      })
+    }
+  }
+
+  var to_disappear = [[]];
+  for (var i = 0; i < elements.length; i++) {
+    to_disappear.push([]);
+    for (var j = 0; j < i; j++) {
+      const el = elements[j];
+      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
+    }
+  }
 
   var state = 0;
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
+
 <script type='module' src="../next.js"></script>
 
 </html>

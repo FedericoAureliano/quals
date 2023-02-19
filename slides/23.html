@@ -3,8 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <script src="https://unpkg.com/konva@8/konva.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -12,227 +11,132 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Can We Learn From Executions When Verification Fails?</div>
+    <div class="title">What Happens When Verification Fails?</div>
   </div>
-  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style='width:960px; height:730px; margin-top: -1.5em;'></canvas>
-    <div id="learned" style="margin-top: -4.25em; margin-left: 80px; font-size: 80%; margin-right: 80px; display: none;">
-      For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math>.
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
     </div>
-  </div>
-  <div class="half-box">  
-    <div class="half-half-box" id="top-right" style="display: none;">
-      <div style="width: 95%;">
-        <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Algorithm</span>
-        <ul style="font-size: 20pt; padding-top: 1em;">
-          <li id="start">Send your own identifier left
-          </li>
-          <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send received value
-            left
-          </li>
-          <li style="margin-top: 1em;" id="win">If you receive your own identifier, declare yourself the winner
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="half-half-box" id="bottom-right" style="display: none;">
-      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Unique Message Chains in Final State</span>
-      <div id="log-data" style="width: 95%; padding-top: 0.5em;">
-        <ul>
-          <li id="mc0"><span style="color: white;"><sup>&nbsp;</sup></span></li>
-          <li id="mc1"><span style="color: white;"><sup>&nbsp;</sup></span></li>
-          <li id="mc2"><span style="color: white;"><sup>&nbsp;</sup></span></li>
-          <li id="mc3"><span style="color: white;"><sup>&nbsp;</sup></span></li>
-          <li id="mc4"><span style="color: white;"><sup>&nbsp;</sup></span></li>
-        </ul>
-      </div>
-    </div>
+    <div id="canvas"></div>
   </div>
   <div class="foot-box">
+    <div class="footnote">Leino and W&#252;stholz (2014)</div>
+    <!-- https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/krml236.pdf -->
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
 
-  var start = document.querySelector('#start');
-  var forward = document.querySelector('#forward');
-  var win = document.querySelector('#win');
-  var learned_el = document.querySelector('#learned');
+  const width = 1920;
+  const height = 1080 - 350;
 
-  start = annotate(start, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  learned = annotate(learned_el, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+  var stage = new Konva.Stage({
+    container: 'canvas',
+    width: width,
+    height: height,
+  });
+  var layer = new Konva.Layer();
+  stage.add(layer);
 
-  import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_from_gen } from "../utils.js";
+  const vert_gap = 50;
+  const horiz_gap = 150;
 
-  // regular canvas
-  var canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  // Rough.js canvas
-  const rc = rough.canvas(document.getElementById('canvas'));
-  let generator = rc.generator;
+  const doc_width = 150;
+  const doc_height = 200;
+  const doc_corners = [0, 20, 0, 0];
 
-  // log 
-  const log = [
-    document.getElementById("mc0"),
-    document.getElementById("mc1"),
-    document.getElementById("mc2"),
-    document.getElementById("mc3"),
-    document.getElementById("mc4")
-  ]
+  const big_process_width = 1100;
+  const big_process_height = 500;
+  const process_corners = [0, 0, 0, 0];
 
-  const radius = 50;
+  const left_most_x = (width - (big_process_width + doc_width + doc_width + horiz_gap + horiz_gap)) / 2;
+  const upmost_y = (height - (doc_height + doc_height + vert_gap)) / 2;
 
-  var to_appear = [[], []];
+  var system = draw_rectangle_konva(layer, left_most_x, upmost_y, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User System");
+  var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
 
-  // draw a circle of nodes on the canvas
-  const nodes = new Map([["2", 0], ["4", 1], ["0", 2], ["3", 3], ["1", 4]]);
-  var positions = [];
-  var gen_nodes = [];
-  for (var i = 0; i < 5; i++) {
-    var x = 450 + 200 * Math.cos(2 * Math.PI * i / 5);
-    var y = 300 + 200 * Math.sin(2 * Math.PI * i / 5);
-    positions.push([x, y]);
-    gen_nodes.push(gen_node(generator, x, y, radius, secondary_color))
-  }
+  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
 
-  // draw gen_nodes
-  for (var i = 0; i < gen_nodes.length; i++) {
-    const node = gen_nodes[i];
-    const x = positions[i][0];
-    const y = positions[i][1];
-    to_appear[1].push(function (x, y, i) {
-      return function () {
-        draw_from_gen(rc, ctx, node, x, y, getByValue(nodes, i), secondary_color)
-      }
-    }(x, y, i));
-  }
+  var ringSystemImage = new Image();
+  var ringSystemPng = new Konva.Image({
+      x: system[0].x() + 20,
+      y: system[0].y() + 70,
+      image: ringSystemImage,
+      width: system[0].width()  - 40,
+      height: system[0].height() - 80,
+    });
+  ringSystemImage.onload = function () {
+    layer.add(ringSystemPng);
+  };
+  ringSystemImage.src = '../images/ring.png';
+  system = system.concat(ringSystemPng);
 
-  const nodes_checkpoint = to_appear.concat([]);
-  const top_right = document.getElementById("top-right");
-  const bottom_right = document.getElementById("bottom-right");
-  to_appear.push(nodes_checkpoint.flat().concat([() => top_right.style.display = "block"]));
-  to_appear.push(nodes_checkpoint.flat().concat([() => bottom_right.style.display = "block"]));
+  var ringInvImage = new Image();
+  var ringInvPng = new Konva.Image({
+      x: invariant[0].x() + 20,
+      y: invariant[0].y() + 70,
+      image: ringInvImage,
+      width: invariant[0].width()  - 40,
+      height: invariant[0].height() - 80,
+    });
+  ringInvImage.onload = function () {
+    layer.add(ringInvPng);
+  };
+  ringInvImage.src = '../images/ring_inv.png';
+  invariant = invariant.concat(ringInvPng);
 
-  const message_chains = [
-    [0, 3],
-    [1, 2],
-    [2, 4],
-    [3, 1, 2, 4],
-    [4, 0, 3, 1, 2, 4],
-  ];
+  system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
+  invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
 
-  var counts = [0, 0, 0, 0, 0];
-  var trace = [];
-  while (true) {
-    // pick a message chain to draw from
-    var choice = Math.floor(Math.random() * 5);
-    const chain = message_chains[choice];
-    const count = counts[choice];
+  var toolText = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y(),
+    text: 'Usually the solver will timeout',
+    fontSize: 70,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText);
 
-    if (count >= chain.length - 1) {
-      continue;
-    }
+  const elements = [tool, system, invariant, toolText];
 
-    // label is greatest value seen so far in that chain
-    var label;
-    if (count == 0) {
-      label = String(chain[0]);
-    } else {
-      label = String(Math.max(...chain.slice(0, count + 1)));
-    }
-    const from = String(chain[count]);
-    const to = String(chain[count + 1]);
-    trace.push([from, to, label, tertiary_color, primary_color, choice, count]);
-
-    counts[choice] = count + 1;
-
-    if (to == label) {
-      break;
-    }
-  }
-
-  for (var i = 0; i < trace.length; i++) {
-    const from = nodes.get(trace[i][0]);
-    const to = nodes.get(trace[i][1]);
-    const kind = String(trace[i][2]) == String(trace[i][0]);
-    const label = trace[i][2];
-    const arrow_color = trace[i][3];
-    const label_color = trace[i][4];
-
-    const choice = trace[i][5];
-    const count = trace[i][6];
-
-    const todo = nodes_checkpoint.flat().concat([function (from, to) {
-      return function () {
-        const center1_x = positions[from][0];
-        const center1_y = positions[from][1];
-        const center2_x = positions[to][0];
-        const center2_y = positions[to][1];
-
-        const betweenVec = { x: center2_x - center1_x, y: center2_y - center1_y };
-        const betweenVecLen = Math.sqrt(betweenVec.x * betweenVec.x + betweenVec.y * betweenVec.y);
-        betweenVec.x /= betweenVecLen;
-        betweenVec.y /= betweenVecLen;
-
-        const p1x = center1_x + ((radius + 15) * betweenVec.x);
-        const p1y = center1_y + ((radius + 15) * betweenVec.y);
-
-        const p2x = center2_x - ((radius + 25) * betweenVec.x);
-        const p2y = center2_y - ((radius + 25) * betweenVec.y);
-
-        // draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
-
-        log[choice].innerHTML = log[choice].innerHTML + getByValue(nodes, from) + "&nbsp&#8594;<sup>" + label + "</sup>&nbsp" + getByValue(nodes, to) + ";&nbsp ";
-
-        // if (kind) {
-        //   start.show();
-        // } else {
-        //   forward.show();
-        // }
-      }
-    }(from, to)]);
-    to_appear.push(todo);
-  }
-
-  // highlight the node that won
-  var winning_chain = log[trace[trace.length - 1][5]];
-  winning_chain = annotate(winning_chain, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  const winner = nodes.get("4");
-
-  // make to appear a flattened array
-  to_appear = to_appear.flat();
-  const last = nodes_checkpoint.flat().concat([() => learned.show(), () => learned_el.style.display = "block"]);
-  to_appear = [[], to_appear, last];
-
-  var to_disappear = []
-  for (var i = 0; i < to_appear.length; i++) {
-    var cleaner;
-    if (i != 0) {
-      cleaner = function () {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        start.hide();
-        forward.hide();
-        win.hide();
-        winning_chain.hide();
-      }
-    } else {
-      cleaner = function () {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // clear logs
-        for (var i = 0; i < log.length; i++) {
-          log[i].innerHTML = "";
+  function clean() {
+    for (const x of elements) {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.hide();
         }
-        start.hide();
-        forward.hide();
-        win.hide();
-        winning_chain.hide();
+      } else {
+        x.hide();
       }
     }
-    to_disappear.push([cleaner]);
+  }
+
+  clean();
+
+  var to_appear = [[]];
+  for (const x of elements) {
+    function f() {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.show();
+        }
+      } else {
+        x.show();
+      }
+    }
+    to_appear.push([f]);
+  }
+
+  var to_disappear = [];
+  for (const x of to_appear) { 
+    to_disappear.push([]);
   }
 
   var state = 0;

@@ -3,6 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,39 +11,48 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Non-Erasing Pattern Learning Example</div>
+    <div class="title">Non-Erasing Pattern Learning</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="setup" style="margin-bottom: 1em; opacity: 0;">
+      <div id="non-erasing" style="margin-bottom: 1em; opacity: 0;">
         <ul>
-          <li><math>&Sigma; = {</math><math>C</math><sub><math>1</math></sub><math>, C</math><sub><math>2</math></sub><math>, C</math><sub><math>3</math></sub><math></math><math>, S</math><sub><math>1</math></sub><math>, S</math><sub><math>2</math></sub><math>, S</math><sub><math>3</math></sub><math>}</math></li>
-          <li><math>V = {X, Y, Z}</math></li>
-        </ul>
-      </div>
-      <div  id="input" style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li> Input strings (message chains sampled from a client-server system):
+          <li><strong>Non-Erasing Patterns</strong>
             <ul>
-              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>1</math></sub></li>
-              <li><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub></li>
-              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
+              <li style="margin-bottom: 0.5em; margin-top: 0.25em">
+                Let <math>&Sigma;</math> and <math>V</math> be two disjoint sets of symbols with at least two elements each
+              </li>
+              <li style="margin-bottom: 0.5em;">
+                A <strong>non-erasing pattern</strong> is a finite sequence of symbols drawn from <math>&Sigma;</math> and <math>V</math>
+              </li>
+              <li style="margin-bottom: 0.5em;">
+                A <strong>string</strong> is a finite sequence of symbols drawn from <math>&Sigma;</math>
+              </li>
+              <li style="margin-bottom: 0.5em;">
+                Every non-erasing pattern <math>p</math> represents a <strong>language</strong>, <math>L(p)</math>. For a given pattern <math>p</math> and string <math>s</math>
+                <ul>
+                  <li id="justifies">If there is a mapping <math>&mu;</math> from <math>V</math> to <math>&Sigma;</math><sup><math>+</math></sup> such that <math>&mu;(p) = s</math>, then <math>s &in; L(p)</math></li>
+                  <li>Otherwise, <math>s &notin; L(p)</math></li>
+                </ul>
+              </li>
             </ul>
           </li>
         </ul>
       </div>
-      <div id="output"  style="margin-bottom: 1em; opacity: 0;">
+      
+      <div id="learning" style="opacity: 0;">
         <ul>
-          <li>Angluin's output pattern: <math>XYX</math></li>
-        </ul>
-      </div>
-      <div id="bad" style="opacity: 0;">
-        <ul>
-          <li>Strings in the language of the pattern but that are kind of disappointing: 
+          <li>
+            <strong>The Learning Problem:</strong>
             <ul>
-              <li><math>S</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub></li>
-              <li><math>C</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub></li>
-              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>3</math></sub><math>C</math><sub><math>3</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
+              <li style="margin-bottom: 0.5em; margin-top: 0.25em">Input: set of strings <math>S</math></li>
+              <li style="margin-bottom: 0.5em;">
+                Output: a non-erasing pattern <math>p</math> such that
+                <ul>
+                  <li><math>L(p) &subseteq; S</math></li>
+                  <li><math>p</math> is <em>the most specific pattern</em></li>
+                </ul>
+              </li>
             </ul>
           </li>
         </ul>
@@ -50,7 +60,7 @@
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Angluin (1980)</div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -60,13 +70,15 @@
   import { annotate } from 'https://unpkg.com/rough-notation?module';
   import { step, tertiary_color } from "../utils.js";
 
-  var setup = document.querySelector('#setup');
-  var input = document.querySelector('#input');
-  var output = document.querySelector('#output');
-  var bad = document.querySelector('#bad');
 
-  const to_appear = [[], [() => setup.style.opacity = 1], [() => input.style.opacity = 1], [() => output.style.opacity = 1], [() => bad.style.opacity = 1]];
-  const to_disappear = [[], [], [], [], []];
+  var justifies = document.querySelector('#justifies');
+  justifies = annotate(justifies, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var non_erasing = document.querySelector('#non-erasing');
+  var learning = document.querySelector('#learning');
+
+  const to_appear = [[], [() => non_erasing.style.opacity = 1], [() => justifies.show()],  [() => learning.style.opacity = 1]];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
   const body = document.querySelector('body');
