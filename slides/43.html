@@ -3,7 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <script src="https://unpkg.com/konva@8/konva.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -11,111 +11,174 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Timeline</div>
+    <div class="title">Proposal: Verification Methodology for Distributed Systems</div>
   </div>
-  <div class="half-box">
-    <div style="margin-right: 20px; margin-left: 80px; font-size: 75%;">
-      <ul>
-        <li style="margin-bottom: 1em;">Message Chains for Asynchronous Verification
-          <ul>
-            <li style="margin-top: 0.5em;">April 2023
-              <ul>
-                <li style="margin-top: 0.25em;">submit to SOSP</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li style="margin-bottom: 1em;">Learning Invariants using Message Chain Examples
-          <ul>
-            <li style="margin-top: 0.5em;">May 2023
-              <ul>
-                <li style="margin-top: 0.25em;">submit to FMCAD</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li style="margin-bottom: 1em;">Modular Message Chains and Partially Synchronous Systems 
-          <ul>
-            <li style="margin-top: 0.5em;"> September 2023 to December 2023
-              <ul>
-                <li style="margin-top: 0.25em;">formalize modular message chains</li>
-                <li style="margin-top: 0.25em;">encode partial synchrony in our framework</li>
-              </ul>
-            </li>
-            <li style="margin-top: 0.5em;">January 2024 to March 2024
-              <ul>
-                <li style="margin-top: 0.25em;">
-                  challenge: verify one system per week of 294-234
-                </li>
-              </ul>
-            </li>
-            <li style="margin-top: 0.5em;">~April 2024
-              <ul>
-                <li style="margin-top: 0.25em;">submit to SOSP or similar</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div class="half-box">
-    <div style="margin-left: 20px; margin-right: 80px; font-size: 75%;">
-      <ul>
-        <li style="margin-bottom: 1em;">SMT Solver and Platform Selection: When and How to Cloud
-          <ul>
-            <li style="margin-top: 0.5em;">March 2023 to September 2023
-              <ul>
-                <li style="margin-top: 0.25em;"> proof-of-concept implementation
-                  <ul>
-                    <li style="margin-top: 0.25em;">e-graph-based eager SMT solving in the cloud</li>
-                    <li style="margin-top: 0.25em;">algorithm selection for when to go to the cloud</li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li style="margin-top: 0.5em;">January 2024
-              <ul>
-                <li style="margin-top: 0.25em;">submit to CAV</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li style="margin-bottom: 1em;">Proof-Producing Verification Encodings with Learned Rewrites
-          <ul>
-            <li style="margin-top: 0.5em;">~May 2024 to December 2024
-              <ul>
-                <li style="margin-top: 0.25em;">combine previous projects</li>
-              </ul>
-            </li>
-            <li style="margin-top: 0.5em;">January 2025
-              <ul>
-                <li style="margin-top: 0.25em;">submit to CAV</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li style="margin-bottom: 1em;">Apply for jobs: December 2024 to May 2025</li>
-        <li style="margin-bottom: 1em;"><span id="grad">Graduation: May 2025</span></li>
-      </ul>
-    </div>
-  </div>
+  <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
-    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
-  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
+  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
 
-  var grad = document.querySelector('#grad');
-  grad = annotate(grad, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  const width = 1920;
+  const height = 1080 - 350;
 
-  const to_appear = [[], [() => grad.show()]];
-  const to_disappear = [[], []];
+  var stage = new Konva.Stage({
+    container: 'canvas',
+    width: width,
+    height: height,
+  });
+  var layer = new Konva.Layer();
+  stage.add(layer);
+
+  const vert_gap = 50;
+  const horiz_gap = 150;
+
+  const doc_width = 150;
+  const doc_height = 200;
+  const doc_corners = [0, 20, 0, 0];
+
+  const big_process_width = 1100;
+  const big_process_height = 500;
+  const process_corners = [0, 0, 0, 0];
+
+  const left_most_x = (width - (big_process_width + doc_width + doc_width + horiz_gap + horiz_gap)) / 2;
+  const upmost_y = (height - (doc_height + doc_height + vert_gap)) / 2;
+
+  var system = draw_rectangle_konva(layer, left_most_x, upmost_y, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User System");
+  var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
+
+  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
+  
+  var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
+  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Invariant");
+
+  var ringSystemImage = new Image();
+  var ringSystemPng = new Konva.Image({
+      x: system[0].x() + 20,
+      y: system[0].y() + 70,
+      image: ringSystemImage,
+      width: system[0].width()  - 40,
+      height: system[0].height() - 80,
+    });
+  ringSystemImage.onload = function () {
+    layer.add(ringSystemPng);
+  };
+  ringSystemImage.src = '../images/ring.png';
+  system = system.concat(ringSystemPng);
+
+  var ringInvImage = new Image();
+  var ringInvPng = new Konva.Image({
+      x: invariant[0].x() + 20,
+      y: invariant[0].y() + 70,
+      image: ringInvImage,
+      width: invariant[0].width()  - 40,
+      height: invariant[0].height() - 80,
+    });
+  ringInvImage.onload = function () {
+    layer.add(ringInvPng);
+  };
+  ringInvImage.src = '../images/ring_inv.png';
+  invariant = invariant.concat(ringInvPng);
+
+  var proofImage = new Image();
+  var proofPng = new Konva.Image({
+      x: proof[0].x() + 30,
+      y: proof[0].y() + 40,
+      image: proofImage,
+      width: proof[0].width() - 60,
+      height: proof[0].height() - 50,
+    });
+  proofImage.onload = function () {
+    layer.add(proofPng);
+  };
+  proofImage.src = '../images/proof.png';
+  proof = proof.concat(proofPng);
+
+  // add text to center of help
+  var helpText = new Konva.Text({
+    x: help[0].x(),
+    y: help[0].y() + 20,
+    text: 'P(s)',
+    fontSize: 30,
+    fontFamily: 'Open Sans',
+    fill: secondary_color,
+    width: help[0].width(),
+    height: help[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(helpText);
+  help = help.concat(helpText);
+
+  system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
+  invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
+  proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
+  help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
+
+  var toolText2 = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y() + tool[0].height() / 4,
+    text: 'This turns out to be hard!',
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText2);
+
+  var toolText1 = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y() - tool[0].height() / 4,
+    text: 'Is the invariant inductive?',
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText1);
+
+  function clean() {
+    for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.hide();
+        }
+      } else {
+        x.hide();
+      }
+    }
+  }
+
+  clean();
+
+  var to_appear = [[]];
+  for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
+    function f() {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.show();
+        }
+      } else {
+        x.show();
+      }
+    }
+    to_appear.push([f]);
+  }
+
+  var to_disappear = [];
+  for (const x of to_appear) { 
+    to_disappear.push([]);
+  }
 
   var state = 0;
   const body = document.querySelector('body');

@@ -3,6 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,45 +11,59 @@
 
 <body>
   <div class="title-box">
-    <div class="title">What Can Path-Patterns Learn?</div>
+    <div class="title">Non-Erasing Patterns with Justified Constraints, <span id="generally">Generally</span></div>
   </div>
-  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
-    <div style="margin-left: 80px; margin-right: 20px">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em; margin-bottom: 2em;">
-        <img src="../images/tor.png" style="width: 80%">
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <div id="justified" style="margin-bottom: 1em; opacity: 0;">
+        <ul>
+          <li style="margin-bottom: 1em;">
+            Let <math>S</math> be an input set of strings and <math>p</math> be a learned pattern
+          </li>
+          <li style="margin-bottom: 1em;">
+            The set of <em>justifications</em> <math>J(S, p)</math> is the set of assignments <math>&mu;</math> such that <math>&Exists; s &in; S &mu;(p) = s</math>
+          </li>
+          <li style="margin-bottom: 1em;">
+            A semantic constraint is <em>justified</em> if it does not block any justification
+            <ul>
+              <li>
+                In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
-      <br>
-      <math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
-      <br> where the first and last client are the same. 
-    </div>
-  </div>
-  <div id="right" class="half-box" style="opacity: 0;">
-    <div style="margin-right: 80px; margin-left: 40px;">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em; margin-bottom: 1em;">
-        <img src="../images/2pc.png" style="width: 60%">
+      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
+        <ul>
+          <li style="margin-bottom: 1em;">We consider two domain-specific constraint classes
+            <ul>
+              <li style="margin-top: 0.5em;">Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
+              <li style="margin-top: 0.5em;">Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
+            </ul>
+          </li>
+        </ul>
       </div>
-      <br>
-      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
-      <br> where the three coordinator nodes are the same, but the participants before and after the decision may be different. 
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Ayari (2010)</div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { step } from "../utils.js";
 
-  var left = document.getElementById('left');
-  var right = document.getElementById('right');
+<script type="module">
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
   
-  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
+  import { step, tertiary_color } from "../utils.js";
+
+  var classes = document.getElementById('classes');
+  var justified = document.getElementById('justified');
+
+  const to_appear = [[], [() => justified.style.opacity = 1], [() => classes.style.opacity = 1]];
   const to_disappear = [[], [], []];
 
   var state = 0;
