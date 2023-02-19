@@ -3,8 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <script src="https://unpkg.com/konva@8/konva.min.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -12,193 +11,173 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Asynchronous Message Passing Distributed Systems Example</div>
+    <div class="title">Proposal: Verification Methodology for Async Distributed Systems</div>
   </div>
-  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
-  <div class="half-box">
-    <div class="half-half-box" id="top-right" style="display: none;">
-      <div style="width: 95%;">
-        <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Ring Leader Election Protocol</span>
-        <ul style="font-size: 20pt; width: 100%; padding-top: 1em;">
-          <li id="start">Send your own identifier left</li>
-          <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send received value
-            left</li>
-          <li style="margin-top: 1em;" id="win">If you receive your own identifier, declare yourself the winner</li>
-        </ul>
-      </div>
-    </div>
-    <div class="half-half-box" id="bottom-right" style="display: none; margin-top: -1em;">
-      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span> 
-      <span style="font-size: 75%; opacity: 0.5; margin-left: 1em;">send(to, payload) | receive(from, payload) | win(node) </span>
-      <div id="log-data" style="width: 95%; padding-top: 0.5em; font-size: 80%;"></div>
-    </div>
-  </div>
+  <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
-    <div class="footnote">Le Lann (1977); Chang and Roberts (1979)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_rectangle_konva, draw_arrow_konva } from "../utils.js";
 
-  var start = document.querySelector('#start');
-  var forward = document.querySelector('#forward');
-  var win = document.querySelector('#win');
-  start = annotate(start, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  const width = 1920;
+  const height = 1080 - 350;
 
-  import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_from_gen } from "../utils.js";
+  var stage = new Konva.Stage({
+    container: 'canvas',
+    width: width,
+    height: height,
+  });
+  var layer = new Konva.Layer();
+  stage.add(layer);
 
-  // regular canvas
-  var canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  // Rough.js canvas
-  const rc = rough.canvas(document.getElementById('canvas'));
-  let generator = rc.generator;
+  const vert_gap = 50;
+  const horiz_gap = 150;
 
-  // log 
-  var log = document.getElementById("log-data");
+  const doc_width = 150;
+  const doc_height = 200;
+  const doc_corners = [0, 20, 0, 0];
 
-  const radius = 50;
+  const big_process_width = 1100;
+  const big_process_height = 500;
+  const process_corners = [0, 0, 0, 0];
 
-  var to_appear = [[], []];
+  const left_most_x = (width - (big_process_width + doc_width + doc_width + horiz_gap + horiz_gap)) / 2;
+  const upmost_y = (height - (doc_height + doc_height + vert_gap)) / 2;
 
-  // draw a circle of nodes on the canvas
-  const nodes = new Map([["2", 0], ["4", 1], ["0", 2], ["3", 3], ["1", 4]]);
-  var positions = [];
-  var gen_nodes = [];
-  for (var i = 0; i < 5; i++) {
-    var x = 450 + 200 * Math.cos(2 * Math.PI * i / 5);
-    var y = 300 + 200 * Math.sin(2 * Math.PI * i / 5);
-    positions.push([x, y]);
-    gen_nodes.push(gen_node(generator, x, y, radius, secondary_color))
-  }
+  var system = draw_rectangle_konva(layer, left_most_x, upmost_y, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User System");
+  var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
 
-  // draw gen_nodes
-  for (var i = 0; i < gen_nodes.length; i++) {
-    const node = gen_nodes[i];
-    const x = positions[i][0];
-    const y = positions[i][1];
-    to_appear[1].push(function (x, y, i) {
-      return function () {
-        draw_from_gen(rc, ctx, node, x, y, getByValue(nodes, i), secondary_color)
-      }
-    }(x, y, i));
-  }
+  var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
+  
+  var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
+  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Invariant");
 
-  const nodes_checkpoint = to_appear.concat([]);
+  var ringSystemImage = new Image();
+  var ringSystemPng = new Konva.Image({
+      x: system[0].x() + 20,
+      y: system[0].y() + 70,
+      image: ringSystemImage,
+      width: system[0].width()  - 40,
+      height: system[0].height() - 80,
+    });
+  ringSystemImage.onload = function () {
+    layer.add(ringSystemPng);
+  };
+  ringSystemImage.src = '../images/ring.png';
+  system = system.concat(ringSystemPng);
 
-  const top_right = document.getElementById("top-right");
-  const bottom_right = document.getElementById("bottom-right");
-  to_appear.push(nodes_checkpoint.flat().concat([() => top_right.style.display = "block"]));
-  to_appear.push(nodes_checkpoint.flat().concat([() => bottom_right.style.display = "block"]));
+  var ringInvImage = new Image();
+  var ringInvPng = new Konva.Image({
+      x: invariant[0].x() + 20,
+      y: invariant[0].y() + 70,
+      image: ringInvImage,
+      width: invariant[0].width()  - 40,
+      height: invariant[0].height() - 80,
+    });
+  ringInvImage.onload = function () {
+    layer.add(ringInvPng);
+  };
+  ringInvImage.src = '../images/ring_inv.png';
+  invariant = invariant.concat(ringInvPng);
 
-  const message_chains = [
-    [0, 3, 1, 2, 4, 0, 3, 1, 2, 4],
-    [1, 2, 4, 0, 3, 1, 2, 4],
-    [2, 4, 0, 3, 1, 2, 4],
-    [3, 1, 2, 4, 0, 3, 1, 2, 4],
-    [4, 0, 3, 1, 2, 4],
-  ];
+  var proofImage = new Image();
+  var proofPng = new Konva.Image({
+      x: proof[0].x() + 30,
+      y: proof[0].y() + 40,
+      image: proofImage,
+      width: proof[0].width() - 60,
+      height: proof[0].height() - 50,
+    });
+  proofImage.onload = function () {
+    layer.add(proofPng);
+  };
+  proofImage.src = '../images/proof.png';
+  proof = proof.concat(proofPng);
 
-  var counts = [0, 0, 0, 0, 0];
-  var trace = [];
-  while (counts[0] < message_chains[0].length - 1 && counts[1] < message_chains[1].length - 1 && counts[2] < message_chains[2].length - 1 && counts[3] < message_chains[3].length - 1 && counts[4] < message_chains[4].length - 1) {
-    // pick a message chain to draw from
-    var choice = Math.floor(Math.random() * 5);
-    const chain = message_chains[choice];
-    const count = counts[choice];
+  // add text to center of help
+  var helpText = new Konva.Text({
+    x: help[0].x(),
+    y: help[0].y() + 20,
+    text: 'P(s)',
+    fontSize: 30,
+    fontFamily: 'Open Sans',
+    fill: secondary_color,
+    width: help[0].width(),
+    height: help[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(helpText);
+  help = help.concat(helpText);
 
-    // label is greatest value seen so far in that chain
-    var label;
-    if (count == 0) {
-      label = String(chain[0]);
-    } else {
-      label = String(Math.max(...chain.slice(0, count + 1)));
-    }
-    const from = String(chain[count]);
-    const to = String(chain[count + 1]);
-    trace.push([from, to, label, tertiary_color, primary_color]);
+  system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
+  invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
+  proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
+  help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
 
-    counts[choice] = count + 1;
-  }
+  var toolText2 = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y() + tool[0].height() / 4,
+    text: 'This turns out to be hard!',
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText2);
 
-  for (var i = 0; i < trace.length; i++) {
-    const from = nodes.get(trace[i][0]);
-    const to = nodes.get(trace[i][1]);
-    const kind = String(trace[i][2]) == String(trace[i][0]);
-    const label = trace[i][2];
-    const arrow_color = trace[i][3];
-    const label_color = trace[i][4];
-    const todo = nodes_checkpoint.flat().concat([function (from, to) {
-      return function () {
-        const center1_x = positions[from][0];
-        const center1_y = positions[from][1];
-        const center2_x = positions[to][0];
-        const center2_y = positions[to][1];
+  var toolText1 = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y() - tool[0].height() / 4,
+    text: 'Is the invariant inductive?',
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText1);
 
-        const betweenVec = { x: center2_x - center1_x, y: center2_y - center1_y };
-        const betweenVecLen = Math.sqrt(betweenVec.x * betweenVec.x + betweenVec.y * betweenVec.y);
-        betweenVec.x /= betweenVecLen;
-        betweenVec.y /= betweenVecLen;
-
-        const p1x = center1_x + ((radius + 15) * betweenVec.x);
-        const p1y = center1_y + ((radius + 15) * betweenVec.y);
-
-        const p2x = center2_x - ((radius + 25) * betweenVec.x);
-        const p2y = center2_y - ((radius + 25) * betweenVec.y);
-
-        draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
-
-        
-        if (kind) {
-          start.show();
-        } else {
-          log.innerHTML = log.innerHTML + "receive(" + getByValue(nodes, from) + ", " + label + ") and ";
-          forward.show();
+  function clean() {
+    for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.hide();
         }
-        log.innerHTML = log.innerHTML + "send(" + getByValue(nodes, to) + ", " + label + ");&nbsp ";
+      } else {
+        x.hide();
       }
-    }(from, to)]);
-    to_appear.push(todo);
+    }
   }
 
-  // highlight the node that won
-  const winner = nodes.get("4");
-  const todo = nodes_checkpoint.flat().concat([function (winner) {
-    return function () {
-      const x = positions[winner][0];
-      const y = positions[winner][1];
-      win.show();
-      log.innerHTML = log.innerHTML + "receive(" + getByValue(nodes, winner) + ", " + getByValue(nodes, winner) + ") and win(" + getByValue(nodes, winner) + ").";
-      draw_node(rc, ctx, x, y, radius * 1.45, "", quaternary_color, quaternary_color);
-    }
-  }(winner)]);
-  to_appear.push(todo);
+  clean();
 
-  var to_disappear = []
-  for (var i = 0; i < to_appear.length; i++) {
-    var cleaner;
-    if (i != 0) {
-      cleaner = function () {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        start.hide();
-        forward.hide();
-        win.hide();
-      }
-    } else {
-      cleaner = function () {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        log.innerHTML = "";
-        start.hide();
-        forward.hide();
-        win.hide();
+  var to_appear = [[]];
+  for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
+    function f() {
+      if (Array.isArray(x)) {
+        for (const y of x) {
+          y.show();
+        }
+      } else {
+        x.show();
       }
     }
-    to_disappear.push([cleaner]);
+    to_appear.push([f]);
+  }
+
+  var to_disappear = [];
+  for (const x of to_appear) { 
+    to_disappear.push([]);
   }
 
   var state = 0;
