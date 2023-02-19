@@ -16,6 +16,7 @@ html {
     line-height: 1.25;
     color: var(--primary-color);
     background-color: var(--background-color);
+    /* filter: brightness(0.8) contrast(2); */
 }
 
 body {
@@ -178,6 +179,7 @@ ul, ol {
 
 math {
     color: var(--tertiary-color);
+    font-weight: bold;
 }
 
 sub, sup {
