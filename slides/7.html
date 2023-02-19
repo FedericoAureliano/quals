@@ -43,19 +43,11 @@
           </ul>
         </li>
       </ul>
-      <li id="state-def1" style="margin-bottom: 0.75em; display: none;">The <strong>state</strong> of the system is the
-        <ul>
-          <li>state of every node, and</li>
-          <li>the state of the message buffer.</li>
-        </ul>
-      </li>
-      <ul style="margin-bottom: 0.75em; display: none;" id="system-def">
-        <li>Define a system by giving
+      <ul id="state-def1" style="margin-bottom: 0.75em; display: none;">
+        <li>The <strong>state</strong> of the system is the
           <ul>
-            <li>the set of node identifiers,</li>
-            <li>the payload type,</li>
-            <li>the available node actions (atomic procedures), and</li>
-            <li>an initial set of states.</li>
+            <li>state of every node, and</li>
+            <li>the state of the message buffer.</li>
           </ul>
         </li>
       </ul>
@@ -90,9 +82,8 @@
   const messages_def = document.querySelector('#messages-def');
   const interface_def = document.querySelector('#interface-def');
   const state_def = document.querySelector('#state-def1');
-  const system_def = document.querySelector('#system-def');
   
-  const elements = [nodes_def, messages_def, interface_def, state_def, system_def];
+  const elements = [nodes_def, messages_def, interface_def, state_def];
 
   var to_appear = [[]];
   for (const el of elements) {

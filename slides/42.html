@@ -11,16 +11,10 @@
 
 <body>
   <div class="title-box">
-    <div class="title">What Happens When Verification Fails?</div>
+    <div class="title">Proposal: Verification Methodology for Distributed Systems</div>
   </div>
-  <div class="full-box">
-    <div style="margin-right: 80px; margin-left: 80px">
-    </div>
-    <div id="canvas"></div>
-  </div>
+  <div class="full-box"><div id="canvas"></div></div>
   <div class="foot-box">
-    <div class="footnote">Leino and W&#252;stholz (2014)</div>
-    <!-- https://www.microsoft.com/en-us/research/wp-content/uploads/2016/12/krml236.pdf -->
     <div class="slide-number"></div>
   </div>
 </body>
@@ -58,6 +52,9 @@
   var invariant = draw_rectangle_konva(layer, system[0].x(), system[0].y() + system[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "User Invariant");
 
   var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
+  
+  var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
+  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Invariant");
 
   var ringSystemImage = new Image();
   var ringSystemPng = new Konva.Image({
@@ -87,14 +84,46 @@
   ringInvImage.src = '../images/ring_inv.png';
   invariant = invariant.concat(ringInvPng);
 
+  var proofImage = new Image();
+  var proofPng = new Konva.Image({
+      x: proof[0].x() + 30,
+      y: proof[0].y() + 40,
+      image: proofImage,
+      width: proof[0].width() - 60,
+      height: proof[0].height() - 50,
+    });
+  proofImage.onload = function () {
+    layer.add(proofPng);
+  };
+  proofImage.src = '../images/proof.png';
+  proof = proof.concat(proofPng);
+
+  // add text to center of help
+  var helpText = new Konva.Text({
+    x: help[0].x(),
+    y: help[0].y() + 20,
+    text: 'P(s)',
+    fontSize: 30,
+    fontFamily: 'Open Sans',
+    fill: secondary_color,
+    width: help[0].width(),
+    height: help[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(helpText);
+  help = help.concat(helpText);
+
   system = system.concat(draw_arrow_konva(layer, system[0], tool[0], primary_color, primary_color, ""));
   invariant = invariant.concat(draw_arrow_konva(layer, invariant[0], tool[0], primary_color, primary_color, ""));
+  proof = proof.concat(draw_arrow_konva(layer, tool[0], proof[0], primary_color, primary_color, "success"));
+  help = help.concat(draw_arrow_konva(layer, tool[0], help[0], primary_color, primary_color, "failure"));
 
-  var toolText = new Konva.Text({
+  var toolText2 = new Konva.Text({
     x: tool[0].x(),
-    y: tool[0].y(),
-    text: 'Usually the solver will timeout',
-    fontSize: 70,
+    y: tool[0].y() + tool[0].height() / 4,
+    text: 'This turns out to be hard!',
+    fontSize: 80,
     fontFamily: 'Open Sans',
     fill: primary_color,
     width: tool[0].width(),
@@ -102,12 +131,24 @@
     align: 'center',
     verticalAlign: 'middle',
   });
-  layer.add(toolText);
+  layer.add(toolText2);
 
-  const elements = [tool, system, invariant, toolText];
+  var toolText1 = new Konva.Text({
+    x: tool[0].x(),
+    y: tool[0].y() - tool[0].height() / 4,
+    text: 'Is the invariant inductive?',
+    fontSize: 80,
+    fontFamily: 'Open Sans',
+    fill: primary_color,
+    width: tool[0].width(),
+    height: tool[0].height(),
+    align: 'center',
+    verticalAlign: 'middle',
+  });
+  layer.add(toolText1);
 
   function clean() {
-    for (const x of elements) {
+    for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
       if (Array.isArray(x)) {
         for (const y of x) {
           y.hide();
@@ -121,7 +162,7 @@
   clean();
 
   var to_appear = [[]];
-  for (const x of elements) {
+  for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {

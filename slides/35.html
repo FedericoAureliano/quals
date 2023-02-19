@@ -3,6 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,38 +11,56 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Extensions: Modular Verification</div>
+    <div class="title">Challenges Revisited</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <ul>
-        <li style="margin-bottom: 1em;">Decompose complex systems and reason about them in isolation</li>
-        <li style="margin-bottom: 3em;">Usually through assume-guarantee reasoning</li>
-        <li style="margin-bottom: 1em;">P supports modular testing</li>
-        <li style="margin-bottom: 1em;">Can message chains play a role in modular verification?
+      <ul style="width: 70%;">
+        <li style="margin-bottom: 1em;">Reasoning about messages
           <ul>
-            <li style="margin-top: 0.5em;">e.g., can we define sub-chains and chains of sub-chains?</li>
-            <li style="margin-top: 0.5em;">would that help simplify proofs or improve specification mining?</li>
+            <li>Message chains help but
+              <ul id="extend">
+                <li>they do not remove the limitations of asynchrony</li>
+                <li>they do not yet support modular reasoning</li>
+              </ul>
+            </li>
           </ul>
         </li>
+        <li style="margin-bottom: 1em;">Coming up with true invariants
+          <ul>
+            <li>Path pattern learning helps but captures only one class of invariants</li>
+            <li>Programming-by-example helps but requires negative examples</li>
+          </ul>
+        </li>
+        <li id="proofs" style="margin-bottom: 1em;">Independently checking verification results</li>
+        <li id="cloud" style="margin-bottom: 1em;">Getting solvers to terminate</li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <!-- M. Abadi and L. Lamport, “Conjoining specifications,” -->
-    <!-- Meyer, B. (1992). Applying ’design by contract’. -->
-    <div class="footnote">Meyer (1992); Abadi and Lamport (1995); Desai (2020)</div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { step, tertiary_color } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
+
+  var extend = document.querySelector('#extend');
+  extend = annotate(extend, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var proofs = document.querySelector('#proofs');
+  proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var cloud = document.querySelector('#cloud');
+  cloud = annotate(cloud, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  const to_appear = [[], [() => extend.show()], [() => proofs.show()], [() => cloud.show()]];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

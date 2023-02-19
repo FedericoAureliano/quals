@@ -4,56 +4,51 @@
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/erlang.min.js"></script>
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/scala.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@11.7.0/styles/atom-one-dark.css">
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
   <div class="title-box">
-    <div class="title">What Other Systems Does This Work For?</div>
+    <div class="title">How do Developers Implement Message-Passing Systems?</div>
   </div>
-  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
-    <div style="margin-left: 80px; margin-right: 20px">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
-      <br>
-      If a client receives a response, then the client must have sent a matching request.
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em;">
-        <img src="../images/tor.png" style="width: 80%">
-      </div>
-      <br>
-      Every message chain follows the path:<br><math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
-    </div>
-  </div>
-  <div id="right" class="half-box" style="opacity: 0;">
-    <div style="margin-right: 80px; margin-left: 40px;">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
-      <br>
-      All participants agree to either commit or abort.
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em;">
-        <img src="../images/2pc.png" style="width: 60%">
-      </div>
-      <br>
-      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
-      <br>
-      But what happens between <math>Vote &rarr; Decision</math>?
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px; font-size: 85%;">
+      <pre><code class="language-erlang">receive
+  pong -> io:format("received pong~n", [])
+end,</code></pre>
+<br>
+<pre><code class="language-scala">def receive = {
+  case "pong" => log.info("received pong")
+  case _      => log.info("received unknown message")
+}</code></pre>
+<br>
+<pre><code>on ePong do {
+  print "received pong";
+}</code></pre>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Reed, Syverson, and Goldschlag (1998); Gray (1978); Ayari (2010)</div>
+    <div class="footnote">Erlang, Akka (Scala), P</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { step } from "../utils.js";
 
-  var left = document.getElementById('left');
-  var right = document.getElementById('right');
-  
-  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
-  const to_disappear = [[], [], []];
+<script type="module">
+  import { step, tertiary_color } from "../utils.js";
+
+  hljs.debugMode();
+  hljs.highlightAll();
 
   var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

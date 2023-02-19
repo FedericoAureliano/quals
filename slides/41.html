@@ -10,34 +10,37 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Learning-Enabled Verification with End-to-End Proofs</div>
+    <div class="title">Cloud Solving: Solvers and Selection</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li style="margin-bottom: 1em;">Modular verification
+        <li style="margin-bottom: 1em;">Different SMT solvers have different performance profiles
           <ul>
-            <li style="margin-top: 0.5em;">verifying one distributed system</li>
-            <li style="margin-top: 0.5em;">decomposed into multiple, simpler queries</li>
+            <li style="margin-top: 0.5em;">No one solver dominates all others</li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">Where some queries are solved in the cloud
+        <li style="margin-bottom: 2em;">Especially apparent with the emergence of cloud solvers
           <ul>
-            <li style="margin-top: 0.5em;">automatically selecting solver and platform per query</li>
+            <li style="margin-top: 0.5em;">
+              Dispatching to the cloud may take longer than solving locally
+            </li>
+            <li style="margin-top: 0.5em;">
+              But may be worth it!
+            </li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">With end-to-end proofs
-          <ul>
-            <li style="margin-top: 0.5em;">verification encodings produce proofs</li>
-            <li style="margin-top: 0.5em;">solvers produce proofs</li>
-            <li style="margin-top: 0.5em;">proofs are stitched together and returned</li>
-          </ul>
+        <li style="margin-bottom: 1em;">
+          Can we use e-graphs to implement proof-producing, efficient, cloud solvers?
+        </li>
+        <li style="margin-bottom: 1em;">
+          Can we use solver selection techniques to decide when to go to the cloud (and what solver to use)?
         </li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Mora et al. 2021; Pimpalkhare et al. 2021; https://www.amazon.science/blog/automated-reasonings-scientific-frontiers</div>
     <div class="slide-number"></div>
   </div>
 </body>

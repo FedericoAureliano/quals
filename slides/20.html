@@ -3,6 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,54 +11,81 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Message Chains v. Happened-Before</div>
+    <div class="title">Message Chains, <span id="generally">Generally</span></div>
   </div>
-  <div class="half-box" style="max-width: 60%;">
-    <div style="margin-left: 80px">
-      <div style="display: none;" id="summary">
-        Different structures, but if you squint:
-        <ul style="margin-bottom: 3em;">
-          <li style="margin-bottom: 0.5em; margin-top: 0.5em">Message chains are a subset of happened-before</li>
-          <li>Happened-before is not a subset of message chains</li>
+  <div class="full-box">
+    <div style="margin-left: 80px; margin-right: 80px; font-size: 80%;">
+      <div id="mc-def" style="opacity: 0;">
+        The set of message chains is the smallest set such that:
+        <ul style="margin-bottom: 1em;">
+          <li style="margin-bottom: 0.25em; margin-top: 0.25em;"><math>nil</math> is a message chain; and</li>
+          <li>if <math>c</math> is a message chain, <math>p</math> is a payload, and <math>s</math> and <math>t</math> are identifiers, then <math>cons(s, t, p, c)</math> is</li>
         </ul>
       </div>
-
-      <div style="display: none;" id="example-description">
-        Consider the two execution on the right:
+      <div id="mc-buffer" style="opacity: 0;">
+        Every system state <math>&sigma;</math> has an associated multiset of message chains, denoted <math>chains(&sigma;)</math>. 
+        Let <math>(&sigma;, &sigma;')</math> be a system step for an action <math>&alpha;</math> taken by node <math>n</math>. Then <math>chains(&sigma;')</math> is the smallest multiset such that:
         <ul>
-          <li style="margin-bottom: 0.5em; margin-top: 0.5em" >The order relation induced by the message chains is included in the happened-before relation</li>
-          <li>But there is no message chain relation between <math>b1</math> and <math>b6</math>, even though <math>b1</math> happened-before <math>b6</math></li>
+          <li><math>chains(&sigma;')</math> contains <math>nil</math><sup><math>1</math></sup></li>
+          <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, nil)</math><sup><math>k+1</math></sup> if
+            <ul>
+              <li><math>&alpha;</math> contains no receive actions</li>
+              <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
+              <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, nil)</math><sup><math>k</math></sup></li>
+            </ul>
+          </li>
+          <li><math>chains(&sigma;')</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k+1</math></sup> if
+            <ul>
+              <li><math>&alpha;</math> contains <math>receive(n, p')</math></li>
+              <li><math>&alpha;</math> contains <math>send(t, p)</math></li>
+              <li><math>chains(&sigma;)</math> contains at least one <math>cons(s, n, p', c)</math></li>
+              <li><math>chains(&sigma;)</math> contains <math>cons(n, t, p, cons(s, n, p', c))</math><sup><math>k</math></sup></li>
+            </ul>
+          </li>
+          <li>if <math>chains(&sigma;)</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup> and <math>&alpha;</math> does not contain <math>receive(n, p')</math>, then <math>chains(&sigma;')</math> contains <math>cons(s, n, p', c)</math><sup><math>k</math></sup></li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="half-box" style="min-width: 40%; max-width: 40%;">
-    <div style="display: none;" id="example-picture">
-      <img src="../images/hb.png" style="width: 60%; height: 50%; margin-top: 0em; margin-right: 120px; float: right;"/>
-    </div>
+  <div id="basically" style="display: none; font-size: 200%; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
+    <ul style="margin-left: 2em; margin-right: 2em;">
+      <li style="margin-bottom: 2em;">
+        If you receive and then send in the same action, then extend the message chain. 
+      </li>
+      <li>
+        If you send without first receiving, then start a new message chain.
+      </li>
+    </ul>
+    
   </div>
   <div class="foot-box">
-    <!-- Time, Clocks, and the Ordering of Events in a Distributed System -->
-    <div class="footnote">Lamport (1978)</div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { step } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var generally = document.querySelector('#generally');
+  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
+  generally.show();
 
-  var summary = document.getElementById('summary');
-  var example_description = document.getElementById('example-description');
-  var example_picture = document.getElementById('example-picture');
+  import { step, tertiary_color } from "../utils.js";
 
-  const to_appear = [[], [() => summary.style.display = 'block'], [() => example_description.style.display = 'block', () => example_picture.style.display = 'block']];
-  const to_disappear = [[], [], []];
+  // select basically element
+  const basically = document.querySelector('#basically');
+  const mc_def = document.querySelector('#mc-def');
+  const mc_buffer = document.querySelector('#mc-buffer');
+
+  const to_appear = [[], [() => mc_def.style.opacity = 1], [() => mc_buffer.style.opacity = 1], [() => basically.style.display = 'flex']];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
+
 <script type='module' src="../next.js"></script>
 
 </html>
