@@ -14,13 +14,13 @@
   <div class="title-box">
     <div class="title">Asynchronous Message Passing Distributed Systems, <span id="generally">Generally</span></div>
   </div>
-  <div class="half-box" style="margin-top: -1em;">
-    <div style="width: 95%; margin-left: 80px; font-size: 20pt;">
-      <ul style="margin-bottom: 0.75em; display: none;" id="nodes-def">
+  <div class="half-box" style="margin-top: -1em; max-width: 75%; min-width: 75%;">
+    <div style="margin-left: 80px; font-size: 90%;">
+      <ul style="margin-bottom: 0.75em" id="nodes-def">
         <li><strong>Nodes</strong> are state machines with a unique identifier.</li>
         <li>The set of node identifiers <math>N</math> has at least two elements.</li>
       </ul>
-      <ul style="margin-bottom: 0.75em; display: none;" id="messages-def">
+      <ul style="margin-bottom: 0.75em" id="messages-def">
         <li><strong>Messages</strong> are pairs <math>(t, p)</math>, where 
           <ul>
             <li><math>t &in; N</math> represents the message target and </li>
@@ -28,7 +28,7 @@
           </ul>
         <li>There is multiset of messages, called the <strong>message buffer</strong>.</li>
       </ul>
-      <ul style="margin-bottom: 0.75em; display: none;" id="interface-def">
+      <ul style="margin-bottom: 0.75em" id="interface-def">
         <li>Nodes can only read/write to their own state.</li>
         <li>Except that every node <math>n</math> can (for any <math>t</math> and <math>p</math>)
           <ul>
@@ -43,7 +43,7 @@
           </ul>
         </li>
       </ul>
-      <ul id="state-def1" style="margin-bottom: 0.75em; display: none;">
+      <ul id="state-def1" style="margin-bottom: 0.75em">
         <li>The <strong>state</strong> of the system is the
           <ul>
             <li>state of every node, and</li>
@@ -53,7 +53,7 @@
       </ul>
     </div>
   </div>
-  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
+  <div class="half-box" style="max-width: 25%; min-width: 25%;"><canvas id="canvas" width="7680px" height="5840px" style='width:960px; height:730px; margin-left: -12em;'></canvas></div>
   <div class="foot-box">
     <div class="footnote">Fischer, Lynch, and Paterson (1985); Dwork, Lynch, and Stockmeyer (1988)</div>
     <div class="slide-number"></div>
@@ -110,10 +110,10 @@
   var to_disappear = [[]];
   for (var i = 0; i < elements.length; i++) {
     to_disappear.push([]);
-    for (var j = 0; j < i; j++) {
-      const el = elements[j];
-      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
-    }
+    // for (var j = 0; j < i; j++) {
+    //   const el = elements[j];
+    //   to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
+    // }
   }
 
   var state = 0;

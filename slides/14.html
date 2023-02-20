@@ -60,11 +60,11 @@
   var goal1 = document.querySelector('#goal1');
   const first_goal = [() => goal1.style.display = 'block'];
   var goal2 = document.querySelector('#goal2');
-  const second_goal = [() => goal2.style.display = 'block', () => goal1.style.opacity = 0.25];
+  const second_goal = [() => goal2.style.display = 'block'];
   var goal3 = document.querySelector('#goal3');
-  const third_goal = [() => goal3.style.display = 'block', () => goal2.style.opacity = 0.25];
+  const third_goal = [() => goal3.style.display = 'block'];
   var goal4 = document.querySelector('#goal4');
-  const fourth_goal = [() => goal4.style.display = 'block', () => goal3.style.opacity = 0.25];
+  const fourth_goal = [() => goal4.style.display = 'block'];
 
   const to_appear = [[], first_goal, second_goal, third_goal, fourth_goal];
   const to_disappear = [[], [], [], [], []];

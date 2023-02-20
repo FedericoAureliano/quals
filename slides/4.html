@@ -147,8 +147,10 @@
   });
   layer.add(toolText1);
 
+  const elements = [tool, system, invariant, toolText1, proof, help, toolText2];
+
   function clean() {
-    for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
+    for (const x of elements) {
       if (Array.isArray(x)) {
         for (const y of x) {
           y.hide();
@@ -162,7 +164,7 @@
   clean();
 
   var to_appear = [[]];
-  for (const x of [system, invariant, tool, toolText1, proof, help, toolText2]) {
+  for (const x of elements) {
     function f() {
       if (Array.isArray(x)) {
         for (const y of x) {

@@ -68,10 +68,10 @@
   var to_disappear = [[]];
   for (var i = 0; i < elements.length; i++) {
     to_disappear.push([]);
-    for (var j = 0; j < i; j++) {
-      const el = elements[j];
-      to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
-    }
+    // for (var j = 0; j < i; j++) {
+    //   const el = elements[j];
+    //   to_disappear[to_disappear.length - 1].push(() => el.style.opacity = '0.15');
+    // }
   }
 
   var state = 0;
