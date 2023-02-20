@@ -54,7 +54,7 @@
   var tool = draw_rectangle_konva(layer, system[0].x() + system[0].width() + horiz_gap, system[0].y() + ((system[0].height() + invariant[0].height() + vert_gap) / 2) - (big_process_height / 2), big_process_width, big_process_height, process_corners, "transparent", primary_color, primary_color, "");
   
   var proof = draw_rectangle_konva(layer, tool[0].x() + tool[0].width() + horiz_gap, system[0].y(), doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Proof");
-  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Invariant");
+  var help = draw_rectangle_konva(layer, proof[0].x(), proof[0].y() + proof[0].height() + vert_gap, doc_width, doc_height, doc_corners, "transparent", primary_color, primary_color, "Suggested Lemma");
 
   var ringSystemImage = new Image();
   var ringSystemPng = new Konva.Image({
@@ -123,7 +123,7 @@
     x: tool[0].x(),
     y: tool[0].y() + tool[0].height() / 4,
     text: 'This turns out to be hard!',
-    fontSize: 80,
+    fontSize: 75,
     fontFamily: 'Open Sans',
     fill: primary_color,
     width: tool[0].width(),
@@ -136,8 +136,8 @@
   var toolText1 = new Konva.Text({
     x: tool[0].x(),
     y: tool[0].y() - tool[0].height() / 4,
-    text: 'Is the invariant inductive?',
-    fontSize: 80,
+    text: 'Will the invariant always hold?',
+    fontSize: 75,
     fontFamily: 'Open Sans',
     fill: primary_color,
     width: tool[0].width(),

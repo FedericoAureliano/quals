@@ -3,8 +3,6 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -12,21 +10,11 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Asynchronous Message Passing Distributed Systems Example</div>
+    <div class="title">Verification Goal Example</div>
   </div>
   <div class="full-box">
     <div style="width: 95%; margin-left: 80px;">
-      <ul style="margin-bottom: 0.75em;">
-        <li>Define a system by giving
-          <ul>
-            <li>the set of node identifiers,</li>
-            <li>the payload type,</li>
-            <li>the available node actions (atomic procedures), and</li>
-            <li>an initial set of states.</li>
-          </ul>
-        </li>
-      </ul>
-      <div id="system-def">
+      <div id="system-def" style="display: none;">
         <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">Ring System Definition (Verification Assumptions)</span>:
         <ul style="margin-top: 0.5em; margin-bottom: 1em;">
           <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers</li>
@@ -45,22 +33,36 @@
           <li>Initially, no node is in the winning state and the message buffer is empty</li>
         </ul>
       </div>
+      <div id="system-spec" style="display: none;">
+        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline">Ring System Specification (Verification Goal)</span>:
+        <ul style="margin-top: 0.5em;">
+          <li>There is always at most one node in the winning state</li>
+        </ul>
+        <img src="../images/ring_inv.png" style="position: absolute; top: 450px; left: 1500px;"/>
+      </div>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">  import { step } from "../utils.js";
-  const to_disappear = [];
-  const to_appear = [];
+
+<script type="module">
+  import { step } from "../utils.js";
+
+  var system_def_element = document.querySelector('#system-def');
+  const system_def = [() => system_def_element.style.display = 'block'];
+  var system_spec_element = document.querySelector('#system-spec');
+  const system_spec = [() => system_spec_element.style.display = 'block'];
+
+  const to_disappear = [[], system_def, system_spec];
+  const to_appear = [[], [], []];
+
   var state = 0;
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
-
 <script type='module' src="../next.js"></script>
 
 </html>

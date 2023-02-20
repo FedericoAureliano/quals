@@ -3,50 +3,205 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
   <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Background</div>
+<body>
+  <div class="title-box">
+    <div class="title">Async System Example</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle" style="font-size: 95%;">
-    <ul style="list-style: none;">
-      <li id="current">
-        Asynchronous Systems and Verification
-      </li>
-      <li style="opacity: 0.25;">
-        Reasoning About Messages
-      </li>
-      <li style="opacity: 0.25;">
-        Coming Up with True Invariants
-      </li>
-      <li style="opacity: 0.25;">
-        Future work: Extensions, Proofs, and Cloud Solving
-      </li>
-    </ul style="list-style: none;">
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style ='width:960px; height:730px;'></canvas></div>
+  <div class="half-box">
+    <div class="half-half-box" id="top-right" style="display: none;">
+      <div style="width: 95%;">
+        <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Ring Leader Election Protocol</span>
+        <ul style="font-size: 20pt; width: 100%; padding-top: 1em;">
+          <li id="start">Send your own identifier left</li>
+          <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send received value
+            left</li>
+          <li style="margin-top: 1em;" id="win">If you receive your own identifier, declare yourself the winner</li>
+        </ul>
+      </div>
+    </div>
+    <div class="half-half-box" id="bottom-right" style="display: none; margin-top: -1em;">
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Log</span> 
+      <span style="font-size: 75%; opacity: 0.5; margin-left: 1em;">send(to, payload) | receive(from, payload) | win(node) </span>
+      <div id="log-data" style="width: 95%; padding-top: 0.5em; font-size: 80%;"></div>
     </div>
   </div>
   <div class="foot-box">
-    <div class="slide-number" style="background-color: white; color: var(--primary-color); box-shadow: 10px 0 0 white, -10px 0 0 white;"></div>
+    <div class="footnote">Le Lann (1977); Chang and Roberts (1979); <a class="footlink" href="./6.html">Refresh For New Execution</a></div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
+
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
 
-  import { step, tertiary_color } from "../utils.js";
+  var start = document.querySelector('#start');
+  var forward = document.querySelector('#forward');
+  var win = document.querySelector('#win');
+  start = annotate(start, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+
+  import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_from_gen } from "../utils.js";
+
+  // regular canvas
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  // Rough.js canvas
+  const rc = rough.canvas(document.getElementById('canvas'));
+  let generator = rc.generator;
+
+  // log 
+  var log = document.getElementById("log-data");
+
+  const radius = 50;
+
+  var to_appear = [[], []];
+
+  // draw a circle of nodes on the canvas
+  const nodes = new Map([["2", 0], ["4", 1], ["0", 2], ["3", 3], ["1", 4]]);
+  var positions = [];
+  var gen_nodes = [];
+  for (var i = 0; i < 5; i++) {
+    var x = 450 + 200 * Math.cos(2 * Math.PI * i / 5);
+    var y = 300 + 200 * Math.sin(2 * Math.PI * i / 5);
+    positions.push([x, y]);
+    gen_nodes.push(gen_node(generator, x, y, radius, secondary_color))
+  }
+
+  // draw gen_nodes
+  for (var i = 0; i < gen_nodes.length; i++) {
+    const node = gen_nodes[i];
+    const x = positions[i][0];
+    const y = positions[i][1];
+    to_appear[1].push(function (x, y, i) {
+      return function () {
+        draw_from_gen(rc, ctx, node, x, y, getByValue(nodes, i), secondary_color)
+      }
+    }(x, y, i));
+  }
+
+  const nodes_checkpoint = to_appear.concat([]);
+
+  const top_right = document.getElementById("top-right");
+  const bottom_right = document.getElementById("bottom-right");
+  to_appear.push(nodes_checkpoint.flat().concat([() => top_right.style.display = "block"]));
+  to_appear.push(nodes_checkpoint.flat().concat([() => bottom_right.style.display = "block"]));
+
+  const message_chains = [
+    [0, 3, 1, 2, 4, 0, 3, 1, 2, 4],
+    [1, 2, 4, 0, 3, 1, 2, 4],
+    [2, 4, 0, 3, 1, 2, 4],
+    [3, 1, 2, 4, 0, 3, 1, 2, 4],
+    [4, 0, 3, 1, 2, 4],
+  ];
+
+  var counts = [0, 0, 0, 0, 0];
+  var trace = [];
+  while (counts[0] < message_chains[0].length - 1 && counts[1] < message_chains[1].length - 1 && counts[2] < message_chains[2].length - 1 && counts[3] < message_chains[3].length - 1 && counts[4] < message_chains[4].length - 1) {
+    // pick a message chain to draw from
+    var choice = Math.floor(Math.random() * 5);
+    const chain = message_chains[choice];
+    const count = counts[choice];
+
+    // label is greatest value seen so far in that chain
+    var label;
+    if (count == 0) {
+      label = String(chain[0]);
+    } else {
+      label = String(Math.max(...chain.slice(0, count + 1)));
+    }
+    const from = String(chain[count]);
+    const to = String(chain[count + 1]);
+    trace.push([from, to, label, tertiary_color, primary_color]);
+
+    counts[choice] = count + 1;
+  }
+
+  for (var i = 0; i < trace.length; i++) {
+    const from = nodes.get(trace[i][0]);
+    const to = nodes.get(trace[i][1]);
+    const kind = String(trace[i][2]) == String(trace[i][0]);
+    const label = trace[i][2];
+    const arrow_color = trace[i][3];
+    const label_color = trace[i][4];
+    const todo = nodes_checkpoint.flat().concat([function (from, to) {
+      return function () {
+        const center1_x = positions[from][0];
+        const center1_y = positions[from][1];
+        const center2_x = positions[to][0];
+        const center2_y = positions[to][1];
+
+        const betweenVec = { x: center2_x - center1_x, y: center2_y - center1_y };
+        const betweenVecLen = Math.sqrt(betweenVec.x * betweenVec.x + betweenVec.y * betweenVec.y);
+        betweenVec.x /= betweenVecLen;
+        betweenVec.y /= betweenVecLen;
+
+        const p1x = center1_x + ((radius + 15) * betweenVec.x);
+        const p1y = center1_y + ((radius + 15) * betweenVec.y);
+
+        const p2x = center2_x - ((radius + 25) * betweenVec.x);
+        const p2y = center2_y - ((radius + 25) * betweenVec.y);
+
+        draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
+
+        
+        if (kind) {
+          start.show();
+        } else {
+          log.innerHTML = log.innerHTML + "receive(" + getByValue(nodes, from) + ", " + label + ") and ";
+          forward.show();
+        }
+        log.innerHTML = log.innerHTML + "send(" + getByValue(nodes, to) + ", " + label + ");&nbsp ";
+      }
+    }(from, to)]);
+    to_appear.push(todo);
+  }
+
+  // highlight the node that won
+  const winner = nodes.get("4");
+  const todo = nodes_checkpoint.flat().concat([function (winner) {
+    return function () {
+      const x = positions[winner][0];
+      const y = positions[winner][1];
+      win.show();
+      log.innerHTML = log.innerHTML + "receive(" + getByValue(nodes, winner) + ", " + getByValue(nodes, winner) + ") and win(" + getByValue(nodes, winner) + ").";
+      draw_node(rc, ctx, x, y, radius * 1.45, "", quaternary_color, quaternary_color);
+    }
+  }(winner)]);
+  to_appear.push(todo);
+
+  var to_disappear = []
+  for (var i = 0; i < to_appear.length; i++) {
+    var cleaner;
+    if (i != 0) {
+      cleaner = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        start.hide();
+        forward.hide();
+        win.hide();
+      }
+    } else {
+      cleaner = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        log.innerHTML = "";
+        start.hide();
+        forward.hide();
+        win.hide();
+      }
+    }
+    to_disappear.push([cleaner]);
+  }
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
