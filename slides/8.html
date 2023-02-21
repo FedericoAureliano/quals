@@ -17,27 +17,28 @@
   <div class="half-box" style="margin-top: -1em; max-width: 75%; min-width: 75%;">
     <div style="margin-left: 80px; font-size: 90%;">
       <ul style="margin-bottom: 0.75em" id="nodes-def">
-        <li><strong>Nodes</strong> are state machines with a unique identifier.</li>
-        <li>The set of node identifiers <math>N</math> has at least two elements.</li>
+        <li><strong>Nodes</strong> are state machines with a unique identifier</li>
+        <li>The set of node identifiers <math>N</math> has at least two elements</li>
+        <li>Nodes perform atomic actions</li>
       </ul>
       <ul style="margin-bottom: 0.75em" id="messages-def">
         <li><strong>Messages</strong> are pairs <math>(t, p)</math>, where 
           <ul>
             <li><math>t &in; N</math> represents the message target and </li>
-            <li><math>p</math> is the message <strong>payload</strong>.</li>
+            <li><math>p</math> is the message <strong>payload</strong></li>
           </ul>
-        <li>There is multiset of messages, called the <strong>message buffer</strong>.</li>
+        <li>There is multiset of messages, called the <strong>message buffer</strong></li>
       </ul>
       <ul style="margin-bottom: 0.75em" id="interface-def">
-        <li>Nodes can only read/write to their own state.</li>
+        <li>Nodes can only read/write to their own state</li>
         <li>Except that every node <math>n</math> can (for any <math>t</math> and <math>p</math>)
           <ul>
             <li><math>send(t, p)</math> in the message buffer, or</li>
             <li>
               <math>receive(n, p)</math> from the message buffer.
               <ul>
-                <li>If <math>(n, p)</math> is present, then <math>receive(n, p)</math> returns <math>p</math>.</li>
-                <li>Otherwise, <math>receive(n, p)</math> returns <math>&empty;</math>.</li>
+                <li>If <math>(n, p)</math> is present, then <math>receive(n, p)</math> returns <math>p</math></li>
+                <li>Otherwise, <math>receive(n, p)</math> returns <math>&empty;</math></li>
               </ul>
             </li>
           </ul>
@@ -47,7 +48,7 @@
         <li>The <strong>state</strong> of the system is the
           <ul>
             <li>state of every node, and</li>
-            <li>the state of the message buffer.</li>
+            <li>the state of the message buffer</li>
           </ul>
         </li>
       </ul>
@@ -55,7 +56,7 @@
   </div>
   <div class="half-box" style="max-width: 25%; min-width: 25%;"><canvas id="canvas" width="7680px" height="5840px" style='width:960px; height:730px; margin-left: -12em;'></canvas></div>
   <div class="foot-box">
-    <div class="footnote">Fischer, Lynch, and Paterson (1985); Dwork, Lynch, and Stockmeyer (1988)</div>
+    <div class="footnote">Fischer, Lynch, and Paterson (1985); Dwork, Lynch, and Stockmeyer (1988); <a class="footlink" href="./ringFormal.html">See Formal Definition of Ring Example</a></div>
     <div class="slide-number"></div>
   </div>
 </body>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Async System Formal Example</div>
+  </div>
+  <div class="full-box">
+    <div style="width: 95%; margin-left: 80px;">
+      <ul style="margin-bottom: 0.75em;">
+        <li>Define a system by giving
+          <ul>
+            <li>the set of node identifiers,</li>
+            <li>the payload type,</li>
+            <li>the available node actions (atomic procedures), and</li>
+            <li>an initial set of states.</li>
+          </ul>
+        </li>
+      </ul>
+      <div id="system-def">
+        <span style="font-size: 110%; font-weight: bolder; text-decoration: underline;">Ring System Definition (Verification Assumptions)</span>:
+        <ul style="margin-top: 0.5em; margin-bottom: 1em;">
+          <li style="margin-bottom: 0.5em;">The set of node identifiers is an <strong>unknown</strong> subset of the natural numbers</li>
+          <li style="margin-bottom: 0.5em;">Payloads are natural numbers</li>
+          <li style="margin-bottom: 0.5em;">Nodes can perform the following actions:
+            <ol>
+              <li>Send their own identifier clockwise</li>
+              <li>Receive a message and, 
+                <ul style="font-size: 90%;">
+                  <li>if the payload is greater than their own identifier, send the payload clockwise; </li>
+                  <li>if the message is their own identifier, move to a winning state</li>
+                </ul>
+              </li>
+            </ol>
+          </li>
+          <li>Initially, no node is in the winning state and the message buffer is empty</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+<script type="module">  import { step } from "../utils.js";
+  const to_disappear = [];
+  const to_appear = [];
+  var state = 0;
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+</html>

@@ -3,8 +3,6 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -12,78 +10,48 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Ring Leader Election Protocol Verification</div>
+    <div class="title">What Other Systems Does This Work For?</div>
   </div>
-  <div class="full-box">
-    <div style="margin-right: 80px; margin-left: 80px">
-      <span id="spec-title" style="opacity: 0; font-weight: bolder; text-decoration: underline">System Specification:</span>
-      <ul id="spec" style="margin-top: 0.5em; font-size: 100%; opacity: 0;">
-        <li id="spec-original" style="opacity: 0; margin-bottom: 0.5em;">There is always at most one node in the winning state</li>
-        <li id="spec-mc" style="margin-bottom: 0.5em; opacity: 0;">
-          For every message chain <math>c</math> in the current state of the system
-          <ul>
-            <li id="spec-mc1" style="opacity: 0; margin-bottom: 0.25em; margin-top: 0.25em;">the payload at the head of <math>c</math> is the largest source label that appears in <math>c</math></li>
-            <li id="spec-mc2" style="opacity: 0;">if a node <math>n</math> has not yet participated in <math>c</math>, then <math>n</math> lies between the first and last nodes of <math>c</math></li>
-          </ul>
-        </li>
-      </ul>
-      <div id="first-attempt-ctx" style="display: none; margin-top: 2em; margin-left: 10em; width: 60%;">
-        <span style="font-weight: bolder; text-decoration: underline;">Old Counterexample to Induction (Now Blocked)</span>:
-        <canvas id="canvas-left" width="7680px" height="2920px" style ='width:960px; height:365px;'></canvas>
+  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
+    <div style="margin-left: 80px; margin-right: 20px">
+      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
+      <br>
+      If a client receives a response, then the client must have sent a matching request.
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em;">
+        <img src="../images/tor.png" style="width: 80%">
       </div>
+      <br>
+      Every message chain follows the path:<br><math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
+    </div>
+  </div>
+  <div id="right" class="half-box" style="opacity: 0;">
+    <div style="margin-right: 80px; margin-left: 40px;">
+      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
+      <br>
+      All participants agree to either commit or abort.
+      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em;">
+        <img src="../images/2pc.png" style="width: 60%">
+      </div>
+      <br>
+      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
+      <br>
+      But what happens between <math>Vote &rarr; Decision</math>?
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"><a class="footlink" href="./ringP.html">See Full Verification in P</a></div>
+    <div class="footnote">Reed, Syverson, and Goldschlag (1998); Gray (1978); Ayari (2010); <a class="footlink" href="./verification.html">Learn More</a></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  import { step, primary_color, secondary_color, tertiary_color, quaternary_color, draw_node, draw_rect, draw_arrow, draw_dashed_line } from "../utils.js";
-  const radius = 40;
-  const width = 960;
-  const height = 365;
+  import { step } from "../utils.js";
 
-  // regular canvas
-  var canvas_left = document.getElementById("canvas-left");
-  var ctx_left = canvas_left.getContext("2d");
-  // Rough.js canvas
-  const rc_left = rough.canvas(document.getElementById("canvas-left"));
-
-  const before_won_A_left = () => draw_node(rc_left, ctx_left, 1* width / 6, height / 4, radius * 1.25, "", quaternary_color, quaternary_color);
-  const before_node_A_left = () => draw_node(rc_left, ctx_left, 1* width / 6, height / 4, radius, "2", secondary_color);
-  const before_node_B_left = () => draw_node(rc_left, ctx_left, 5* width / 6, height / 4, radius, "1", secondary_color);
-  const before_buffer_left = () => draw_rect(rc_left, ctx_left, width / 2 - width/12, height / 4 - radius, width/6, 2* radius, "{(1, 1)}", secondary_color);
-  const before_left = [before_node_A_left, before_won_A_left, before_node_B_left, before_buffer_left];
-
-  // draw a dashed line down the middle of the canvas
-  const dashed_line_left = () => draw_dashed_line(rc_left, ctx_left, 80, height / 2, width - 40, height / 2, secondary_color);
-
-  const after_won_A_left = () => draw_node(rc_left, ctx_left, 1* width / 6, 3 * height / 4, radius * 1.25, "", quaternary_color, quaternary_color);
-  const after_node_A_left = () => draw_node(rc_left, ctx_left, 1* width / 6, 3 * height / 4, radius, "2", secondary_color);
-  const after_node_B_left = () => draw_node(rc_left, ctx_left, 5* width / 6, 3 * height / 4, radius, "1", secondary_color);
-  const after_won_b_left = () => draw_node(rc_left, ctx_left, 5* width / 6, 3 * height / 4, radius * 1.25, "", quaternary_color, quaternary_color);
-  const after_buffer_left = () => draw_rect(rc_left, ctx_left, width / 2 - width/12, 3 * height / 4 - radius, width/6, 2* radius, "", secondary_color);
-  const after_receive_left = () => draw_arrow(ctx_left, width / 2 + width/12, 3 * height / 4, 5* width / 6 - 1.3*radius, 3 * height / 4, "receive", secondary_color, primary_color);
-  const after_left = [dashed_line_left, after_node_A_left, after_won_A_left, after_node_B_left, after_won_b_left, after_receive_left, after_buffer_left];
-
-  var first_attempt_ctx = document.getElementById('first-attempt-ctx');
-  var spec_title = document.getElementById('spec-title');
-  var specs = document.getElementById('spec');
-  var spec_original = document.getElementById('spec-original');
-  var spec_mc = document.getElementById('spec-mc');
-  var spec_mc1 = document.getElementById('spec-mc1');
-  var spec_mc2 = document.getElementById('spec-mc2');
-
-  var revised = annotate(first_attempt_ctx, { type: 'crossed-off', color: "red", strokeWidth: 10 });
-
-  var drawing = before_left.flat().concat([() => first_attempt_ctx.style.display = 'block', () => revised.show()]).concat(after_left.flat());
-
-  const to_appear = [[], [() => spec_title.style.opacity = 1], [() => specs.style.opacity = 1, () => spec_original.style.opacity = 1], [() => spec_mc.style.opacity = 1], [() => spec_mc1.style.opacity = 1], [() => spec_mc2.style.opacity = 1], drawing];
-  const to_disappear = [[], [], [], [], [], [], []];
+  var left = document.getElementById('left');
+  var right = document.getElementById('right');
+  
+  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
+  const to_disappear = [[], [], []];
 
   var state = 0;
   const body = document.querySelector('body');

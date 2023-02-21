@@ -3,7 +3,6 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -11,34 +10,47 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Specification Mining, <span id="generally">Generally</span></div>
+    <div class="title">Non-Erasing Pattern Learning Example</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="def" style="margin-bottom: 2em; opacity: 0;">
-        "... a machine learning approach to discovering formal specifications" that code <em>likely</em> obeys.
-        <ul style="margin-top: 0.5em;">
-          <li style="margin-bottom: 0.25em;">Input: observed program executions</li>
-          <li>Output: suggested invariant</li>
+      <div id="setup" style="margin-bottom: 1em; opacity: 0;">
+        <ul>
+          <li><math>&Sigma; = {</math><math>C</math><sub><math>1</math></sub><math>, C</math><sub><math>2</math></sub><math>, C</math><sub><math>3</math></sub><math></math><math>, S</math><sub><math>1</math></sub><math>, S</math><sub><math>2</math></sub><math>, S</math><sub><math>3</math></sub><math>}</math></li>
+          <li><math>V = {X, Y, Z}</math></li>
         </ul>
       </div>
-
-      <div id="is-not" style="margin-bottom: 2em; opacity: 0;">
-        The goal is <strong>not</strong> to reverse engineer the code from observations (or to discover a model).
+      <div  id="input" style="margin-bottom: 1em; opacity: 0;">
+        <ul>
+          <li> Input strings (message chains sampled from a client-server system):
+            <ul>
+              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>1</math></sub></li>
+              <li><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub></li>
+              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
+            </ul>
+          </li>
+        </ul>
       </div>
-
-      <div id="us" style="opacity: 0;">
-        In our setting, we are interested in mining <strong>message chain</strong> invariants:
-        <ul style="margin-top: 0.5em;">
-          <li style="margin-bottom: 0.25em;">predicates that hold for every message chain that appears during the execution of a system</li>
+      <div id="output"  style="margin-bottom: 1em; opacity: 0;">
+        <ul>
+          <li>Angluin's output pattern: <math>XYX</math></li>
+        </ul>
+      </div>
+      <div id="bad" style="opacity: 0;">
+        <ul>
+          <li>Strings in the language of the pattern but that are kind of disappointing: 
+            <ul>
+              <li><math>S</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub></li>
+              <li><math>C</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub></li>
+              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>3</math></sub><math>C</math><sub><math>3</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
   </div>
   <div class="foot-box">
-    <!-- https://dl.acm.org/doi/10.1145/503272.503275 -->
-    <!-- https://homes.cs.washington.edu/~mernst/pubs/invariants-ernst-phdthesis.pdf -->
-    <div class="footnote">Ernst (2000); Ammons, Bod&#237;k, and Larus (2002); Biermann and Feldman (1972)</div>
+    <div class="footnote">Angluin (1980); <a class="footlink" href="./lminl.html">Learn More</a></div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -46,18 +58,15 @@
 
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var generally = document.querySelector('#generally');
-  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
-  generally.show();
-
   import { step, tertiary_color } from "../utils.js";
 
-  var def = document.querySelector('#def');
-  var is_not = document.querySelector('#is-not');
-  var us = document.querySelector('#us');
-  
-  const to_appear = [[], [() => def.style.opacity = 1], [() => is_not.style.opacity = 1], [() => us.style.opacity = 1]];
-  const to_disappear = [[], [], [], []];
+  var setup = document.querySelector('#setup');
+  var input = document.querySelector('#input');
+  var output = document.querySelector('#output');
+  var bad = document.querySelector('#bad');
+
+  const to_appear = [[], [() => setup.style.opacity = 1], [() => input.style.opacity = 1], [() => output.style.opacity = 1], [() => bad.style.opacity = 1]];
+  const to_disappear = [[], [], [], [], []];
 
   var state = 0;
   const body = document.querySelector('body');

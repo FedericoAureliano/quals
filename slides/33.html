@@ -10,48 +10,44 @@
 
 <body>
   <div class="title-box">
-    <div class="title">What Can Path-Patterns Learn?</div>
+    <div class="title">Learning Even More With Negative Examples</div>
   </div>
-  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
-    <div style="margin-left: 80px; margin-right: 20px">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em; margin-bottom: 2em;">
-        <img src="../images/tor.png" style="width: 80%">
-      </div>
-      <br>
-      <math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
-      <br> where the first and last client are the same. 
-    </div>
-  </div>
-  <div id="right" class="half-box" style="opacity: 0;">
-    <div style="margin-right: 80px; margin-left: 40px;">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em; margin-bottom: 1em;">
-        <img src="../images/2pc.png" style="width: 60%">
-      </div>
-      <br>
-      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
-      <br> where the three coordinator nodes are the same, but the participants before and after the decision may be different. 
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li style="margin-bottom: 1em;">Positive message chain examples are easy to get
+          <ul>
+            <li style="margin-top: 0.5em;">Sample by fuzzing the target system</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 3em;">Negative examples are harder
+          <ul>
+            <li style="margin-top: 0.5em;">We must prove that a message chain can never happen</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">PBE tools can synthesize predicates from positive <strong>and</strong> negative examples</li>
+        <li style="margin-bottom: 1em;">Assuming users can provide negative examples, PBE tools can suggest invariants</li>
+        <li>Smyth and Burst, with less than 10 examples, can learn (among other things)
+          <ul>
+            <li style="font-size: 90%; margin-top: 0.5em;">For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Ayari (2010)</div>
+    <div class="footnote">Lubin et al. (2020);  Miltner et al. (2022)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { step } from "../utils.js";
 
-  var left = document.getElementById('left');
-  var right = document.getElementById('right');
-  
-  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
-  const to_disappear = [[], [], []];
+<script type="module">
+  import { step, tertiary_color } from "../utils.js";
 
   var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

@@ -3,46 +3,47 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Message Chains</div>
+<body>
+  <div class="title-box">
+    <div class="title">Message Chains Proposal Overview</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle" style="font-size: 95%;">
-    <ul style="list-style: none;">
-      <li style="opacity: 0.25;">
-        Asynchronous Systems and Verification
-      </li>
-      <li id="current">
-        Reasoning About Messages
-      </li>
-      <li style="opacity: 0.25;">
-        Coming Up with True Invariants
-      </li>
-      <li style="opacity: 0.25;">
-        Future work: Extensions, Proofs, and Cloud Solving
-      </li>
-    </ul style="list-style: none;">
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <ul>
+        <li style="margin-bottom: 1em;">We propose <strong>message chains</strong>
+          <ul>
+            <li style="margin-top: 0.5em;">an organization of messages into sequences</li>
+            <li style="margin-top: 0.5em;">that is well-aligned with existing
+              <ul>
+                <li style="margin-top: 0.25em;">design standards and</li>
+                <li style="margin-top: 0.25em;">programming languages</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">Users can write invariants over message chains
+          <ul>
+            <li style="margin-top: 0.5em;">making formal verification of message passing systems easier</li>
+          </ul>
+        </li>
+        <li>Later, we describe how to automatically learn some message chain invariants</li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="slide-number" style="background-color: white; color: var(--primary-color); box-shadow: 10px 0 0 white, -10px 0 0 white;"></div>
+    <div class="footnote"></div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
 
-  import { step, tertiary_color } from "../utils.js";
+<script type="module">
+  import { step } from "../utils.js";
 
   var state = 0;
   const to_disappear = [];
