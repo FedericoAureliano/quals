@@ -10,34 +10,27 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Learning-Enabled Verification with End-to-End Proofs</div>
+    <div class="title">Extensions: Partial Synchrony</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li style="margin-bottom: 1em;">Modular verification
+        <li style="margin-bottom: 1em;">Let <math>&Delta;</math> be the max message delivery time</li>
+        <li style="margin-bottom: 1em;">Let <math>&Phi;</math> be the max difference in node computation speeds</li>
+        <li style="margin-bottom: 1em;">In the asynchronous setting, no <math>&Delta;</math> or <math>&Phi;</math> exist
           <ul>
-            <li style="margin-top: 0.5em;">verifying one distributed system</li>
-            <li style="margin-top: 0.5em;">decomposed into multiple, simpler queries</li>
+            <li style="margin-top: 0.5em;">our setting so far</li>
+            <li style="margin-top: 0.5em;">"there is no consensus protocol resilient to even one fail-stop fault"</li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">Where some queries are solved in the cloud
-          <ul>
-            <li style="margin-top: 0.5em;">automatically selecting solver and platform per query</li>
-          </ul>
-        </li>
-        <li style="margin-bottom: 1em;">With end-to-end proofs
-          <ul>
-            <li style="margin-top: 0.5em;">verification encodings produce proofs</li>
-            <li style="margin-top: 0.5em;">solvers produce proofs</li>
-            <li style="margin-top: 0.5em;">proofs are stitched together and returned</li>
-          </ul>
-        </li>
+        <li style="margin-bottom: 1em;">In the synchronous setting, <math>&Delta;</math> and <math>&Phi;</math> exist and are known</li>
+        <li style="margin-bottom: 1em;">In the partially synchronous setting, <math>&Delta;</math> and <math>&Phi;</math> exist but are not known</li>
+        <li>What kinds of proofs can message chains help with in the partially synchronous setting?</li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Dwork and Lynch (1988)</div>
     <div class="slide-number"></div>
   </div>
 </body>

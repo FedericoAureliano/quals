@@ -16,7 +16,7 @@
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul style="width: 70%;">
-        <li style="margin-bottom: 1em;">Reasoning about messages
+        <li id="p0" style="margin-bottom: 1em; opacity: 0;">Reasoning about messages
           <ul>
             <li>Message chains help but
               <ul id="extend">
@@ -26,15 +26,24 @@
             </li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">Coming up with true invariants
+        <li id="p1" style="margin-bottom: 1em; opacity: 0;">Coming up with true invariants
           <ul>
             <li>Path pattern learning helps but captures only one class of invariants</li>
             <li>Programming-by-example helps but requires negative examples</li>
           </ul>
         </li>
-        <li id="proofs" style="margin-bottom: 1em;">Independently checking verification results</li>
-        <li id="cloud" style="margin-bottom: 1em;">Getting solvers to terminate</li>
+        <li id="p2" style="margin-bottom: 1em; opacity: 0;">Independently checking verification results</li>
+        <li id="p3" style="margin-bottom: 1em; opacity: 0;">Getting solvers to terminate</li>
       </ul>
+      <div id="extensions" style="opacity: 0; position: absolute; top: 365px; left: 1380px; background-color: var(--tertiary-color); box-shadow: 5px 0 0 var(--tertiary-color), -5px 0 0 var(--tertiary-color); color: white; font-weight: bold;">
+        Extensions
+      </div>
+      <div id="proofs" style="opacity: 0; position: absolute; top: 655px; left: 1380px; background-color: var(--tertiary-color); box-shadow: 5px 0 0 var(--tertiary-color), -5px 0 0 var(--tertiary-color); color: white; font-weight: bold;">
+        Proofs
+      </div>
+      <div id="cloud" style="opacity: 0; position: absolute; top: 740px; left: 1380px; background-color: var(--tertiary-color); box-shadow: 5px 0 0 var(--tertiary-color), -5px 0 0 var(--tertiary-color); color: white; font-weight: bold;">
+        Cloud
+      </div>
     </div>
   </div>
   <div class="foot-box">
@@ -51,14 +60,23 @@
   var extend = document.querySelector('#extend');
   extend = annotate(extend, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
-  var proofs = document.querySelector('#proofs');
-  proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+  var prove = document.querySelector('#p2');
+  prove = annotate(prove, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
-  var cloud = document.querySelector('#cloud');
-  cloud = annotate(cloud, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+  var solve = document.querySelector('#p3');
+  solve = annotate(solve, { type: 'box', color: tertiary_color, strokeWidth: 10 });
 
-  const to_appear = [[], [() => extend.show()], [() => proofs.show()], [() => cloud.show()]];
-  const to_disappear = [[], [], [], []];
+  var p0 = document.getElementById('p0');
+  var p1 = document.getElementById('p1');
+  var p2 = document.getElementById('p2');
+  var p3 = document.getElementById('p3');
+
+  var extensions = document.getElementById('extensions');
+  var proofs = document.getElementById('proofs');
+  var cloud = document.getElementById('cloud');
+
+  const to_appear = [[], [() => p0.style.opacity = 1], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1], [() => extend.show(), () => extensions.style.opacity = 1], [() => prove.show(), () => proofs.style.opacity = 1], [() => solve.show(), () => cloud.style.opacity = 1]];
+  const to_disappear = Array(to_appear.length).fill([])
 
   var state = 0;
   const body = document.querySelector('body');
