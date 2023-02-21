@@ -21,7 +21,6 @@
         <li id="bugs" style="opacity: 0; margin-bottom: 0.5em;">Modern, state-of-the-art automated verification tools, like Dafny, have bugs.</li>
         <li id="smt" style="opacity: 0; margin-bottom: 0.5em;">So do SMT solvers, which are used under the hood.</li>
         <li id="rely" style="opacity: 0; margin-bottom: 0.5em;">Users should not "have to rely on the correctness of a large and frequently-changing code base."</li>
-        <li id="mc" style="opacity: 0;">We need to generate end-to-end proofs that can be checked independently.</li>
       </ul>
     </div>
   </div>
@@ -40,9 +39,8 @@
   var bugs = document.getElementById('bugs');
   var smt = document.getElementById('smt');
   var rely = document.getElementById('rely');
-  var mc = document.getElementById('mc');
 
-  const to_appear = [[], [() => table.style.opacity = 1, () => bugs.style.opacity = 1], [() => smt.style.opacity = 1], [() => rely.style.opacity = 1], [() => mc.style.opacity = 1]];
+  const to_appear = [[], [() => table.style.opacity = 1, () => bugs.style.opacity = 1], [() => smt.style.opacity = 1], [() => rely.style.opacity = 1]];
   const to_disappear = [[], [], [], [], []];
 
   var state = 0;
