@@ -27,6 +27,12 @@
         </li> -->
         <li id="goal-def" style="margin-bottom: 3em; opacity: 0;">We want to guarantee that an invariant will hold over every state of every possible execution</li>
         
+        <li id="state-def" style="opacity: 0; margin-bottom: 1em">The <strong>state</strong> of the system is the
+          <ul>
+            <li>state of every node, and</li>
+            <li>the state of the message buffer</li>
+          </ul>
+        </li>
         <li id="step-def" style="margin-bottom: 1em; opacity: 0;">A system <strong>step</strong> is a pair of states <math>(&sigma;, &sigma;')</math>, where <math>&sigma;'</math> is the result of a node's action on <math>&sigma;</math></li>
         <li id="execution-def" style="margin-bottom: 2em; opacity: 0;">An <strong>execution</strong> is a sequence of states <math>&sigma;</math><sub><math>1</math></sub><math>&#8729;&#8729;&#8729; &sigma;</math><sub><math>n</math></sub> such that
           <ul>
@@ -56,8 +62,9 @@
   const step_def = document.querySelector('#step-def');
   const execution_def = document.querySelector('#execution-def');
   const goal_def = document.querySelector('#goal-def');
+  const state_def = document.querySelector('#state-def');
 
-  const elements = [invariant_def, goal_def, step_def, execution_def];
+  const elements = [invariant_def, goal_def, state_def, step_def, execution_def];
 
   var to_appear = [[]];
   for (const el of elements) {
