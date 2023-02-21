@@ -10,27 +10,27 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Extensions: Partial Synchrony</div>
+    <div class="title">Extensions: Modular Verification</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li style="margin-bottom: 1em;">Let <math>&Delta;</math> be the max message delivery time</li>
-        <li style="margin-bottom: 1em;">Let <math>&Phi;</math> be the max difference in node computation speeds</li>
-        <li style="margin-bottom: 1em;">In the asynchronous setting, no <math>&Delta;</math> or <math>&Phi;</math> exist
+        <li style="margin-bottom: 1em;">Decompose complex systems and reason about them in isolation</li>
+        <li style="margin-bottom: 3em;">Usually through assume-guarantee reasoning</li>
+        <li style="margin-bottom: 1em;">P supports modular testing</li>
+        <li style="margin-bottom: 1em;">Can message chains play a role in modular verification?
           <ul>
-            <li style="margin-top: 0.5em;">our setting so far</li>
-            <li style="margin-top: 0.5em;">"there is no consensus protocol resilient to even one fail-stop fault"</li>
+            <li style="margin-top: 0.5em;">e.g., can we define sub-chains and chains of sub-chains?</li>
+            <li style="margin-top: 0.5em;">would that help simplify proofs or improve specification mining?</li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">In the synchronous setting, <math>&Delta;</math> and <math>&Phi;</math> exist and are known</li>
-        <li style="margin-bottom: 1em;">In the partially synchronous setting, <math>&Delta;</math> and <math>&Phi;</math> exist but are not known</li>
-        <li>What kinds of proofs can message chains help with in the partially synchronous setting?</li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Dwork and Lynch (1988)</div>
+    <!-- M. Abadi and L. Lamport, “Conjoining specifications,” -->
+    <!-- Meyer, B. (1992). Applying ’design by contract’. -->
+    <div class="footnote">Meyer (1992); Abadi and Lamport (1995); Desai (2020)</div>
     <div class="slide-number"></div>
   </div>
 </body>

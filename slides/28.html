@@ -10,63 +10,38 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Non-Erasing Pattern Learning Example</div>
+    <div class="title">Justified Constraint Examples</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="setup" style="margin-bottom: 1em; opacity: 0;">
+      <div style="margin-bottom: 2em;">
         <ul>
-          <li><math>&Sigma; = {</math><math>C</math><sub><math>1</math></sub><math>, C</math><sub><math>2</math></sub><math>, C</math><sub><math>3</math></sub><math></math><math>, S</math><sub><math>1</math></sub><math>, S</math><sub><math>2</math></sub><math>, S</math><sub><math>3</math></sub><math>}</math></li>
-          <li><math>V = {X, Y, Z}</math></li>
-        </ul>
-      </div>
-      <div  id="input" style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li> Input strings (message chains sampled from a client-server system):
+          <li style="margin-bottom: 1em;"> Input strings (message chains sampled from a client-server system):
             <ul>
               <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>1</math></sub></li>
               <li><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub></li>
               <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
             </ul>
           </li>
-        </ul>
-      </div>
-      <div id="output"  style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li>Angluin's output pattern: <math>XYX</math></li>
-        </ul>
-      </div>
-      <div id="bad" style="opacity: 0;">
-        <ul>
-          <li>Strings in the language of the pattern but that are kind of disappointing: 
-            <ul>
-              <li><math>S</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub><math>S</math><sub><math>1</math></sub></li>
-              <li><math>C</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>1</math></sub><math>C</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub></li>
-              <li><math>C</math><sub><math>1</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>2</math></sub><math>S</math><sub><math>3</math></sub><math>C</math><sub><math>3</math></sub><math>S</math><sub><math>2</math></sub><math>C</math><sub><math>1</math></sub></li>
-            </ul>
-          </li>
+          <li style="margin-bottom: 1em;">Output pattern: <math>XYX &wedge; |X| = 1 &wedge; |Y| = 1 &wedge; X &in; C</math><sup><math>+</math></sup> <math> &wedge; Y &in; S</math><sup><math>+</math></sup></li>
         </ul>
       </div>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Angluin (1980); <a class="footlink" href="./lminl.html">Learn More</a></div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
   import { step, tertiary_color } from "../utils.js";
 
-  var setup = document.querySelector('#setup');
-  var input = document.querySelector('#input');
-  var output = document.querySelector('#output');
-  var bad = document.querySelector('#bad');
+  var example = document.getElementById('example');
 
-  const to_appear = [[], [() => setup.style.opacity = 1], [() => input.style.opacity = 1], [() => output.style.opacity = 1], [() => bad.style.opacity = 1]];
-  const to_disappear = [[], [], [], [], []];
+  const to_appear = [];
+  const to_disappear = [];
 
   var state = 0;
   const body = document.querySelector('body');

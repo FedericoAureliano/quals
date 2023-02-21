@@ -51,8 +51,18 @@
       </div>
     </div>
   </div>
+  <div id="basically" style="display: none; font-size: 200%; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
+    <ul style="margin-left: 2em; margin-right: 2em;">
+      <li style="margin-bottom: 2em;">
+        If you receive and then send in the same action, then extend the message chain. 
+      </li>
+      <li>
+        If you send without first receiving, then start a new message chain.
+      </li>
+    </ul>
+  </div>
   <div class="foot-box">
-    <div class="footnote"><a class="footlink" href="./17.html">Refresh For New Execution</a></div>
+    <div class="footnote"><a class="footlink" href="./17.html">Refresh For New Execution</a>; <a class="footlink" href="./messageChainsFormally.html">See Formal Definition</a></div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -61,6 +71,7 @@
 <script type="module">
   import { annotate } from 'https://unpkg.com/rough-notation?module';
 
+  const basically = document.querySelector('#basically');
   var start = document.querySelector('#start');
   var forward = document.querySelector('#forward');
   var win = document.querySelector('#win');
@@ -242,6 +253,9 @@
     }
     to_disappear.push([cleaner]);
   }
+
+  to_appear.push([() => basically.style.display = 'flex']);
+  to_disappear.push([]);
 
   var state = 0;
   const body = document.querySelector('body');
