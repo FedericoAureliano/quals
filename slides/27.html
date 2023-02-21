@@ -6,6 +6,14 @@
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
+  <style>
+    sub {
+      font-size: 80%;
+    }
+    math {
+      font-size: 110%;
+    }
+  </style>
 </head>
 
 <body>
@@ -16,20 +24,20 @@
     <div style="margin-right: 80px; margin-left: 80px">
       <div style="margin-bottom: 2em;">
         <ul>
-          <li style="margin-bottom: 1em;">Input strings:
+          <li id="p0" style="margin-bottom: 1em; opacity: 0;">Input strings:
             <ul>
               <li><math>abcd</math></li>
-              <li><math>cbd</math></li>
+              <li><math>cdb</math></li>
               <li><math>dc</math></li>
             </ul>
           </li>
-          <li style="margin-bottom: 1em;">Output pattern: <math>XY</math></li>
-          <li style="margin-bottom: 1em;">Unjustified constraint (BAD): <math>|X| = 1</math>
+          <li id="p1" style="margin-bottom: 1em; opacity: 0;">Output pattern: <math>XY</math></li>
+          <li id="p2" style="margin-bottom: 1em; opacity: 0;">Unjustified constraint (BAD): <math>|X| = 1</math>
             <ul>
               <li style="margin-top: 0.5em;">e.g., the assignment <math>{X &mapsto; abc, Y &mapsto; d}</math> can <em>justify</em> <math>abcd &in; L(XY)</math></li>
             </ul>
           </li>
-          <li>Note that <math>L(XY) = L(XY &and; |X| = 1)</math>
+          <li id="p3" style="margin-bottom: 1em; opacity: 0;">Note that <math>L(XY) = L(XY &and; |X| = 1)</math>
             <ul>
               <li style="margin-top: 0.5em;">We are adding <em>semantic</em> constraints to a <em>syntactic</em> notion</li>
             </ul>
@@ -48,10 +56,15 @@
 <script type="module">
   import { step, tertiary_color } from "../utils.js";
 
+  var p0 = document.getElementById('p0');
+  var p1 = document.getElementById('p1');
+  var p2 = document.getElementById('p2');
+  var p3 = document.getElementById('p3');
+
+  const to_appear = [[], [() => p0.style.opacity = 1], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1]];
+  const to_disappear = Array(to_appear.length).fill([])
   
   var state = 0;
-  const to_appear = [];
-  const to_disappear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
