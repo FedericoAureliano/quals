@@ -3,6 +3,7 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -10,44 +11,56 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Learning Even More With Negative Examples</div>
+    <div class="title">Challenges Revisited</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <ul>
-        <li style="margin-bottom: 1em;">Positive message chain examples are easy to get
+      <ul style="width: 70%;">
+        <li style="margin-bottom: 1em;">Reasoning about messages
           <ul>
-            <li style="margin-top: 0.5em;">Sample by fuzzing the target system</li>
+            <li>Message chains help but
+              <ul id="extend">
+                <li>they do not remove the limitations of asynchrony</li>
+                <li>they do not yet support modular reasoning</li>
+              </ul>
+            </li>
           </ul>
         </li>
-        <li style="margin-bottom: 3em;">Negative examples are harder
+        <li style="margin-bottom: 1em;">Coming up with true invariants
           <ul>
-            <li style="margin-top: 0.5em;">We must prove that a message chain can never happen</li>
+            <li>Path pattern learning helps but captures only one class of invariants</li>
+            <li>Programming-by-example helps but requires negative examples</li>
           </ul>
         </li>
-        <li style="margin-bottom: 1em;">PBE tools can synthesize predicates from positive <strong>and</strong> negative examples</li>
-        <li style="margin-bottom: 1em;">Assuming users can provide negative examples, PBE tools can suggest invariants</li>
-        <li>Smyth and Burst, with less than 10 examples, can learn (among other things)
-          <ul>
-            <li style="font-size: 90%; margin-top: 0.5em;">For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math></li>
-          </ul>
-        </li>
+        <li id="proofs" style="margin-bottom: 1em;">Independently checking verification results</li>
+        <li id="cloud" style="margin-bottom: 1em;">Getting solvers to terminate</li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Lubin et al. (2020);  Miltner et al. (2022)</div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { step, tertiary_color } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  import { step, background_color, primary_color, secondary_color, tertiary_color } from "../utils.js";
+
+  var extend = document.querySelector('#extend');
+  extend = annotate(extend, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var proofs = document.querySelector('#proofs');
+  proofs = annotate(proofs, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  var cloud = document.querySelector('#cloud');
+  cloud = annotate(cloud, { type: 'box', color: tertiary_color, strokeWidth: 10 });
+
+  const to_appear = [[], [() => extend.show()], [() => proofs.show()], [() => cloud.show()]];
+  const to_disappear = [[], [], [], []];
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

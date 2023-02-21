@@ -3,55 +3,50 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
-  <div class="title-box">
-    <div class="title">What Can Path-Patterns Learn?</div>
+<body class="section">
+  <div class="full-title-box">
+    <div class="full-title">Limitations and Future Work</div>
   </div>
-  <div id="left" class="half-box" style="box-shadow: 2px 0 0 var(--primary-color); opacity: 0;">
-    <div style="margin-left: 80px; margin-right: 20px">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Onion Routing Protocol</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.5em; margin-bottom: 2em;">
-        <img src="../images/tor.png" style="width: 80%">
-      </div>
-      <br>
-      <math>Client</math> <math>Node</math><sup><math>+</math></sup> <math>Server</math> <math>Node</math><sup><math>+</math></sup> <math>Client</math>
-      <br> where the first and last client are the same. 
-    </div>
-  </div>
-  <div id="right" class="half-box" style="opacity: 0;">
-    <div style="margin-right: 80px; margin-left: 40px;">
-      <span style="font-size: 115%; font-weight: bold; text-decoration: underline;">Example: Two-Phase Commit</span>
-      <br>
-      <div style="display: flex; justify-content: center; align-items: center; margin-top: 2em; margin-bottom: 1em;">
-        <img src="../images/2pc.png" style="width: 60%">
-      </div>
-      <br>
-      <math>Prepare &rarr; Vote &rarr; Decision &rarr; Ack</math> 
-      <br> where the three coordinator nodes are the same, but the participants before and after the decision may be different. 
+  <div class="full-subtitle-box">
+    <div class="full-subtitle" style="font-size: 95%;">
+    <ul style="list-style: none;">
+      <li style="opacity: 0.25;">
+        Asynchronous Systems and Verification
+      </li>
+      <li style="opacity: 0.25;">
+        Reasoning About Messages
+      </li>
+      <li style="opacity: 0.25;">
+        Coming Up with True Invariants
+      </li>
+      <li id="current">
+        Extensions, Proofs, and Cloud Solving
+      </li>
+    </ul style="list-style: none;">
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Ayari (2010)</div>
-    <div class="slide-number"></div>
+    <div class="slide-number" style="background-color: white; color: var(--primary-color); box-shadow: 10px 0 0 white, -10px 0 0 white;"></div>
   </div>
 </body>
 
 <script type="module">
-  import { step } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
+  var current = document.querySelector('#current');
+  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  current.show();
 
-  var left = document.getElementById('left');
-  var right = document.getElementById('right');
-  
-  const to_appear = [[], [() => left.style.opacity = 1], [() => right.style.opacity = 1]];
-  const to_disappear = [[], [], []];
+  import { step, tertiary_color } from "../utils.js";
 
   var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>

@@ -3,7 +3,6 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
@@ -11,62 +10,44 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Non-Erasing Patterns with Justified Constraints, <span id="generally">Generally</span></div>
+    <div class="title">Learning Even More With Negative Examples</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
-      <div id="justified" style="margin-bottom: 1em; opacity: 0;">
-        <ul>
-          <li style="margin-bottom: 1em;">
-            Let <math>S</math> be an input set of strings and <math>p</math> be a learned pattern
-          </li>
-          <li style="margin-bottom: 1em;">
-            The set of <em>justifications</em> <math>J(S, p)</math> is the set of assignments <math>&mu;</math> such that <math>&Exists; s &in; S &mu;(p) = s</math>
-          </li>
-          <li style="margin-bottom: 1em;">
-            A semantic constraint is <em>justified</em> if it does not block any justification
-            <ul>
-              <li>
-                In other words, a constraint <math>f</math> is justified iff <math>&forall; &mu; &in; J(S, p) &mu; &vDash; f</math>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div id="classes" style="margin-bottom: 2em; opacity: 0;">
-        <ul>
-          <li style="margin-bottom: 1em;">We consider two domain-specific constraint classes
-            <ul>
-              <li style="margin-top: 0.5em;">Single machines: <math>|x| = 1</math>, where <math>x &in; V</math></li>
-              <li style="margin-top: 0.5em;">Machine kinds: <math>x &in; &Gamma;</math><sup><math>+</math></sup>, where <math>&Gamma; &subseteq; &Sigma;</math></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+      <ul>
+        <li style="margin-bottom: 1em;">Positive message chain examples are easy to get
+          <ul>
+            <li style="margin-top: 0.5em;">Sample by fuzzing the target system</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 3em;">Negative examples are harder
+          <ul>
+            <li style="margin-top: 0.5em;">We must prove that a message chain can never happen</li>
+          </ul>
+        </li>
+        <li style="margin-bottom: 1em;">PBE tools can synthesize predicates from positive <strong>and</strong> negative examples</li>
+        <li style="margin-bottom: 1em;">Assuming users can provide negative examples, PBE tools can suggest invariants</li>
+        <li>Smyth and Burst, with less than 10 examples, can learn (among other things)
+          <ul>
+            <li style="font-size: 90%; margin-top: 0.5em;">For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote">Lubin et al. (2020);  Miltner et al. (2022)</div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var generally = document.querySelector('#generally');
-  generally = annotate(generally, { type: 'underline', color: tertiary_color, strokeWidth: 10 });
-  generally.show();
-  
   import { step, tertiary_color } from "../utils.js";
 
-  var classes = document.getElementById('classes');
-  var justified = document.getElementById('justified');
-
-  const to_appear = [[], [() => justified.style.opacity = 1], [() => classes.style.opacity = 1]];
-  const to_disappear = [[], [], []];
-
   var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
