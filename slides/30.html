@@ -10,33 +10,34 @@
 
 <body>
   <div class="title-box">
-    <div class="title">Learning Even More With Negative Examples</div>
+    <div class="title">Learning-Enabled Verification with End-to-End Proofs</div>
   </div>
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li id="p0" style="margin-bottom: 1em; opacity: 0;">Positive message chain examples are easy to get
+        <li id="p0" style="margin-bottom: 1em; opacity: 0;">Modular verification
           <ul>
-            <li style="margin-top: 0.5em;">Sample by fuzzing the target system</li>
+            <li style="margin-top: 0.5em;">verifying one distributed system</li>
+            <li style="margin-top: 0.5em;">decomposed into multiple, simpler queries</li>
           </ul>
         </li>
-        <li id="p1" style="margin-bottom: 3em; opacity: 0;">Negative examples are harder
+        <li id="p1" style="margin-bottom: 1em; opacity: 0;">Where some queries are solved in the cloud
           <ul>
-            <li style="margin-top: 0.5em;">We <em>should</em> prove that a message chain can never happen</li>
+            <li style="margin-top: 0.5em;">automatically selecting solver and platform per query</li>
           </ul>
         </li>
-        <li id="p2" style="margin-bottom: 1em; opacity: 0;">PBE tools can synthesize predicates from positive <strong>and</strong> negative examples</li>
-        <li id="p3" style="margin-bottom: 1em; opacity: 0;">Assuming users can provide negative examples, PBE tools can suggest invariants</li>
-        <li id="p4" style="margin-bottom: 1em; opacity: 0;">Smyth and Burst, with less than 10 examples, can learn (among other things)
+        <li id="p2" style="margin-bottom: 1em; opacity: 0;">With end-to-end proofs
           <ul>
-            <li style="font-size: 90%; margin-top: 0.5em;">For every message chain <math>c</math>, the head payload is the largest source label that appears in <math>c</math></li>
+            <li style="margin-top: 0.5em;">verification encodings produce proofs</li>
+            <li style="margin-top: 0.5em;">solvers produce proofs</li>
+            <li style="margin-top: 0.5em;">proofs are stitched together and returned</li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
   <div class="foot-box">
-    <div class="footnote">Lubin et al. (2020);  Miltner et al. (2022)</div>
+    <div class="footnote"></div>
     <div class="slide-number"></div>
   </div>
 </body>
@@ -48,10 +49,8 @@
   var p0 = document.getElementById('p0');
   var p1 = document.getElementById('p1');
   var p2 = document.getElementById('p2');
-  var p3 = document.getElementById('p3');
-  var p4 = document.getElementById('p4');
 
-  const to_appear = [[], [() => p0.style.opacity = 1], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1], [() => p4.style.opacity = 1]];
+  const to_appear = [[], [() => p0.style.opacity = 1], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1]];
   const to_disappear = Array(to_appear.length).fill([])
 
   var state = 0;

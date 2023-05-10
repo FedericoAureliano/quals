@@ -3,55 +3,261 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <script src="https://unpkg.com/roughjs@latest/bundled/rough.js"></script>
+  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
-  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css">
-  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
-  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/erlang.min.js"></script>
-  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/scala.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://unpkg.com/highlight.js@11.7.0/styles/atom-one-dark.css">
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
   <div class="title-box">
-    <div class="title">Developers Implement Message Passing with Event Handlers</div>
+    <div class="title">Message Chains Example and Intuitive Definition</div>
   </div>
-  <div class="full-box">
-    <div style="margin-right: 80px; margin-left: 80px; font-size: 85%;">
-      <div style="position: absolute; top: 260px; left: 1728px; background-color: var(--tertiary-color); box-shadow: 5px 0 0 var(--tertiary-color), -5px 0 0 var(--tertiary-color); color: white; font-weight: bold;">Erlang</div>
-      <pre><code class="language-erlang">receive
-  pong -> io:format("received pong~n", [])
-end,</code></pre>
-<br>
-<div style="position: absolute; top: 485px; left: 1750px; background-color: var(--tertiary-color); box-shadow: 5px 0 0 var(--tertiary-color), -5px 0 0 var(--tertiary-color); color: white; font-weight: bold;">Akka</div>      
-<pre><code class="language-scala">def receive = {
-  case "pong" => log.info("received pong")
-  case _      => log.info("received unknown message")
-}</code></pre>
-<br>
-<div style="position: absolute; top: 745px; left: 1805px; background-color: var(--tertiary-color); box-shadow: 5px 0 0 var(--tertiary-color), -5px 0 0 var(--tertiary-color); color: white; font-weight: bold;">P</div>      
-<pre><code>on ePong do {
-  print "received pong";
-}</code></pre>
+  <div class="half-box"><canvas id="canvas" width="7680px" height="5840px" style='width:960px; height:730px;'></canvas>
+  </div>
+  <div class="half-box">
+    <div class="half-half-box" id="top-right" style="display: none;">
+      <div style="width: 95%;">
+        <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Ring Leader Election Protocol</span>
+        <ul style="font-size: 20pt; width: 100%; padding-top: 1em;">
+          <li id="start">Send your own identifier clockwise
+            <ul style="padding-left: 2em;">
+              <li>starts a message chain</li>
+            </ul>
+          </li>
+          <li style="margin-top: 1em;" id="forward">If you receive a value greater than your own, send new value
+            clockwise
+            <ul style="padding-left: 2em;">
+              <li>extends a message chain</li>
+            </ul>
+          </li>
+          <li style="margin-top: 1em;" id="win">If you receive your own identifier, declare yourself the winner
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="half-half-box" id="bottom-right" style="display: none;">
+      <span style="text-decoration: underline; font-weight: bold; font-size: 28pt;">Unique Message Chains</span>
+      <span style="font-size: 75%; opacity: 0.5; margin-left: 1em;">source &#8594;<sup>payload</sup> target</span>
+      <div id="log-data" style="width: 95%; padding-top: 0.5em;">
+        <ul>
+          <li id="mc0"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+          <li id="mc1"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+          <li id="mc2"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+          <li id="mc3"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+          <li id="mc4"><span style="color: white;"><sup>&nbsp;</sup></span></li>
+        </ul>
+      </div>
     </div>
   </div>
+  <div id="basically" style="display: none; font-size: 200%; position: absolute; top: 10%; left: 10%; width: 80%; height: 80%; background-color: white; outline: 10px solid red; justify-content: center; align-items: center;">
+    <ul style="margin-left: 2em; margin-right: 2em;">
+      <li style="margin-bottom: 2em;">
+        If you receive and then send in the same action, then extend the message chain. 
+      </li>
+      <li>
+        If you send without first receiving, then start a new message chain.
+      </li>
+    </ul>
+  </div>
   <div class="foot-box">
-    <div class="footnote"></div>
+    <div class="footnote"><a class="footlink" href="./16.html">Refresh For New Execution</a>; <a class="footlink" href="./messageChainsFormally.html">See Formal Definition</a></div>
     <div class="slide-number"></div>
   </div>
 </body>
 
 
 <script type="module">
-  import { step, tertiary_color } from "../utils.js";
+  import { annotate } from 'https://unpkg.com/rough-notation?module';
 
-  hljs.debugMode();
-  hljs.highlightAll();
+  const basically = document.querySelector('#basically');
+  var start = document.querySelector('#start');
+  var forward = document.querySelector('#forward');
+  var win = document.querySelector('#win');
+
+  start = annotate(start, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  forward = annotate(forward, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  win = annotate(win, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+
+  import { draw_node, draw_arrow, background_color, primary_color, secondary_color, tertiary_color, quaternary_color, getByValue, step, gen_node, draw_from_gen } from "../utils.js";
+
+  // regular canvas
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  // Rough.js canvas
+  const rc = rough.canvas(document.getElementById('canvas'));
+  let generator = rc.generator;
+
+  // log 
+  const log = [
+    document.getElementById("mc0"),
+    document.getElementById("mc1"),
+    document.getElementById("mc2"),
+    document.getElementById("mc3"),
+    document.getElementById("mc4")
+  ]
+
+  const radius = 50;
+
+  var to_appear = [[], []];
+
+  // draw a circle of nodes on the canvas
+  const nodes = new Map([["2", 0], ["4", 1], ["0", 2], ["3", 3], ["1", 4]]);
+  var positions = [];
+  var gen_nodes = [];
+  for (var i = 0; i < 5; i++) {
+    var x = 450 + 200 * Math.cos(2 * Math.PI * i / 5);
+    var y = 300 + 200 * Math.sin(2 * Math.PI * i / 5);
+    positions.push([x, y]);
+    gen_nodes.push(gen_node(generator, x, y, radius, secondary_color))
+  }
+
+  // draw gen_nodes
+  for (var i = 0; i < gen_nodes.length; i++) {
+    const node = gen_nodes[i];
+    const x = positions[i][0];
+    const y = positions[i][1];
+    to_appear[1].push(function (x, y, i) {
+      return function () {
+        draw_from_gen(rc, ctx, node, x, y, getByValue(nodes, i), secondary_color)
+      }
+    }(x, y, i));
+  }
+
+  const nodes_checkpoint = to_appear.concat([]);
+  const top_right = document.getElementById("top-right");
+  const bottom_right = document.getElementById("bottom-right");
+  to_appear.push(nodes_checkpoint.flat().concat([() => top_right.style.display = "block"]));
+  to_appear.push(nodes_checkpoint.flat().concat([() => bottom_right.style.display = "block"]));
+
+  const message_chains = [
+    [0, 3],
+    [1, 2],
+    [2, 4],
+    [3, 1, 2, 4],
+    [4, 0, 3, 1, 2, 4],
+  ];
+
+  var counts = [0, 0, 0, 0, 0];
+  var trace = [];
+  while (true) {
+    // pick a message chain to draw from
+    var choice = Math.floor(Math.random() * 5);
+    const chain = message_chains[choice];
+    const count = counts[choice];
+
+    if (count >= chain.length - 1) {
+      continue;
+    }
+
+    // label is greatest value seen so far in that chain
+    var label;
+    if (count == 0) {
+      label = String(chain[0]);
+    } else {
+      label = String(Math.max(...chain.slice(0, count + 1)));
+    }
+    const from = String(chain[count]);
+    const to = String(chain[count + 1]);
+    trace.push([from, to, label, tertiary_color, primary_color, choice, count]);
+
+    counts[choice] = count + 1;
+
+    if (to == label) {
+      break;
+    }
+  }
+
+  for (var i = 0; i < trace.length; i++) {
+    const from = nodes.get(trace[i][0]);
+    const to = nodes.get(trace[i][1]);
+    const kind = String(trace[i][2]) == String(trace[i][0]);
+    const label = trace[i][2];
+    const arrow_color = trace[i][3];
+    const label_color = trace[i][4];
+
+    const choice = trace[i][5];
+    const count = trace[i][6];
+
+    const todo = nodes_checkpoint.flat().concat([function (from, to) {
+      return function () {
+        const center1_x = positions[from][0];
+        const center1_y = positions[from][1];
+        const center2_x = positions[to][0];
+        const center2_y = positions[to][1];
+
+        const betweenVec = { x: center2_x - center1_x, y: center2_y - center1_y };
+        const betweenVecLen = Math.sqrt(betweenVec.x * betweenVec.x + betweenVec.y * betweenVec.y);
+        betweenVec.x /= betweenVecLen;
+        betweenVec.y /= betweenVecLen;
+
+        const p1x = center1_x + ((radius + 15) * betweenVec.x);
+        const p1y = center1_y + ((radius + 15) * betweenVec.y);
+
+        const p2x = center2_x - ((radius + 25) * betweenVec.x);
+        const p2y = center2_y - ((radius + 25) * betweenVec.y);
+
+        draw_arrow(ctx, p1x, p1y, p2x, p2y, label, arrow_color, label_color);
+
+        log[choice].innerHTML = log[choice].innerHTML + getByValue(nodes, from) + "&nbsp&#8594;<sup>" + label + "</sup>&nbsp" + getByValue(nodes, to) + ";&nbsp ";
+
+        if (kind) {
+          start.show();
+        } else {
+          forward.show();
+        }
+      }
+    }(from, to)]);
+    to_appear.push(todo);
+  }
+
+  // highlight the node that won
+  var winning_chain = log[trace[trace.length - 1][5]];
+  winning_chain = annotate(winning_chain, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
+  const winner = nodes.get("4");
+  const todo = nodes_checkpoint.flat().concat([function (winner) {
+    return function () {
+      const x = positions[winner][0];
+      const y = positions[winner][1];
+      win.show();
+      winning_chain.show()
+      draw_node(rc, ctx, x, y, radius * 1.45, "", quaternary_color, quaternary_color);
+    }
+  }(winner)]);
+  to_appear.push(todo);
+
+  var to_disappear = []
+  for (var i = 0; i < to_appear.length; i++) {
+    var cleaner;
+    if (i != 0) {
+      cleaner = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        start.hide();
+        forward.hide();
+        win.hide();
+        winning_chain.hide();
+      }
+    } else {
+      cleaner = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // clear logs
+        for (var i = 0; i < log.length; i++) {
+          log[i].innerHTML = "";
+        }
+        start.hide();
+        forward.hide();
+        win.hide();
+        winning_chain.hide();
+      }
+    }
+    to_disappear.push([cleaner]);
+  }
+
+  to_appear.push([() => basically.style.display = 'flex']);
+  to_disappear.push([]);
 
   var state = 0;
-  const to_disappear = [];
-  const to_appear = [];
   const body = document.querySelector('body');
   body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
 </script>
