@@ -45,7 +45,7 @@
   var p3 = document.getElementById('p3');
   var spacetime = document.getElementById('spacetime');
 
-  const to_appear = [[], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1], [() => spacetime.style.opacity = 1]];
+  const to_appear = [[], [() => p1.style.opacity = 1], [() => spacetime.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1]];
   const to_disappear = Array(to_appear.length).fill([])
 
   var state = 0;
