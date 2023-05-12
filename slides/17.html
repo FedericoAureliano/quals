@@ -15,24 +15,19 @@
   <div class="full-box">
     <div style="margin-right: 80px; margin-left: 80px">
       <ul>
-        <li id="p1" style="margin-bottom: 1em; opacity: 0;">We propose <strong>message chains</strong>
+        <li id="p1" style="margin-bottom: 1em; opacity: 0;">We propose <strong>message chains</strong>: an organization of messages into sequences
           <ul>
-            <li style="margin-top: 0.5em;">an organization of messages into sequences</li>
-            <li style="margin-top: 0.5em;">that is well-aligned with existing
-              <ul>
-                <li style="margin-top: 0.25em;">design standards and</li>
-                <li style="margin-top: 0.25em;">programming languages</li>
-              </ul>
-            </li>
+            <li style="margin-top: 0.25em;">consistent with design standards and</li>
+            <li style="margin-top: 0.25em;">programming language support</li>
           </ul>
         </li>
-        <li id="p2" style="margin-bottom: 1em; opacity: 0;">Users can write invariants over message chains
-          <ul>
-            <li style="margin-top: 0.5em;">making formal verification of message passing systems easier</li>
-          </ul>
+        <li id="p2" style="margin-bottom: 1em; opacity: 0;">Users can write invariants over message chains, making formal verification easier
         </li>
         <li id="p3" style="margin-bottom: 1em; opacity: 0;">Later, we describe how to automatically learn some message chain invariants</li>
       </ul>
+    </div>
+    <div style="margin-top: 3em; display: block; margin-left: auto; margin-right: auto; width: 80%;">
+      <img src="../images/spacetime.png" alt="spacetime" width="100%" id="spacetime" style="opacity: 0;">      
     </div>
   </div>
   <div class="foot-box">
@@ -48,8 +43,9 @@
   var p1 = document.getElementById('p1');
   var p2 = document.getElementById('p2');
   var p3 = document.getElementById('p3');
+  var spacetime = document.getElementById('spacetime');
 
-  const to_appear = [[], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1]];
+  const to_appear = [[], [() => p1.style.opacity = 1], [() => p2.style.opacity = 1], [() => p3.style.opacity = 1], [() => spacetime.style.opacity = 1]];
   const to_disappear = Array(to_appear.length).fill([])
 
   var state = 0;
