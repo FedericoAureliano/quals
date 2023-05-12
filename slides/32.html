@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
+  <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+  <link href="../reset.css" rel="stylesheet" type="text/css" />
+  <link href="../style.css" rel="stylesheet" type="text/css" />
+
+  <style>
+    #features {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    #features td, #features th {
+      border: 2px solid #ddd;
+      padding: 8px;
+    }
+    
+    #features tr:nth-child(even){background-color: #e7e7e7;}
+    
+    #features td:hover {background-color: var(--tertiary-color);}
+    
+    #features th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    #features thead {
+      font-size: 80%;
+    }
+
+    #features td {
+      text-align: center;
+      font-weight: bold;
+    }
+    </style>
+</head>
+
+<body>
+  <div class="title-box">
+    <div class="title">Table of Desired Features, Revisited</div>
+  </div>
+  <div class="full-box">
+    <div style="margin-right: 80px; margin-left: 80px">
+      <div style="padding-top: 3em;">
+        <table id="features" style="font-size: 90%; width: 85%; margin: auto;">
+          <thead>
+            <tr>
+              <th style="background-color: white; border: 0px solid #ddd;"></th>
+              <th>Domain-Specific</th>
+              <th>Implementation Level</th>
+              <th>Modular Verification</th>
+              <th>High Automation</th>
+              <th>Proof Generation</th>
+              <th>Specification Mining</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TLA+</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#10060;</td>
+              <td>&#10060;</td>
+            </tr>
+            <tr>
+              <td>Ivy</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#10060;</td>
+            </tr>
+            <tr>
+              <td>mypyvy<br></td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#10060;</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#10060;</td>
+            </tr>
+            <tr>
+              <td>Coq/Lean/...</td>
+              <td>&#10060;</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+            </tr>
+            <tr>
+              <td>Dafny/F*/...</td>
+              <td>&#10060;</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;</td>
+              <td>&#10060;</td>
+              <td>&#10060;</td>
+            </tr>
+            <tr>
+              <td>Proposal</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;*</td>
+              <td>&#x2714;</td>
+              <td>&#x2714;*</td>
+              <td>&#x2714;</td>
+            </tr>
+          </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  <div class="foot-box">
+    <div class="footnote">* denotes future work; <a class="footlink" href="./related.html">Learn More</a></div>
+    <div class="slide-number"></div>
+  </div>
+</body>
+
+
+<script type="module">
+  import { step } from "../utils.js";
+
+  var state = 0;
+  const to_disappear = [];
+  const to_appear = [];
+  const body = document.querySelector('body');
+  body.onkeydown = function (e) { state = step(e, state, to_disappear, to_appear) };
+</script>
+
+<script type='module' src="../next.js"></script>
+
+</html>

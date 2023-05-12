@@ -3,46 +3,94 @@
 
 <head>
   <title>Learning-Enabled Verification of Distributed Systems with End-to-End Proofs</title>
-  <script src="https://unpkg.com/rough-notation/lib/rough-notation.iife.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
   <link href="../reset.css" rel="stylesheet" type="text/css" />
   <link href="../style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body class="section">
-  <div class="full-title-box">
-    <div class="full-title">Limitations and Future Work</div>
+<body>
+  <div class="title-box">
+    <div class="title">Trio Case Study</div>
   </div>
-  <div class="full-subtitle-box">
-    <div class="full-subtitle" style="font-size: 95%;">
-    <ul style="list-style: none;">
-      <li style="opacity: 0.25;">
-        Asynchronous Systems and Verification
-      </li>
-      <li style="opacity: 0.25;">
-        Reasoning About Messages
-      </li>
-      <li style="opacity: 0.25;">
-        Coming Up with True Invariants
-      </li>
-      <li id="current">
-        Extensions, Proofs, and Cloud Solving
-      </li>
-    </ul style="list-style: none;">
+  <div class="half-box" style="font-size: 16pt; margin-top: -3em; margin-bottom: 3em;">
+    <div style="margin-left: 80px">
+      <pre>
+<code>type bool = | True | False
+
+type nat =
+  | O
+  | S of nat
+
+type cmp = | LT | EQ | GT
+
+let compare =
+  fix (compare : nat -> nat -> cmp) =
+    fun (x1 : nat) ->
+      fun (x2 : nat) ->
+        match x1 with
+        | O -> (match x2 with
+                | O -> EQ
+                | S _ -> LT)
+        | S x1 -> (match x2 with
+                | O -> GT
+                | S x2 -> compare x1 x2);;
+
+type mref = | N1 | N2 | N3 | N4
+
+type message_chain =
+  | Empty
+  | Send of mref * mref * nat * message_chain
+
+synth message_chain -> bool satisfying</code>
+      </pre>
+    </div>
+  </div>
+
+  <div class="half-box" style="font-size: 16pt; margin-top: -3em; margin-bottom: 3em;">
+    <div style="margin-right: 80px">
+      <pre>
+<code>[Empty] -> True,
+[Send(N1, N2, 1, Empty)] -> True,
+[Send(N2, N3, 2, Empty)] -> True,
+[Send(N1, N2, 4, Send(N4, N1, 4, Empty))] -> True,
+[Send(N4, N1, 3, Send(N3, N4, 2, Empty))] -> True,
+[Send(N4, N1, 4, Send(N3, N4, 3, Send(N2, N3, 2, Empty)))] -> True,
+[Send(N4, N1, 4, Send(N3, N4, 3, Send(N2, N3, 2, Send(N1, N2, 1,Empty))))] -> True,
+[Send(N3, N4, 4, Send(N2, N3, 4, Send(N1, N2, 4, Send(N4, N1, 4,Empty))))] -> True,
+
+[Send(N2, N1, 0, Send(N1, N2, 1, Empty))] -> False,
+[Send(N1, N4, 3, Send(N3, N4, 4, Empty))] -> False,
+[Send(N4, N3, 4, Send(N4, N1, 5, Send(N4, N2, 2, Empty)))] -> False,
+
+let rec (f : (message_chain -> bool)) = 
+  fun (x:message_chain) -> 
+    match x with
+    Empty(_) -> 
+      True([])
+    Send(_) -> 
+      match (Un_Send(x)).3 with
+      Empty(_) -> 
+        True([])
+      Send(_) -> 
+        match ((compare (Un_Send(x)).2) (Un_Send((Un_Send(x)).3)).2) with
+        EQ(_) -> 
+          True([])
+        GT(_) -> 
+          True([])
+        LT(_) -> 
+          False([])</code>
+      </pre>
     </div>
   </div>
   <div class="foot-box">
-    <div class="slide-number" style="background-color: white; color: var(--primary-color); box-shadow: 10px 0 0 white, -10px 0 0 white;"></div>
+    <div class="footnote">Thank you to Amar Shah, Anirban Sarkar, and Zili Wang for finding Trio and running this example</div>
+    <div class="slide-number"></div>
   </div>
 </body>
 
-<script type="module">
-  import { annotate } from 'https://unpkg.com/rough-notation?module';
-  var current = document.querySelector('#current');
-  current = annotate(current, { type: 'highlight', color: tertiary_color, strokeWidth: 10 });
-  current.show();
 
-  import { step, tertiary_color } from "../utils.js";
+<script type="module">
+  import { step } from "../utils.js";
 
   var state = 0;
   const to_disappear = [];
